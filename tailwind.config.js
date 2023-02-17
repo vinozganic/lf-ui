@@ -7,6 +7,8 @@ module.exports = {
             primary: "#E4C1F9",
             secondary: "#FCF6BD",
             background: "#D0F4DE",
+            black: "#000000",
+            pink: "#FF99C8",
         },
     },
     plugins: [],
