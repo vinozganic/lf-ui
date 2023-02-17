@@ -1,7 +1,7 @@
 import React from "react"
 
-const SmallText = ({ children }) => {
-    return <div className="text-lg font-bold">{children}</div>
+const SmallText = ({ children, className }) => {
+    return <div className={`text-lg font-bold ${className}`}>{children}</div>
 }
 
 export default SmallText
