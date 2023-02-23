@@ -1,13 +1,24 @@
 import React from "react"
-import { VeryBigText } from "../components"
+import { Button, MediumText, VeryBigText } from "../components"
 import Page from "../components/Page"
 
 const HomePage = () => {
     return (
-        <Page>
-            <VeryBigText>
+        <Page
+            className="h-auto min-h-screen bg-cover bg-no-repeat flex flex-col items-center px-6 lg:px-16"
+            bgImage="images/bgVector1920x1080.png">
+            <VeryBigText className="text-pink text-center">Lost & Found</VeryBigText>
+            <MediumText className="mx-2 mt-12 lg:w-1/2 text-center">
                 Ostavio si torbu u tramvaju? Ostala ti je majica u teretani? Pronađi izgubljene predmete u nekoliko klikova.
-            </VeryBigText>
+            </MediumText>
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-16 mt-20 lg:mt-40 w-full">
+                <Button link="/lost" className="w-full lg:w-1/4">
+                    Izgubio sam nešto
+                </Button>
+                <Button link="/found" className="w-full lg:w-1/4">
+                    Pronašao sam nešto
+                </Button>
+            </div>
         </Page>
     )
 }
