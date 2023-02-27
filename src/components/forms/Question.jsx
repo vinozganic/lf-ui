@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import MediumText from "../MediumText"
 
 const Question = ({ questionText, children }) => {

@@ -8,5 +8,4 @@ import Page from "./Page"
 import Question from "./forms/Question"
 import Form from "./forms/Form"
 
-
-export { SmallText, MediumText, BigText, VeryBigText, Button, TopBar, Page, Question }
+export { SmallText, MediumText, BigText, VeryBigText, Button, TopBar, Page, Question, Form }
