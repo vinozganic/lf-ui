@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import SmallText from "../SmallText"
+import Question from "./Question"
 
-const MultipleChoice = ({ values, className }) => {
+const MultipleChoice = ({ values, questionId, updateAnswer }) => {
     const [checkboxItems, setCheckboxItems] = useState(
         values.map((item, i = 0) => {
             const id = i++
@@ -16,17 +17,17 @@ const MultipleChoice = ({ values, className }) => {
             return item
         })
         setCheckboxItems(newCheckboxItems)
+        updateAnswer(
+            newCheckboxItems.filter((item) => item.checked).map((item) => item.value),
+            questionId
+        )
     }
     const listCheckboxItems = checkboxItems.map((item) => (
         <li key={item.id} className={`p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}>
             <CheckboxComponent label={item.value} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
         </li>
     ))
-    return (
-        <div className={`${className}`}>
-            <ul className="flex flex-wrap list-none">{listCheckboxItems}</ul>
-        </div>
-    )
+    return <ul className="flex flex-wrap list-none">{listCheckboxItems}</ul>
 }
 const CheckboxComponent = ({ label, id, handleSelectedState, checked }) => {
     return (
@@ -48,4 +49,12 @@ const CheckboxComponent = ({ label, id, handleSelectedState, checked }) => {
     )
 }
 
-export default MultipleChoice
+const addMultipleChoiceQuestion = (questionText, options, key, updateAnswer) => {
+    return (
+        <Question questionText={questionText} key={key}>
+            <MultipleChoice values={options} questionId={key} updateAnswer={updateAnswer} />
+        </Question>
+    )
+}
+
+export default addMultipleChoiceQuestion
