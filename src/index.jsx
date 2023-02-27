@@ -3,11 +3,16 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import HomePage from "./pages/HomePage"
+import FoundPage from "./pages/FoundPage"
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <HomePage />,
+    },
+    {
+        path: "/found",
+        element: <FoundPage />,
     },
 ])
 
