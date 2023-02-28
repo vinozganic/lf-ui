@@ -17,10 +17,9 @@ const MultipleChoice = ({ values, questionId, updateAnswer }) => {
             return item
         })
         setCheckboxItems(newCheckboxItems)
-        updateAnswer(
-            newCheckboxItems.filter((item) => item.checked).map((item) => item.value),
-            questionId
-        )
+
+        const answer = newCheckboxItems.filter((item) => item.checked).map((item) => item.value)
+        updateAnswer(answer.length > 0 ? answer : null, questionId)
     }
     const listCheckboxItems = checkboxItems.map((item) => (
         <li key={item.id} className={`p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}>

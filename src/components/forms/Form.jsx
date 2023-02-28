@@ -9,10 +9,14 @@ const Form = ({ questions }) => {
     }
 
     const updateAnswer = (answer, key) => {
-        setFormAnswers((prev) => prev.map((item, i) => (i === key ? answer : item)))
+        setFormAnswers((prev) => prev.map((oldAnswer, i) => (i === key ? answer : oldAnswer)))
+        if (answer === null) {
+            setFormAnswers((prev) => prev.map((oldAnswer, i) => (i > key ? null : oldAnswer)))
+        }
     }
 
     const renderQuestions = () => {
+        console.log(formAnswers)
         let exit = false
         return questions.map((question, key) => {
             if (exit) {
@@ -25,13 +29,12 @@ const Form = ({ questions }) => {
                     if (formAnswers[key - 1].length > 0) {
                         return addQuestion(question, key, updateAnswer)
                     }
-                    exit = true
-                    return null
                 } else if (formAnswers[key - 1]) {
                     return addQuestion(question, key, updateAnswer)
+                } else {
+                    exit = true
+                    return null
                 }
-                exit = true
-                return null
             }
         })
     }
