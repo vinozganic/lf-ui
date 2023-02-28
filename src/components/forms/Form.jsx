@@ -16,7 +16,6 @@ const Form = ({ questions }) => {
     }
 
     const renderQuestions = () => {
-        console.log(formAnswers)
         let exit = false
         return questions.map((question, key) => {
             if (exit) {
