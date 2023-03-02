@@ -22,28 +22,27 @@ const MultipleChoice = ({ values, questionId, updateAnswer }) => {
         updateAnswer(answer.length > 0 ? answer : null, questionId)
     }
     const listCheckboxItems = checkboxItems.map((item) => (
-        <li key={item.id} className={`p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}>
+        <li key={item.id}>
             <CheckboxComponent label={item.value} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
         </li>
     ))
-    return <ul className="flex flex-wrap list-none">{listCheckboxItems}</ul>
+    return <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-4 list-none">{listCheckboxItems}</ul>
 }
 const CheckboxComponent = ({ label, id, handleSelectedState, checked }) => {
     return (
         <div
-            className="bg-gradient-to-tr from-primary to-pink border-black border rounded items-center flex pl-4 py-2 cursor-pointer hover:from-primary hover:to-pink hover:opacity-60"
+            className={`rounded-xl items-center flex pl-3 py-2 border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 cursor-pointer ${
+                checked ? "bg-primary border-primary" : "bg-gray border-gray"
+            }`}
             onClick={() => handleSelectedState(id)}>
-            <div
-                className={`w-8 h-8 rounded-full border-2 bg-opacity-70 border-black border-opacity-70 flex items-center justify-center ${
-                    checked ? "bg-secondary" : ""
-                }`}>
+            <div className={`w-6 h-6 rounded-lg bg-white flex items-center justify-center ${checked ? "bg-secondary" : ""}`}>
                 {checked && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-primary">
                         <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
                     </svg>
                 )}
             </div>
-            <SmallText className="inline-block mx-3">{label}</SmallText>
+            <SmallText className="inline-block mx-3 select-none">{label}</SmallText>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-const Form = ({ questions }) => {
+const Form = ({ questions, className }) => {
     const [formAnswers, setFormAnswers] = useState(questions.map((item) => null))
 
     const addQuestion = (questionObject, key, updateAnswer) => {
@@ -38,7 +38,7 @@ const Form = ({ questions }) => {
         })
     }
 
-    return <>{renderQuestions()}</>
+    return <div className={`${className}`}>{renderQuestions()}</div>
 }
 
 export default Form

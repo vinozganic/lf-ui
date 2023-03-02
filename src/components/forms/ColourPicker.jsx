@@ -18,8 +18,10 @@ const ColourPicker = ({ questionId, updateAnswer }) => {
     }
 
     return (
-        <div>
-            <ChromePicker color={colour} onChange={handleChangeComplete} disableAlpha={true} className="m-10" />
+        <div className="rounded-sm bg-gray hover:bg-opacity-80 duration-100 inline-flex items-center justify-start">
+            <div className="basis">
+                <ChromePicker color={colour} onChange={handleChangeComplete} disableAlpha={true} className="m-2" />
+            </div>
         </div>
     )
 }
