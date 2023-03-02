@@ -3,10 +3,10 @@ import MediumText from "../MediumText"
 
 const Question = ({ questionText, children }) => {
     return (
-        <>
-            <MediumText>{questionText}</MediumText>
+        <div>
+            <MediumText className="mb-4">{questionText}</MediumText>
             {children}
-        </>
+        </div>
     )
 }
 

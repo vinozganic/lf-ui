@@ -6,13 +6,9 @@ const Button = ({ children, onClick, className, link }) => {
         <button
             onClick={onClick}
             type="button"
-            className="text-center transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-110 duration-100
-                                        font-bold px-8 py-2 border-solid border-black w-full 
-                                        border-opacity-30 border-2 border-b-4 bg-gradient-to-tr from-primary to-pink rounded-3xl
-                                        hover:from-secondary hover:to-pink text-black
-                                        shadow-primary shadow-2xl hover:shadow-secondary text-opacity-60
-                                        active:ring-primary active:ring-1
-                                        active:from-secondary active:to-primary active:shadow-sm">
+            className="text-center transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-105 duration-100
+                        font-semibold px-8 py-2 w-full border-2 border-primary
+                        bg-primary rounded-3xl hover:bg-opacity-80 drop-shadow-button">
             {children}
         </button>
     )

@@ -1,57 +1,46 @@
-import React, { useState } from 'react'
-import SmallText from '../SmallText'
-import Question from './Question'
+import React, { useState } from "react"
+import SmallText from "../SmallText"
+import Question from "./Question"
 
 const SingleChoice = ({ values, questionId, updateAnswer }) => {
-    const [radioComponentList, setRadioComponentList] = useState (
+    const [radioComponentList, setRadioComponentList] = useState(
         values.map((item, i = 0) => {
             const id = i++
             return { id, value: item, checked: false }
         })
     )
-    
+
     const handleSelectedState = (id) => {
         let selectedValue = null
         const newRadioComponentList = radioComponentList.map((item) => {
-            if (id === item.id) { 
-                selectedValue = item.value;
-                return {...item, checked: true}
+            if (id === item.id) {
+                selectedValue = item.value
+                return { ...item, checked: true }
             }
-            return {...item, checked: false}
+            return { ...item, checked: false }
         })
         setRadioComponentList(newRadioComponentList)
-        updateAnswer (
-            selectedValue,
-            questionId
-        )
+        updateAnswer(selectedValue, questionId)
     }
 
     const listRadioItems = radioComponentList.map((item) => (
-        <li key={item.id} className={`p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4`}>
+        <li key={item.id}>
             <RadioComponent label={item.value} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
         </li>
     ))
 
-    return <ul className="flex flex-wrap list-none">{listRadioItems}</ul>
+    return <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-4 list-none">{listRadioItems}</ul>
 }
 
-const RadioComponent = ({ label, id, handleSelectedState, checked}) => {
+const RadioComponent = ({ label, id, handleSelectedState, checked }) => {
     return (
-        <div 
-            className="bg-gradient-to-tr from-primary to-pink
-                    border-black border rounded items-center flex pl-4 py-2 
-                    cursor-pointer hover:opacity-60"
+        <div
+            className={`rounded-xl items-center flex pl-2 py-2 border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 cursor-pointer ${
+                checked ? "bg-primary border-primary" : "bg-gray border-gray"
+            }`}
             onClick={() => handleSelectedState(id)}>
-            { <div
-                className={`w-8 h-8 rounded-full border-2 bg-opacity-70 border-black border-opacity-70 
-                            flex items-center justify-center 
-                            ${checked ? "bg-secondary" : ""}`}
-                >
-                {checked && (
-                    <div className="w-4 h-4 rounded-full bg-black bg-opacity-70"></div>
-                )}
-              </div> }
-            <SmallText className="inline-block mx-3">{label}</SmallText>
+            {}
+            <SmallText className="inline-block mx-3 select-none">{label}</SmallText>
         </div>
     )
 }

@@ -9,12 +9,7 @@ const questions = [
     {
         create: addMultipleChoiceQuestion,
         text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addColourPicker,
-        text: "Ovo je tekst pitanja",
-        options: "",
+        options: ["test", "test2", "test3", "test4", "test5"],
     },
     {
         create: addSingleChoiceQuestion,
@@ -22,14 +17,44 @@ const questions = [
         options: ["test", "test2", "test3"],
     },
     {
-        create: addMultipleChoiceQuestion,
+        create: addSingleChoiceQuestion,
         text: "Ovo je tekst pitanja",
         options: ["test", "test2", "test3"],
     },
     {
-        create: addColourPicker,
+        create: addSingleChoiceQuestion,
         text: "Ovo je tekst pitanja",
-        options: "",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
+    },
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["test", "test2", "test3"],
     },
     {
         create: addSingleChoiceQuestion,
@@ -40,8 +65,8 @@ const questions = [
 
 const FoundPage = () => {
     return (
-        <Page>
-            <Form questions={questions} />
+        <Page className="h-auto min-h-screen flex justify-center overflow-y-auto">
+            <Form questions={questions} className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 " />
         </Page>
     )
 }
