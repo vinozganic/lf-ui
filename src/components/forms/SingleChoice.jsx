@@ -38,18 +38,19 @@ const SingleChoice = ({ values, questionId, updateAnswer }) => {
 const RadioComponent = ({ label, id, handleSelectedState, checked}) => {
     return (
         <div 
-            className="bg-gradient-to-tr from-primary to-pink border-black border rounded items-center flex pl-4 py-2 cursor-pointer hover:from-primary hover:to-pink hover:opacity-60"
+            className="bg-gradient-to-tr from-primary to-pink
+                    border-black border rounded items-center flex pl-4 py-2 
+                    cursor-pointer hover:opacity-60"
             onClick={() => handleSelectedState(id)}>
-            <div 
-                className={`w-8 h-8 rounded-full border-2 bg-opacity-70 border-black border-opacity-70 flex items-center justify-center 
-                ${checked ? "bg-secondary" : ""}`
-                }>
+            { <div
+                className={`w-8 h-8 rounded-full border-2 bg-opacity-70 border-black border-opacity-70 
+                            flex items-center justify-center 
+                            ${checked ? "bg-secondary" : ""}`}
+                >
                 {checked && (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
-                    </svg>
+                    <div className="w-4 h-4 rounded-full bg-black bg-opacity-70"></div>
                 )}
-            </div>
+              </div> }
             <SmallText className="inline-block mx-3">{label}</SmallText>
         </div>
     )
