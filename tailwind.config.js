@@ -4,8 +4,8 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: (theme) => ({
-                vertical: "url('./bgVector828x1792.png')",
-                horizontal: "url('./bgVector1920x1080.png')",
+                vertical: "url('./images/bgVector828x1792.png')",
+                horizontal: "url('./images/bgVector1920x1080.png')",
             }),
             dropShadow: {
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
@@ -19,6 +19,7 @@ module.exports = {
             black: "#000000",
             white: "rgba(255, 255, 255, 0.9)",
             gray: "#384866",
+            transparent: "transparent",
         },
     },
     plugins: [],
