@@ -1,9 +1,9 @@
 import React from "react"
 
-const ProgressBar = ({ progress, className }) => {
+const ProgressBar = ({ progress }) => {
     return (
-        <div className={`flex gap-2 ${className}`}>
-            <div className="bg-gray w-full flex justify-center rounded-full">
+        <div className="flex fixed top-12 p-12 pb-24 w-full max-w-3xl bg-gradient-to-b from-background via-background to-transparent duration-300 ease-in-out pointer-events-none">
+            <div className="bg-gray w-full flex justify-center rounded-full pointer-events-auto">
                 <div className="w-full flex">
                     <div
                         style={{ width: `${progress}%` }}
