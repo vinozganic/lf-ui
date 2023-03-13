@@ -56,7 +56,10 @@ const Form = ({ questions, className }) => {
 
     return (
         <div className={`${className} relative flex items-center`}>
-            <ProgressBar progress={progress} />
+            <ProgressBar
+                progress={progress}
+                className={`fixed top-12 p-12 w-full max-w-3xl bg-gradient-to-b from-background via-background to-transparent duration-300 ease-in-out`}
+            />
             <div className="mt-32 overflow-auto scrollbar-hide w-full max-w-3xl">{renderQuestions()}</div>
             <div ref={ref}></div>
         </div>
