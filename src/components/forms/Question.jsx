@@ -1,5 +1,5 @@
 import React from "react"
-import { MediumText } from "../../components"
+import MediumText from "../MediumText"
 
 const Question = ({ questionText, children }) => {
     return (

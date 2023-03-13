@@ -57,7 +57,7 @@ const Form = ({ questions, className }) => {
     return (
         <div className={`${className} relative flex items-center`}>
             <ProgressBar progress={progress} />
-            <div className="mt-32  w-full max-w-7xl">{renderQuestions()}</div>
+            <div className="mt-32 overflow-auto scrollbar-hide w-full max-w-3xl">{renderQuestions()}</div>
             <div ref={ref}></div>
         </div>
     )
