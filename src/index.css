@@ -24,13 +24,17 @@ html {
     }
 }
 
-/* For Webkit-based browsers (Chrome, Safari and Opera) */
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
+.leaflet-control {
+    z-index: 0 !important;
+}
+.leaflet-pane {
+    z-index: 0 !important;
+}
+.leaflet-top,
+.leaflet-bottom {
+    z-index: 0 !important;
 }
 
-/* For IE, Edge and Firefox */
-.scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+.leaflet-div-icon {
+    background-color: #000 !important;
 }
