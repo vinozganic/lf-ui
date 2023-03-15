@@ -2,64 +2,23 @@ import React, { useState } from "react"
 import { Page } from "../components"
 import addColourPicker from "../components/forms/ColourPicker"
 import Form from "../components/forms/Form"
+import addLocationSelectQuestion from "../components/forms/LocationSelect"
 import addMultipleChoiceQuestion from "../components/forms/MultipleChoice"
 import addSingleChoiceQuestion from "../components/forms/SingleChoice"
 
 const questions = [
     {
-        create: addMultipleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3", "test4", "test5"],
-    },
-    {
         create: addSingleChoiceQuestion,
         text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
+        options: ["Opcija 1", "Opcija 2", "Opcija 3"],
     },
+
     {
-        create: addSingleChoiceQuestion,
+        create: addLocationSelectQuestion,
         text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
-    },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Ovo je tekst pitanja",
-        options: ["test", "test2", "test3"],
+        options: {
+            mapCenter: [45.813, 15.977],
+        },
     },
 ]
 
