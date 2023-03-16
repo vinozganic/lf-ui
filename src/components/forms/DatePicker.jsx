@@ -55,8 +55,8 @@ const DatePicker = ({ questionId, updateAnswer}) => {
     
     return (
         <div className="grid gap-y-4">
-            <div className="grid-flow-row gap-2 items-center justify-start flex 
-                bg-background p-4 py-2 w-[300px]
+            <div className="grid-flow-row gap-4 items-center justify-start flex
+                bg-background px-4 py-2 w-[310px]
                 border-primary border-2 rounded-xl">
                 <div>
                     <svg className="w-5 h-5 cursor-pointer" fill="white" 
@@ -67,9 +67,9 @@ const DatePicker = ({ questionId, updateAnswer}) => {
                         </path>
                     </svg>
                 </div>
-                <div className="mx-2">
+                <div className="w-full">
                     <input type="text" onChange={handleOnChange} value={dateText} maxLength={15} placeholder="Upisi datum"
-                        className={`focus:outline-none ${selectedDate === null ? "text-white" : "text-primary"} text-lg font-bold border-none bg-transparent`} />
+                        className={`w-full focus:outline-none ${selectedDate === null ? "text-white" : "text-primary"} text-lg font-bold border-none bg-transparent`} />
                 </div>
             </div>
             {showCalendar && <ReactDatePicker
@@ -79,6 +79,9 @@ const DatePicker = ({ questionId, updateAnswer}) => {
                 dateFormat="dd/MM/yyyy"
                 showPopperArrow={false}
                 inline={true}
+                fixedHeight={true}
+                numberOfMonths={2}
+                calendarClassName="my-class"
                 locale="hr-HR"/>
             }
         </div>
