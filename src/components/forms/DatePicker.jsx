@@ -81,7 +81,6 @@ const DatePicker = ({ questionId, updateAnswer}) => {
                 inline={true}
                 fixedHeight={true}
                 numberOfMonths={2}
-                calendarClassName="my-class"
                 locale="hr-HR"/>
             }
         </div>
