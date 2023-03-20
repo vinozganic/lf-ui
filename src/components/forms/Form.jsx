@@ -1,7 +1,19 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import ProgressBar from "./ProgressBar"
 
 const Form = ({ questions, className }) => {
     const [formAnswers, setFormAnswers] = useState(questions.map((item) => null))
+    const [progress, setProgress] = useState(0)
+
+    const ref = useRef(null)
+
+    const scrollToBottom = () => {
+        ref.current.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+        scrollToBottom()
+    }, [progress])
 
     const addQuestion = (questionObject, key, updateAnswer) => {
         const questionElement = questionObject.create(questionObject.text, questionObject.options, key, updateAnswer)
@@ -9,10 +21,14 @@ const Form = ({ questions, className }) => {
     }
 
     const updateAnswer = (answer, key) => {
-        setFormAnswers((prev) => prev.map((oldAnswer, i) => (i === key ? answer : oldAnswer)))
+        let newFormAnswers = formAnswers.map((oldAnswer, i) => (i === key ? answer : oldAnswer))
         if (answer === null) {
-            setFormAnswers((prev) => prev.map((oldAnswer, i) => (i > key ? null : oldAnswer)))
+            newFormAnswers = newFormAnswers.map((oldAnswer, i) => (i > key ? null : oldAnswer))
         }
+        setFormAnswers(newFormAnswers)
+
+        const progress = Math.round((newFormAnswers.filter((item) => item !== null).length / questions.length) * 100)
+        setProgress(progress)
     }
 
     const renderQuestions = () => {

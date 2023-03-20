@@ -1,28 +1,32 @@
 import React, { useState, useRef } from "react"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
-import Question from "../forms/Question"
 import { EditControl } from "react-leaflet-draw"
 import "leaflet/dist/leaflet.css"
 import "leaflet-draw/dist/leaflet.draw.css"
-import SmallText from "../SmallText"
-import Button from "../Button"
+import { Button, Question } from "../"
+
 const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
 
+    const updateLocationType = (type) => {
+        setLocationType(type)
+        updateAnswer(null, questionId)
+    }
+
     const renderLocationTypeSelect = () => {
         return (
-            <div className="flex flex-col items-start justify-start gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="flex flex-col items-start justify-start gap-x-12 gap-y-4 mx-2 md:flex-row md:items-end md:justify-between">
                 <Button
                     style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6" }}
-                    className={`rounded-md w-full text-white`}
-                    onClick={() => setLocationType("exact")}>
-                    Znam točnu lokaciju gdje je predmet izgubljen
+                    className="rounded-md w-full text-white"
+                    onClick={() => updateLocationType("exact")}>
+                    Znam točnu lokaciju
                 </Button>
                 <Button
                     style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6" }}
-                    className={`"rounded-md bg-blue w-full text-white"`}
-                    onClick={() => setLocationType("nonExact")}>
-                    Ne znam točnu lokaciju gdje je predmet izgubljen
+                    className="rounded-md bg-blue w-full text-white"
+                    onClick={() => updateLocationType("nonExact")}>
+                    Ne znam točnu lokaciju
                 </Button>
             </div>
         )
@@ -33,14 +37,24 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
             return (
                 <>
                     {renderLocationTypeSelect()}
-                    <ExactLocationSelect mapCenter={values?.mapCenter} className={"mt-8"} />
+                    <ExactLocationSelect
+                        updateAnswer={updateAnswer}
+                        questionId={questionId}
+                        mapCenter={values?.mapCenter}
+                        className="mt-6"
+                    />
                 </>
             )
         } else if (locationType === "nonExact") {
             return (
                 <>
                     {renderLocationTypeSelect()}
-                    <NonExactLocationSelect mapCenter={values?.mapCenter} className={"mt-8"} />
+                    <NonExactLocationSelect
+                        updateAnswer={updateAnswer}
+                        questionId={questionId}
+                        mapCenter={values?.mapCenter}
+                        className="mt-6"
+                    />
                 </>
             )
         } else {
@@ -51,36 +65,48 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
     return <div className={`rounded-md bg-gray p-4 ${className}`}>{renderLocationSelect()}</div>
 }
 
-const ExactLocationSelect = ({ mapCenter, className }) => {
-    const [point, setPoint] = useState(null)
+const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {
     const fgRef = useRef(null)
 
     const onCreated = (e) => {
         for (const layer in fgRef.current._layers) {
             fgRef.current.removeLayer(fgRef.current._layers[layer])
         }
+
         fgRef.current.addLayer(e.layer)
-        setPoint(e.layer.toGeoJSON()["geometry"]["coordinates"])
+
+        let point = e.layer.toGeoJSON()["geometry"]["coordinates"]
+        let answer = {
+            type: "Point",
+            coordinates: point,
+        }
+        updateAnswer(answer, questionId)
     }
 
     return (
         <MapContainer
             center={mapCenter}
             zoom={13}
-            style={{ height: "60vh", borderRadius: "0.25rem" }}
-            className={`rounded-xl ${className}`}>
+            style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
+            className={`z-0 rounded-xl ${className}`}>
             <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
             <FeatureGroup ref={fgRef}>
                 <EditControl
                     position="topright"
                     onCreated={onCreated}
+                    on
                     draw={{
                         rectangle: false,
                         circle: false,
                         circlemarker: false,
                         polyline: false,
                         polygon: false,
-                        marker: true,
+                        marker: {
+                            icon: new L.Icon({
+                                iconUrl: "/images/marker.png",
+                                iconSize: [40, 40],
+                            }),
+                        },
                     }}
                 />
             </FeatureGroup>
@@ -88,22 +114,26 @@ const ExactLocationSelect = ({ mapCenter, className }) => {
     )
 }
 
-const NonExactLocationSelect = ({ mapCenter, className }) => {
-    const [multiLineString, setMultiLineString] = useState(null)
+const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {
     const fgRef = useRef(null)
     const onCreated = (e) => {
         const newMultiLineString = []
         for (const layer in fgRef.current._layers) {
             newMultiLineString.push(fgRef.current._layers[layer].toGeoJSON()["geometry"]["coordinates"])
         }
-        setMultiLineString(newMultiLineString)
+
+        let answer = {
+            type: "MultiLineString",
+            coordinates: newMultiLineString,
+        }
+        updateAnswer(answer, questionId)
     }
     return (
         <MapContainer
             center={mapCenter}
             zoom={13}
             style={{ height: "60vh", borderRadius: "0.25rem" }}
-            className={`rounded-xl ${className}`}>
+            className={`z-0 rounded-xl ${className}`}>
             <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
             <FeatureGroup ref={fgRef}>
                 <EditControl
@@ -115,7 +145,7 @@ const NonExactLocationSelect = ({ mapCenter, className }) => {
                         circlemarker: false,
                         polyline: {
                             shapeOptions: {
-                                color: "#15bfe6",
+                                color: "red",
                                 weight: 8,
                             },
                             icon: new L.DivIcon({
