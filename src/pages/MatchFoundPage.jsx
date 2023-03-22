@@ -7,7 +7,7 @@ const MatchFoundPage = () => {
     const [matches, setMatches] = useState([])
 
     useEffect(() => {
-        fetch(`http://localhost:8000/matches?found_id=${id}`)
+        fetch(`${import.meta.env.VITE_MATCHES_URI}?found_id=${id}`)
             .then((res) => res.json())
             .then((data) => setMatches(data))
     }, [])
