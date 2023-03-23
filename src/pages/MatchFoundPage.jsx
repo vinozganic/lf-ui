@@ -8,7 +8,8 @@ const MatchFoundPage = () => {
 
     const getMatches = async (id) => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_MATCHES_URI}/found/${id}`)
+            const apiUri = import.meta.env.VITE_API_URI
+            const response = await fetch(`${apiUri}/matches/found/${id}`)
             const data = await response.json()
             setMatches(data.matches)
         } catch (error) {
