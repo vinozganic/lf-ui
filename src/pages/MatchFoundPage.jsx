@@ -6,10 +6,18 @@ const MatchFoundPage = () => {
     const { id } = useParams()
     const [matches, setMatches] = useState([])
 
+    const getMatches = async (id) => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_MATCHES_URI}/found/${id}`)
+            const data = await response.json()
+            setMatches(data.matches)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_MATCHES_URI}?found_id=${id}`)
-            .then((res) => res.json())
-            .then((data) => setMatches(data))
+        getMatches(id)
     }, [])
 
     return <Page></Page>
