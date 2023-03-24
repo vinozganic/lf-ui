@@ -6,18 +6,17 @@ const MatchLostPage = () => {
     const { id } = useParams()
     const [matches, setMatches] = useState([])
 
-    const getMatches = async (id) => {
-        try {
-            const apiUri = import.meta.env.VITE_API_URI
-            const response = await fetch(`${apiUri}/matches/lost/${id}`)
-            const data = await response.json()
-            setMatches(data.matches)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     useEffect(() => {
+        const getMatches = async (id) => {
+            try {
+                const apiUri = import.meta.env.VITE_API_URI
+                const response = await fetch(`${apiUri}/matches/lost/${id}`)
+                const data = await response.json()
+                setMatches(data.matches)
+            } catch (error) {
+                console.log(error)
+            }
+        }
         getMatches(id)
     }, [])
 
