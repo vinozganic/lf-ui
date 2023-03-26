@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react"
+import useLocation from "react-router-dom"
 import ProgressBar from "./ProgressBar"
+import Button from "../Button"
 
 const Form = ({ questions, className }) => {
+    const UrlLocation = useLocation()
+
     const [formAnswers, setFormAnswers] = useState(questions.map((item) => null))
     const [progress, setProgress] = useState(0)
 
@@ -33,7 +37,7 @@ const Form = ({ questions, className }) => {
 
     const renderQuestions = () => {
         let exit = false
-        return questions.map((question, key) => {
+        const questionElements = questions.map((question, key) => {
             if (exit) {
                 return null
             }
@@ -52,6 +56,54 @@ const Form = ({ questions, className }) => {
                 }
             }
         })
+
+        const submitButton = (
+            <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
+                Submit
+            </Button>
+        )
+
+        return [...questionElements, submitButton]
+    }
+
+    const handleSubmit = async () => {
+        // Check if all answers are filled
+        if (formAnswers.some((answer) => answer === null)) {
+            // Checks if at least one answer is null
+            alert("Please answer all questions before submitting.")
+            return
+        }
+
+        const payload = {
+            formAnswers,
+        }
+
+        // Choose the API endpoint based on the URL the user is on
+        const apiUrl = import.meta.env.VITE_API_URL
+        if (UrlLocation.pathname.includes("/lost")) {
+            var endpoint = "lost"
+        } else if (UrlLocation.pathname.includes("/found")) {
+            var endpoint = "found"
+        }
+
+        try {
+            // Send the form data to the API
+            const response = await fetch(`${apiUrl}/${endpoint}`, {
+                method: "POST",
+                // Do I need headers here? //////////////////////////
+                body: JSON.stringify(payload),
+            })
+
+            // Handle the response
+            if (response.ok) {
+                alert("Form submitted successfully.")
+            } else {
+                const error = await response.json()
+                alert(`Error submitting form: ${error.message}`)
+            }
+        } catch (error) {
+            alert(`Error submitting form: ${error.message}`)
+        }
     }
 
     return (
