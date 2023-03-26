@@ -49,8 +49,8 @@ const TrackingKeyInput = ({ length, className }) => {
                 method: "GET",
             })
             const data = await response.json()
-            const itemType = data.itemType
-            const id = data.id
+            const itemType = data.item.type
+            const id = data.item.id
             const redirectUrl = `/matches/${itemType}/${id}`
             navigate(redirectUrl)
         } catch (error) {
@@ -60,7 +60,7 @@ const TrackingKeyInput = ({ length, className }) => {
 
     return (
         <div className={`flex flex-col items-center gap-1 w-full ${className}`}>
-            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 w-full justify-center">
+            <div className="flex flex-col items-center gap-4 w-full justify-center">
                 <MediumText className="text-2xl">Prati svoj item:</MediumText>
                 <div>
                     {trackingKey.map((value, index) => (
@@ -76,7 +76,7 @@ const TrackingKeyInput = ({ length, className }) => {
                         />
                     ))}
                 </div>
-                <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8">
+                <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" extraClass="rounded-lg">
                     Prati
                 </Button>
             </div>
