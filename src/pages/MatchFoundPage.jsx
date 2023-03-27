@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Page } from "../components"
+import { useFetch } from "use-http"
+import { Page, Spinner } from "../components"
+import { API_URL } from "../constants"
 
 const MatchFoundPage = () => {
     const { id } = useParams()
-    const [matches, setMatches] = useState([])
+    const { loading, error, data: { success, matches = [] } = {} } = useFetch(`${API_URL}/matches/found/${id}`, {}, [])
 
-    useEffect(() => {
-        const getMatches = async (id) => {
-            try {
-                const apiUri = import.meta.env.VITE_API_URI
-                const response = await fetch(`${apiUri}/matches/found/${id}`)
-                const data = await response.json()
-                setMatches(data.matches)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getMatches(id)
-    }, [])
-
-    return <Page></Page>
+    return <Page>{loading && <Spinner />}</Page>
 }
 
 export default MatchFoundPage
