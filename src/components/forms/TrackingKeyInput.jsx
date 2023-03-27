@@ -10,7 +10,7 @@ const TrackingKeyInput = ({ length, className }) => {
     const handleChange = (e, index) => {
         const { value } = e.target
         const newTrackingKey = [...trackingKey]
-        newTrackingKey[index] = value.charAt(value.length - 1)
+        newTrackingKey[index] = value.charAt(value.length - 1).toUpperCase()
         setTrackingKey(newTrackingKey)
         if (value.length > 0) {
             inputRefs.current[index + 1]?.focus()
@@ -76,7 +76,7 @@ const TrackingKeyInput = ({ length, className }) => {
                         />
                     ))}
                 </div>
-                <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" extraClass="rounded-lg">
+                <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
                     Prati
                 </Button>
             </div>
