@@ -1,13 +1,29 @@
 import React, { useEffect, useRef, useState } from "react"
-import useLocation from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import ProgressBar from "./ProgressBar"
 import Button from "../Button"
 
-const Form = ({ questions, className }) => {
-    const UrlLocation = useLocation()
+// 1. Postaviti inicijalni state tako da je [ { fieldName: "answer1", answer: null }, { fieldName: "answer2", answer: null }, { fieldName: "answer3", answer: null } ]
+// 2. Npravi si funkciju const setInitialState JESAM
+// 3. unutar updateanswer funkcije,
 
-    const [formAnswers, setFormAnswers] = useState(questions.map((item) => null))
+const Form = ({ questions, className }) => {
+    const location = useLocation()
+
+    const navigate = useNavigate()
+
+    const setInitialState = () => {
+        const initialState = questions.map((question) => {
+            return { fieldName: question.fieldName, answer: null }
+        })
+
+        return initialState
+    }
+
+    const [formAnswers, setFormAnswers] = useState(setInitialState()) // 1.
     const [progress, setProgress] = useState(0)
+
+    const [error, setError] = useState(null)
 
     const ref = useRef(null)
 
@@ -19,89 +35,93 @@ const Form = ({ questions, className }) => {
         scrollToBottom()
     }, [progress])
 
-    const addQuestion = (questionObject, key, updateAnswer) => {
-        const questionElement = questionObject.create(questionObject.text, questionObject.options, key, updateAnswer)
+    const addQuestion = (questionObject, updateAnswer) => {
+        const questionElement = questionObject.create(questionObject.text, questionObject.options, questionObject.fieldName, updateAnswer)
         return questionElement
     }
 
     const updateAnswer = (answer, key) => {
-        let newFormAnswers = formAnswers.map((oldAnswer, i) => (i === key ? answer : oldAnswer))
+        let newFormAnswers = [...formAnswers]
+        newFormAnswers.forEach((item) => {
+            if (item.fieldName === key) {
+                item.answer = answer
+            }
+        })
         if (answer === null) {
-            newFormAnswers = newFormAnswers.map((oldAnswer, i) => (i > key ? null : oldAnswer))
+            let currentIdx = newFormAnswers.findIndex((item) => item.fieldName === key)
+            newFormAnswers.forEach((oldAnswer, i) => {
+                if (i > currentIdx) {
+                    oldAnswer.answer = null
+                }
+            })
         }
         setFormAnswers(newFormAnswers)
 
-        const progress = Math.round((newFormAnswers.filter((item) => item !== null).length / questions.length) * 100)
+        const progress = Math.round((newFormAnswers.filter((item) => item.answer !== null).length / questions.length) * 100)
         setProgress(progress)
     }
 
     const renderQuestions = () => {
         let exit = false
-        const questionElements = questions.map((question, key) => {
+        const questionElements = questions.map((question, i) => {
             if (exit) {
                 return null
             }
-            if (key === 0) {
-                return addQuestion(question, key, updateAnswer)
+            if (i === 0) {
+                return addQuestion(question, updateAnswer)
             } else {
-                if (Array.isArray(formAnswers[key - 1])) {
-                    if (formAnswers[key - 1].length > 0) {
-                        return addQuestion(question, key, updateAnswer)
+                if (Array.isArray(formAnswers[i - 1].answer)) {
+                    if (formAnswers[i - 1].answer.length > 0) {
+                        return addQuestion(question, updateAnswer)
                     }
-                } else if (formAnswers[key - 1]) {
-                    return addQuestion(question, key, updateAnswer)
+                } else if (formAnswers[i - 1].answer) {
+                    return addQuestion(question, updateAnswer)
                 } else {
                     exit = true
                     return null
                 }
             }
         })
+        return questionElements
+    }
 
-        const submitButton = (
-            <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
-                Submit
-            </Button>
-        )
-
-        return [...questionElements, submitButton]
+    const generatePayload = () => {
+        const payload = {}
+        formAnswers.forEach((item) => {
+            payload[item.fieldName] = item.answer
+        })
+        return payload
     }
 
     const handleSubmit = async () => {
-        // Checks if at least one answer is null, if so, alert the user
-        if (formAnswers.some((answer) => answer === null)) {
-            alert("Please answer all questions before submitting.")
-            return
-        }
+        const payload = generatePayload()
 
-        const payload = {
-            formAnswers,
-        }
-
-        // Choose the API endpoint based on the URL the user is on
         const apiUrl = import.meta.env.VITE_API_URL
-        if (UrlLocation.pathname.includes("/lost")) {
+        if (location.pathname.includes("/lost")) {
             var endpoint = "lost"
-        } else if (UrlLocation.pathname.includes("/found")) {
+        } else if (location.pathname.includes("/found")) {
             var endpoint = "found"
         }
 
         try {
-            // Send the form data to the API
             const response = await fetch(`${apiUrl}/${endpoint}`, {
                 method: "POST",
-                // Do I need headers here? //////////////////////////
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(payload),
             })
-
-            // Handle the response
-            if (response.ok) {
-                alert("Form submitted successfully.")
+            const data = await response.json()
+            if (data.success) {
+                const itemType = endpoint
+                const id = data[itemType]._id
+                const redirectUrl = `/matches/${itemType}/${id}`
+                navigate(redirectUrl)
             } else {
-                const error = await response.json()
-                alert(`Error submitting form: ${error.message}`)
+                setError(data.error.message)
             }
         } catch (error) {
-            alert(`Error submitting form: ${error.message}`)
+            setError("error")
         }
     }
 
@@ -109,6 +129,12 @@ const Form = ({ questions, className }) => {
         <div className={`${className} relative flex items-center`}>
             <ProgressBar progress={progress} />
             <div className="mt-32 w-full max-w-7xl">{renderQuestions()}</div>
+            {progress === 100 && (
+                <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
+                    Submit
+                </Button>
+            )}
+            {error && <p className="text-white">{error}</p>}
             <div ref={ref}></div>
         </div>
     )
