@@ -3,10 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import ProgressBar from "./ProgressBar"
 import Button from "../Button"
 
-// 1. Postaviti inicijalni state tako da je [ { fieldName: "answer1", answer: null }, { fieldName: "answer2", answer: null }, { fieldName: "answer3", answer: null } ]
-// 2. Npravi si funkciju const setInitialState JESAM
-// 3. unutar updateanswer funkcije,
-
 const Form = ({ questions, className }) => {
     const location = useLocation()
 
@@ -96,11 +92,12 @@ const Form = ({ questions, className }) => {
     const handleSubmit = async () => {
         const payload = generatePayload()
 
+        let endpoint
         const apiUrl = import.meta.env.VITE_API_URL
         if (location.pathname.includes("/lost")) {
-            var endpoint = "lost"
+            endpoint = "lost"
         } else if (location.pathname.includes("/found")) {
-            var endpoint = "found"
+            endpoint = "found"
         }
 
         try {
