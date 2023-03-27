@@ -12,6 +12,9 @@ module.exports = {
                 lg: "0 0px 20px rgba(21, 191, 230, 0.6)",
                 xl: "0 0px 35px rgba(255, 255, 255, 0.5)",
             },
+            transitionProperty: {
+                width: "width",
+            },
         },
         colors: {
             primary: "#15bfe6",
