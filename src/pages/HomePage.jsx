@@ -1,5 +1,6 @@
 import React from "react"
 import { Button, MediumText, SmallText, VeryBigText } from "../components"
+import TrackingKeyInput from "../components/forms/TrackingKeyInput"
 import Page from "../components/Page"
 
 const HomePage = () => {
@@ -19,6 +20,7 @@ const HomePage = () => {
                     </Button>
                 </div>
             </div>
+            <TrackingKeyInput length={8} className="mt-8 md:mt-20"/>
         </Page>
     )
 }
