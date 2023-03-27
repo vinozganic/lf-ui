@@ -67,9 +67,8 @@ const Form = ({ questions, className }) => {
     }
 
     const handleSubmit = async () => {
-        // Check if all answers are filled
+        // Checks if at least one answer is null, if so, alert the user
         if (formAnswers.some((answer) => answer === null)) {
-            // Checks if at least one answer is null
             alert("Please answer all questions before submitting.")
             return
         }
