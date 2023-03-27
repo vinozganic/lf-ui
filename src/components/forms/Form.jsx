@@ -4,22 +4,15 @@ import ProgressBar from "./ProgressBar"
 import Button from "../Button"
 
 const Form = ({ questions, className }) => {
-    const location = useLocation()
-
-    const navigate = useNavigate()
-
-    const setInitialState = () => {
-        const initialState = questions.map((question) => {
-            return { fieldName: question.fieldName, answer: null }
-        })
-
-        return initialState
-    }
-
-    const [formAnswers, setFormAnswers] = useState(setInitialState()) // 1.
+    const initialState = questions.map((question) => {
+        return { fieldName: question.fieldName, answer: null }
+    })
+    const [formAnswers, setFormAnswers] = useState(initialState)
     const [progress, setProgress] = useState(0)
-
     const [error, setError] = useState(null)
+
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const ref = useRef(null)
 
