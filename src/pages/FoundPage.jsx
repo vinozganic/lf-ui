@@ -1,16 +1,37 @@
 import React, { useState } from "react"
-import { Page } from "../components"
+import { addDatePicker, Page } from "../components"
 import addColourPicker from "../components/forms/ColourPicker"
 import Form from "../components/forms/Form"
 import addLocationSelectQuestion from "../components/forms/LocationSelect"
 import addMultipleChoiceQuestion from "../components/forms/MultipleChoice"
 import addSingleChoiceQuestion from "../components/forms/SingleChoice"
+import addDatePickerQuestion from "../components/forms/DatePicker"
 
 const questions = [
     {
         create: addSingleChoiceQuestion,
         text: "Ovo je tekst pitanja",
-        options: ["Opcija 1", "Opcija 2", "Opcija 3"],
+        options: ["tech", "clothes", "misc"],
+        fieldName: "type",
+    },
+
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["shirt", "subtype1", "subtype1"],
+        fieldName: "subtype",
+    },
+
+    {
+        create: addColourPicker,
+        text: "Ovo je tekst pitanja",
+        fieldName: "color",
+    },
+
+    {
+        create: addDatePickerQuestion,
+        text: "Ovo je tekst pitanja",
+        fieldName: "date",
     },
 
     {
@@ -19,6 +40,14 @@ const questions = [
         options: {
             mapCenter: [45.813, 15.977],
         },
+        fieldName: "location",
+    },
+
+    {
+        create: addSingleChoiceQuestion,
+        text: "Ovo je tekst pitanja",
+        options: ["true", "false"],
+        fieldName: "identifiable",
     },
 ]
 
