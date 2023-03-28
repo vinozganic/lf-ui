@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Page } from "../components"
-import MatchesList from "../components/MatchesList"
+import { Page, MatchesList } from "../components"
 
 const MatchFoundPage = () => {
     const { id } = useParams()
@@ -14,19 +13,19 @@ const MatchFoundPage = () => {
         { id: 6, found_id: 20, lost_id: 15, match_probability: 0.8},
     ])
 
-    // useEffect(() => {
-    //     const getMatches = async (id) => {
-    //         try {
-    //             const apiUri = import.meta.env.VITE_API_URI
-    //             const response = await fetch(`${apiUri}/matches/found/${id}`)
-    //             const data = await response.json()
-    //             setMatches(data.matches)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     getMatches(id)
-    // }, [])
+    useEffect(() => {
+        const getMatches = async (id) => {
+            try {
+                const apiUri = import.meta.env.VITE_API_URI
+                const response = await fetch(`${apiUri}/matches/found/${id}`)
+                const data = await response.json()
+                setMatches(data.matches)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getMatches(id)
+    }, [])
 
     return (
         <Page className="h-auto min-h-screen justify-center ">

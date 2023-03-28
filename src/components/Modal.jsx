@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react"
 
 const Modal = ({ isVisible, onClose, children, displayMatch }) => {
     
+
     return (
         isVisible &&
             <nav className="xl:top-[150px] lg:top-[136px] lg:z-50 lg:sticky lg:gap-y-40 lg:flex lg:h-fit lg:w-full">
-                <div className="max-lg:hidden ml-16 w-full bg-gray/60 p-10 rounded-xl flex grid-cols-2 gap-x-14">
+                <div className="max-lg:hidden fixed inset-0 min-w-screen min-h-screen z-40 bg-black bg-opacity-25 backdrop-blur-sm"
+                    onClick={() => onClose()}>
+                </div>
+                <div className="max-lg:hidden ml-16 w-full bg-gray/40 p-10 rounded-xl flex grid-cols-2 gap-x-14 z-50">
                     <span className= "w-full text-white font-bold lg:text-xl xl:text-2xl">
                         {displayMatch}
                         {children}
@@ -21,10 +25,10 @@ const Modal = ({ isVisible, onClose, children, displayMatch }) => {
 						</svg>
                     </span>
                 </div>
-                <div className="lg:hidden fixed inset-0 z-50 w-screen h-screen overflow-clip bg-black bg-opacity-25 backdrop-blur-sm
+                <div className="lg:hidden fixed inset-0 z-50 min-w-screen min-h-screen bg-black bg-opacity-25 backdrop-blur-sm
                     flex justify-center items-center" onClick={() => onClose()}>
                     <div className="w-full bg-gray flex mx-20 justify-between" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-10 rounded-xl text-black font-bold text-3xl">
+                        <div className="p-10 rounded-xl text-white font-bold lg:text-3xl sm:text-xl">
                             {displayMatch}
                             {children}
                         </div>

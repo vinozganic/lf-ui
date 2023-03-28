@@ -6,7 +6,6 @@ import HomePage from "./pages/HomePage"
 import FoundPage from "./pages/FoundPage"
 import MatchFoundPage from "./pages/MatchFoundPage"
 import MatchLostPage from "./pages/MatchLostPage"
-import MatchesPage from "./pages/MatchesPage"
 
 const router = createBrowserRouter([
     {
