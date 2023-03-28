@@ -23,6 +23,9 @@ module.exports = {
             white: "rgba(255, 255, 255, 0.9)",
             gray: "#384866",
         },
+        fontFamily: {
+            noto: ["Noto Color Emoji", "sans-serif"],
+        },
     },
     plugins: [],
 }
