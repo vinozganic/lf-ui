@@ -24,6 +24,10 @@ const router = createBrowserRouter([
         path: "/matches/lost/:id",
         element: <MatchLostPage />,
     },
+    {
+        path: "/dm/:id",
+        element: <HomePage />,
+    }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(<RouterProvider router={router} />)

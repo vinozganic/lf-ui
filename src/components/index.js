@@ -12,6 +12,9 @@ import addColourPicker from "./forms/ColourPicker"
 import addSingleChoiceQuestion from "./forms/SingleChoice"
 import addDatePicker from "./forms/DatePicker"
 import addMultipleChoiceQuestion from "./forms/MultipleChoice"
+import Modal from "./Modal"
+import MatchCard from "./MatchCard"
+import MatchesList from "./MatchesList"
 
 export {
     SmallText,
@@ -28,4 +31,7 @@ export {
     addSingleChoiceQuestion,
     addMultipleChoiceQuestion,
     addDatePicker,
+    Modal,
+    MatchCard,
+    MatchesList
 }
