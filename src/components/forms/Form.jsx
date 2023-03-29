@@ -28,7 +28,6 @@ const Form = ({ questions, text, className }) => {
     const addQuestion = (questionObject, updateAnswer) => {
         let dependsOnAnswer = null
         if (questionObject.dependsOn) {
-            console.log(questionObject)
             dependsOnAnswer = formAnswers.find((item) => item.fieldName === questionObject.dependsOn)?.answer
             if (!dependsOnAnswer) {
                 return null
@@ -42,7 +41,6 @@ const Form = ({ questions, text, className }) => {
     }
 
     const updateAnswer = (answer, key) => {
-        console.log(answer, key)
         let newFormAnswers = [...formAnswers]
         newFormAnswers.forEach((item) => {
             if (item.fieldName === key) {
@@ -66,7 +64,6 @@ const Form = ({ questions, text, className }) => {
                 }
             })
         })
-        console.log(newFormAnswers)
         setFormAnswers(newFormAnswers)
 
         const progress = Math.round((newFormAnswers.filter((item) => item.answer !== null).length / questions.length) * 100)
