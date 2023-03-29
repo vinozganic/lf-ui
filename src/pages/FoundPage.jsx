@@ -54,7 +54,7 @@ const questions = [
 const FoundPage = () => {
     return (
         <Page className="h-auto min-h-screen flex justify-center overflow-y-auto">
-            <Form questions={questions} className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 " />
+            <Form questions={questions} type="found" className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 " />
         </Page>
     )
 }

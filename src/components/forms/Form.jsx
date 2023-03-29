@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useFetch } from "use-http"
+import { API_URL } from "../../constants"
 import ProgressBar from "./ProgressBar"
 import Button from "../Button"
+import Spinner from "../Spinner"
 
-const Form = ({ questions, className }) => {
+const Form = ({ questions, type, className }) => {
     const initialState = questions.map((question) => {
         return { fieldName: question.fieldName, answer: null }
     })
+
+    const { post, loading, error: fetchError } = useFetch(`${API_URL}/${type}`, { headers: { "Content-Type": "application/json" } })
+
     const [formAnswers, setFormAnswers] = useState(initialState)
     const [progress, setProgress] = useState(0)
     const [error, setError] = useState(null)
 
-    const location = useLocation()
     const navigate = useNavigate()
 
     const ref = useRef(null)
@@ -85,31 +90,22 @@ const Form = ({ questions, className }) => {
     const handleSubmit = async () => {
         const payload = generatePayload()
 
-        let endpoint
-        const apiUrl = import.meta.env.VITE_API_URL
-        if (location.pathname.includes("/lost")) {
-            endpoint = "lost"
-        } else if (location.pathname.includes("/found")) {
-            endpoint = "found"
-        }
-
         try {
-            const response = await fetch(`${apiUrl}/${endpoint}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            })
-            const data = await response.json()
-            if (data.success) {
-                const itemType = endpoint
-                const id = data[itemType]._id
-                const redirectUrl = `/matches/${itemType}/${id}`
-                navigate(redirectUrl)
-            } else {
-                setError(data.error.message)
+            const data = await post(payload)
+            console.log(data)
+            if (fetchError && !data) {
+                setError(fetchError.message)
+                return
             }
+
+            if (data.success === false) {
+                setError(data.error.message)
+                return
+            }
+
+            const id = data[type]._id
+            const redirectUrl = `/matches/${type}/${id}`
+            navigate(redirectUrl)
         } catch (error) {
             setError("error")
         }
@@ -119,11 +115,12 @@ const Form = ({ questions, className }) => {
         <div className={`${className} relative flex items-center`}>
             <ProgressBar progress={progress} />
             <div className="mt-32 w-full max-w-7xl">{renderQuestions()}</div>
-            {progress === 100 && (
+            {progress === 100 && !loading && (
                 <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
                     Submit
                 </Button>
             )}
+            {loading && <Spinner />}
             {error && <p className="text-white">{error}</p>}
             <div ref={ref}></div>
         </div>
