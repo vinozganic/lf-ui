@@ -4,10 +4,9 @@ import Modal from "./Modal"
 
 const MatchesList = ({ matches, lostItem }) => {
     const [isVisible, setIsVisible] = useState(false)
-    const [displayMatch, setDisplayMatch] = useState("")
+    const [displayMatch, setDisplayMatch] = useState({})
     const [matchesList, setMatchesList] = useState (
-        matches
-        .map((match, index) => (
+        matches.map((match, index) => (
             {...match, showProps: false, functionPassID: index, discarded: false }
         ))
         .sort((a, b) => b.match_probability - a.match_probability)
@@ -16,8 +15,8 @@ const MatchesList = ({ matches, lostItem }) => {
     const handleShowProps = (index) => {
         const newSelectMathces = matchesList.map((match) => {
             if (index === match.functionPassID) {
-                setDisplayMatch(`HARD CODED, wait for GET in found.js | ID: ${match.id}`)
-                return { ...match, showProps: true}
+                setDisplayMatch(match)
+                return { ...match, showProps: true }
             }
             return { ...match, showProps: false }
         })
@@ -58,7 +57,7 @@ const MatchesList = ({ matches, lostItem }) => {
     }
 
     const lockScrollModal = () => {
-            document.body.style.overflow = 'hidden'
+        document.body.style.overflow = 'hidden'
     }
 
     const sortedListMatchCards = matchesList.map( (match, index) => (

@@ -1,7 +1,9 @@
-import React from "react"
+import { React, useEffect } from "react"
 
 const Modal = ({ isVisible, onClose, children, displayMatch }) => {
-    
+    const displayString = Object.keys(displayMatch).map(
+        key => (<li>{key}: {displayMatch[key]}</li>)
+    )
 
     return (
         isVisible &&
@@ -10,8 +12,10 @@ const Modal = ({ isVisible, onClose, children, displayMatch }) => {
                     onClick={() => onClose()}>
                 </div>
                 <div className="max-lg:hidden ml-16 w-full bg-gray/40 p-10 rounded-xl flex grid-cols-2 gap-x-14 z-50">
-                    <span className= "w-full text-white font-bold lg:text-xl xl:text-2xl">
-                        {displayMatch}
+                    <span className= "w-full">
+                        <ul className="text-white font-bold lg:text-xl xl:text-2xl">
+                            {displayString}
+                        </ul>
                         {children}
                     </span>
                     <span className="cursor-pointer z-50" onClick={() => onClose()}>
@@ -28,8 +32,10 @@ const Modal = ({ isVisible, onClose, children, displayMatch }) => {
                 <div className="lg:hidden fixed inset-0 z-50 min-w-screen min-h-screen bg-black bg-opacity-25 backdrop-blur-sm
                     flex justify-center items-center" onClick={() => onClose()}>
                     <div className="w-full bg-gray flex mx-20 justify-between" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-10 rounded-xl text-white font-bold lg:text-3xl sm:text-xl">
-                            {displayMatch}
+                        <div className="p-10 rounded-xl text-white font-bold sm:text-xl">
+                            <ul className="text-white font-bold sm:text-xl">
+                                {displayString}
+                            </ul>
                             {children}
                         </div>
                         <span className="cursor-pointer h-fit w-fit p-4">
