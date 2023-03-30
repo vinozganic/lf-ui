@@ -62,7 +62,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
         }
     }
 
-    return <div className={`rounded-md bg-gray p-4 ${className}`}>{renderLocationSelect()}</div>
+    return <div className={`rounded-md p-4 ${className}`}>{renderLocationSelect()}</div>
 }
 
 const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {

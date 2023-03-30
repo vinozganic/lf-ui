@@ -8,7 +8,7 @@ import Page from "./Page"
 import Question from "./forms/Question"
 import Form from "./forms/Form"
 import Spinner from "./Spinner"
-import addColourPicker from "./forms/ColourPicker"
+import addColorPicker from "./forms/ColorPicker"
 import addSingleChoiceQuestion from "./forms/SingleChoice"
 import addDatePicker from "./forms/DatePicker"
 import addMultipleChoiceQuestion from "./forms/MultipleChoice"
@@ -24,7 +24,7 @@ export {
     Question,
     Form,
     Spinner,
-    addColourPicker,
+    addColorPicker,
     addSingleChoiceQuestion,
     addMultipleChoiceQuestion,
     addDatePicker,
