@@ -123,7 +123,7 @@ const FoundPage = () => {
             <Form
                 text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preci"
                 questions={questions}
-                className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 "
+                type="found" className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 "
             />
         </Page>
     )
