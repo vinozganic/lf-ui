@@ -4,9 +4,10 @@ import { useFetch } from "use-http"
 import { API_URL } from "../../constants"
 import ProgressBar from "./ProgressBar"
 import Button from "../Button"
+import BigText from "../BigText"
 import Spinner from "../Spinner"
 
-const Form = ({ questions, type, className }) => {
+const Form = ({ questions, text, type, className }) => {
     const initialState = questions.map((question) => {
         return { fieldName: question.fieldName, answer: null }
     })
@@ -30,7 +31,17 @@ const Form = ({ questions, type, className }) => {
     }, [progress])
 
     const addQuestion = (questionObject, updateAnswer) => {
-        const questionElement = questionObject.create(questionObject.text, questionObject.options, questionObject.fieldName, updateAnswer)
+        let dependsOnAnswer = null
+        if (questionObject.dependsOn) {
+            dependsOnAnswer = formAnswers.find((item) => item.fieldName === questionObject.dependsOn)?.answer
+            if (!dependsOnAnswer) {
+                return null
+            }
+        }
+
+        const options = dependsOnAnswer ? questionObject.options[dependsOnAnswer] : questionObject.options
+
+        const questionElement = questionObject.create(questionObject.text, options, questionObject.fieldName, updateAnswer)
         return questionElement
     }
 
@@ -49,6 +60,15 @@ const Form = ({ questions, type, className }) => {
                 }
             })
         }
+
+        const dependentQuestions = questions.filter((question) => question.dependsOn === key)
+        dependentQuestions.forEach((question) => {
+            newFormAnswers.forEach((item) => {
+                if (item.fieldName === question.fieldName) {
+                    item.answer = null
+                }
+            })
+        })
         setFormAnswers(newFormAnswers)
 
         const progress = Math.round((newFormAnswers.filter((item) => item.answer !== null).length / questions.length) * 100)
@@ -114,7 +134,8 @@ const Form = ({ questions, type, className }) => {
     return (
         <div className={`${className} relative flex items-center`}>
             <ProgressBar progress={progress} />
-            <div className="mt-32 w-full max-w-7xl">{renderQuestions()}</div>
+            <BigText className="mt-28 w-full">{text}</BigText>
+            <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
                 <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
                     Submit
