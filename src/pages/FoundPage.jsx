@@ -93,13 +93,11 @@ const questions = [
         text: "Koje boje je pronađeni predmet. Pokušaj što preciznije odrediti boju.",
         fieldName: "color",
     },
-
     {
         create: addDatePickerQuestion,
         text: "Kada si, otprilike, pronašao/la predmet?",
         fieldName: "date",
     },
-
     {
         create: addLocationSelectQuestion,
         text: "Gdje si pronašao/la predmet?",
@@ -108,7 +106,6 @@ const questions = [
         },
         fieldName: "location",
     },
-
     {
         create: addSingleChoiceQuestion,
         text: "Može li se prema izgubljenom predmetu utvrditi identitet vlasnika? Npr. negdje piše ime.",
@@ -128,4 +125,5 @@ const FoundPage = () => {
         </Page>
     )
 }
+
 export default FoundPage
