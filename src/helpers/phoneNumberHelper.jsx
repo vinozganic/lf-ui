@@ -1,85 +1,252 @@
-const getSuffix = (number, name) => {
-    switch (name) {
-        case "Puerto Rico":
-            return "-787"
-        case "Western Sahara":
-            return "12"
-        case "Russia":
-            return ""
-        case "United States":
-            return ""
-        case "Kazakhstan":
-            return ""
-        case "Canada":
-            return ""
-        case "Dominican Republic":
-            return "-809"
-        case "Saint Helena, Ascension and Tristan da Cunha":
-            return "90"
-        case "Vatican City":
-            return "79"
-        case "American Samoa":
-            return "-684"
-        case "Barbados":
-            return "-246"
-        case "Anguilla":
-            return "-264"
-        case "Jersey":
-            return "4-1534"
-        case "British Virgin Islands":
-            return "-284"
-        case "Trinidad and Tobago":
-            return "-868"
-        case "United States Virgin Islands":
-            return "-340"
-        case "Saint Kitts and Nevis":
-            return "-869"
-        case "Dominica":
-            return "-767"
-        case "Guernsey":
-            return "4-1481"
-        case "Grenada":
-            return "-473"
-        case "Svalbard and Jan Mayen":
-            return "7"
-        case "Jamaica":
-            return "-876"
-        case "Antigua and Barbuda":
-            return "-268"
-        case "Turks and Caicos Islands":
-            return "-649"
-        case "Bermuda":
-            return "-441"
-        case "Saint Lucia":
-            return "-758"
-        case "Isle of Man":
-            return "4-1624"
-        case "Northern Mariana Islands":
-            return "-670"
-        case "Saint Vincent and the Grenadines":
-            return "-784"
-        case "Guam":
-            return "-671"
-        case "Sint Maarten":
-            return "-721"
-        case "Åland Islands":
-            return "58"
-        case "Cayman Islands":
-            return "-345"
-        case "Montserrat":
-            return "-664"
-        case "Bahamas":
-            return "-242"
-        default:
-            return number.suffixes[0]
-    }
-}
+const countryData = [
+    { name: "Afghanistan", phoneNumber: "+93", flag: "🇦🇫" },
+    { name: "Åland Islands", phoneNumber: "+358", flag: "🇦🇽" },
+    { name: "Albania", phoneNumber: "+355", flag: "🇦🇱" },
+    { name: "Algeria", phoneNumber: "+213", flag: "🇩🇿" },
+    { name: "American Samoa", phoneNumber: "+1", flag: "🇦🇸" },
+    { name: "Andorra", phoneNumber: "+376", flag: "🇦🇩" },
+    { name: "Angola", phoneNumber: "+244", flag: "🇦🇴" },
+    { name: "Anguilla", phoneNumber: "+1", flag: "🇦🇮" },
+    { name: "Antigua and Barbuda", phoneNumber: "+1", flag: "🇦🇬" },
+    { name: "Argentina", phoneNumber: "+54", flag: "🇦🇷" },
+    { name: "Armenia", phoneNumber: "+374", flag: "🇦🇲" },
+    { name: "Aruba", phoneNumber: "+297", flag: "🇦🇼" },
+    { name: "Australia", phoneNumber: "+61", flag: "🇦🇺" },
+    { name: "Austria", phoneNumber: "+43", flag: "🇦🇹" },
+    { name: "Azerbaijan", phoneNumber: "+994", flag: "🇦🇿" },
+    { name: "Bahamas", phoneNumber: "+1", flag: "🇧🇸" },
+    { name: "Bahrain", phoneNumber: "+973", flag: "🇧🇭" },
+    { name: "Bangladesh", phoneNumber: "+880", flag: "🇧🇩" },
+    { name: "Barbados", phoneNumber: "+1", flag: "🇧🇧" },
+    { name: "Belarus", phoneNumber: "+375", flag: "🇧🇾" },
+    { name: "Belgium", phoneNumber: "+32", flag: "🇧🇪" },
+    { name: "Belize", phoneNumber: "+501", flag: "🇧🇿" },
+    { name: "Benin", phoneNumber: "+229", flag: "🇧🇯" },
+    { name: "Bermuda", phoneNumber: "+1", flag: "🇧🇲" },
+    { name: "Bhutan", phoneNumber: "+975", flag: "🇧🇹" },
+    { name: "Bolivia", phoneNumber: "+591", flag: "🇧🇴" },
+    { name: "Bosnia and Herzegovina", phoneNumber: "+387", flag: "🇧🇦" },
+    { name: "Botswana", phoneNumber: "+267", flag: "🇧🇼" },
+    { name: "Bouvet Island", phoneNumber: "+47", flag: "🇧🇻" },
+    { name: "Brazil", phoneNumber: "+55", flag: "🇧🇷" },
+    { name: "British Indian Ocean Territory", phoneNumber: "+246", flag: "🇮🇴" },
+    { name: "British Virgin Islands", phoneNumber: "+1", flag: "🇻🇬" },
+    { name: "Brunei", phoneNumber: "+673", flag: "🇧🇳" },
+    { name: "Bulgaria", phoneNumber: "+359", flag: "🇧🇬" },
+    { name: "Burkina Faso", phoneNumber: "+226", flag: "🇧🇫" },
+    { name: "Burundi", phoneNumber: "+257", flag: "🇧🇮" },
+    { name: "Cambodia", phoneNumber: "+855", flag: "🇰🇭" },
+    { name: "Cameroon", phoneNumber: "+237", flag: "🇨🇲" },
+    { name: "Canada", phoneNumber: "+1", flag: "🇨🇦" },
+    { name: "Cape Verde", phoneNumber: "+238", flag: "🇨🇻" },
+    { name: "Caribbean Netherlands", phoneNumber: "+599", flag: "🇧🇶" },
+    { name: "Cayman Islands", phoneNumber: "+1", flag: "🇰🇾" },
+    { name: "Central African Republic", phoneNumber: "+236", flag: "🇨🇫" },
+    { name: "Chad", phoneNumber: "+235", flag: "🇹🇩" },
+    { name: "Chile", phoneNumber: "+56", flag: "🇨🇱" },
+    { name: "China", phoneNumber: "+86", flag: "🇨🇳" },
+    { name: "Christmas Island", phoneNumber: "+61", flag: "🇨🇽" },
+    { name: "Cocos (Keeling) Islands", phoneNumber: "+61", flag: "🇨🇨" },
+    { name: "Colombia", phoneNumber: "+57", flag: "🇨🇴" },
+    { name: "Comoros", phoneNumber: "+269", flag: "🇰🇲" },
+    { name: "Cook Islands", phoneNumber: "+682", flag: "🇨🇰" },
+    { name: "Costa Rica", phoneNumber: "+506", flag: "🇨🇷" },
+    { name: "Croatia", phoneNumber: "+385", flag: "🇭🇷" },
+    { name: "Cuba", phoneNumber: "+53", flag: "🇨🇺" },
+    { name: "Curaçao", phoneNumber: "+599", flag: "🇨🇼" },
+    { name: "Cyprus", phoneNumber: "+357", flag: "🇨🇾" },
+    { name: "Czechia", phoneNumber: "+420", flag: "🇨🇿" },
+    { name: "Denmark", phoneNumber: "+45", flag: "🇩🇰" },
+    { name: "Djibouti", phoneNumber: "+253", flag: "🇩🇯" },
+    { name: "Dominica", phoneNumber: "+1", flag: "🇩🇲" },
+    { name: "Dominican Republic", phoneNumber: "+1", flag: "🇩🇴" },
+    { name: "DR Congo", phoneNumber: "+243", flag: "🇨🇩" },
+    { name: "Ecuador", phoneNumber: "+593", flag: "🇪🇨" },
+    { name: "Egypt", phoneNumber: "+20", flag: "🇪🇬" },
+    { name: "El Salvador", phoneNumber: "+503", flag: "🇸🇻" },
+    { name: "Equatorial Guinea", phoneNumber: "+240", flag: "🇬🇶" },
+    { name: "Eritrea", phoneNumber: "+291", flag: "🇪🇷" },
+    { name: "Estonia", phoneNumber: "+372", flag: "🇪🇪" },
+    { name: "Eswatini", phoneNumber: "+268", flag: "🇸🇿" },
+    { name: "Ethiopia", phoneNumber: "+251", flag: "🇪🇹" },
+    { name: "Falkland Islands", phoneNumber: "+500", flag: "🇫🇰" },
+    { name: "Faroe Islands", phoneNumber: "+298", flag: "🇫🇴" },
+    { name: "Fiji", phoneNumber: "+679", flag: "🇫🇯" },
+    { name: "Finland", phoneNumber: "+358", flag: "🇫🇮" },
+    { name: "France", phoneNumber: "+33", flag: "🇫🇷" },
+    { name: "French Guiana", phoneNumber: "+594", flag: "🇬🇫" },
+    { name: "French Polynesia", phoneNumber: "+689", flag: "🇵🇫" },
+    { name: "French Southern and Antarctic Lands", phoneNumber: "+262", flag: "🇹🇫" },
+    { name: "Gabon", phoneNumber: "+241", flag: "🇬🇦" },
+    { name: "Gambia", phoneNumber: "+220", flag: "🇬🇲" },
+    { name: "Georgia", phoneNumber: "+995", flag: "🇬🇪" },
+    { name: "Germany", phoneNumber: "+49", flag: "🇩🇪" },
+    { name: "Ghana", phoneNumber: "+233", flag: "🇬🇭" },
+    { name: "Gibraltar", phoneNumber: "+350", flag: "🇬🇮" },
+    { name: "Greece", phoneNumber: "+30", flag: "🇬🇷" },
+    { name: "Greenland", phoneNumber: "+299", flag: "🇬🇱" },
+    { name: "Grenada", phoneNumber: "+1", flag: "🇬🇩" },
+    { name: "Guadeloupe", phoneNumber: "+590", flag: "🇬🇵" },
+    { name: "Guam", phoneNumber: "+1", flag: "🇬🇺" },
+    { name: "Guatemala", phoneNumber: "+502", flag: "🇬🇹" },
+    { name: "Guernsey", phoneNumber: "+44", flag: "🇬🇬" },
+    { name: "Guinea", phoneNumber: "+224", flag: "🇬🇳" },
+    { name: "Guinea-Bissau", phoneNumber: "+245", flag: "🇬🇼" },
+    { name: "Guyana", phoneNumber: "+592", flag: "🇬🇾" },
+    { name: "Haiti", phoneNumber: "+509", flag: "🇭🇹" },
+    { name: "Honduras", phoneNumber: "+504", flag: "🇭🇳" },
+    { name: "Hong Kong", phoneNumber: "+852", flag: "🇭🇰" },
+    { name: "Hungary", phoneNumber: "+36", flag: "🇭🇺" },
+    { name: "Iceland", phoneNumber: "+354", flag: "🇮🇸" },
+    { name: "India", phoneNumber: "+91", flag: "🇮🇳" },
+    { name: "Indonesia", phoneNumber: "+62", flag: "🇮🇩" },
+    { name: "Iran", phoneNumber: "+98", flag: "🇮🇷" },
+    { name: "Iraq", phoneNumber: "+964", flag: "🇮🇶" },
+    { name: "Ireland", phoneNumber: "+353", flag: "🇮🇪" },
+    { name: "Isle of Man", phoneNumber: "+44", flag: "🇮🇲" },
+    { name: "Israel", phoneNumber: "+972", flag: "🇮🇱" },
+    { name: "Italy", phoneNumber: "+39", flag: "🇮🇹" },
+    { name: "Ivory Coast", phoneNumber: "+225", flag: "🇨🇮" },
+    { name: "Jamaica", phoneNumber: "+1", flag: "🇯🇲" },
+    { name: "Japan", phoneNumber: "+81", flag: "🇯🇵" },
+    { name: "Jersey", phoneNumber: "+44", flag: "🇯🇪" },
+    { name: "Jordan", phoneNumber: "+962", flag: "🇯🇴" },
+    { name: "Kazakhstan", phoneNumber: "+7", flag: "🇰🇿" },
+    { name: "Kenya", phoneNumber: "+254", flag: "🇰🇪" },
+    { name: "Kiribati", phoneNumber: "+686", flag: "🇰🇮" },
+    { name: "Kosovo", phoneNumber: "+383", flag: "🇽🇰" },
+    { name: "Kuwait", phoneNumber: "+965", flag: "🇰🇼" },
+    { name: "Kyrgyzstan", phoneNumber: "+996", flag: "🇰🇬" },
+    { name: "Laos", phoneNumber: "+856", flag: "🇱🇦" },
+    { name: "Latvia", phoneNumber: "+371", flag: "🇱🇻" },
+    { name: "Lebanon", phoneNumber: "+961", flag: "🇱🇧" },
+    { name: "Lesotho", phoneNumber: "+266", flag: "🇱🇸" },
+    { name: "Liberia", phoneNumber: "+231", flag: "🇱🇷" },
+    { name: "Libya", phoneNumber: "+218", flag: "🇱🇾" },
+    { name: "Liechtenstein", phoneNumber: "+423", flag: "🇱🇮" },
+    { name: "Lithuania", phoneNumber: "+370", flag: "🇱🇹" },
+    { name: "Luxembourg", phoneNumber: "+352", flag: "🇱🇺" },
+    { name: "Macau", phoneNumber: "+853", flag: "🇲🇴" },
+    { name: "Madagascar", phoneNumber: "+261", flag: "🇲🇬" },
+    { name: "Malawi", phoneNumber: "+265", flag: "🇲🇼" },
+    { name: "Malaysia", phoneNumber: "+60", flag: "🇲🇾" },
+    { name: "Maldives", phoneNumber: "+960", flag: "🇲🇻" },
+    { name: "Mali", phoneNumber: "+223", flag: "🇲🇱" },
+    { name: "Malta", phoneNumber: "+356", flag: "🇲🇹" },
+    { name: "Marshall Islands", phoneNumber: "+692", flag: "🇲🇭" },
+    { name: "Martinique", phoneNumber: "+596", flag: "🇲🇶" },
+    { name: "Mauritania", phoneNumber: "+222", flag: "🇲🇷" },
+    { name: "Mauritius", phoneNumber: "+230", flag: "🇲🇺" },
+    { name: "Mayotte", phoneNumber: "+262", flag: "🇾🇹" },
+    { name: "Mexico", phoneNumber: "+52", flag: "🇲🇽" },
+    { name: "Micronesia", phoneNumber: "+691", flag: "🇫🇲" },
+    { name: "Moldova", phoneNumber: "+373", flag: "🇲🇩" },
+    { name: "Monaco", phoneNumber: "+377", flag: "🇲🇨" },
+    { name: "Mongolia", phoneNumber: "+976", flag: "🇲🇳" },
+    { name: "Montenegro", phoneNumber: "+382", flag: "🇲🇪" },
+    { name: "Montserrat", phoneNumber: "+1", flag: "🇲🇸" },
+    { name: "Morocco", phoneNumber: "+212", flag: "🇲🇦" },
+    { name: "Mozambique", phoneNumber: "+258", flag: "🇲🇿" },
+    { name: "Myanmar", phoneNumber: "+95", flag: "🇲🇲" },
+    { name: "Namibia", phoneNumber: "+264", flag: "🇳🇦" },
+    { name: "Nauru", phoneNumber: "+674", flag: "🇳🇷" },
+    { name: "Nepal", phoneNumber: "+977", flag: "🇳🇵" },
+    { name: "Netherlands", phoneNumber: "+31", flag: "🇳🇱" },
+    { name: "New Caledonia", phoneNumber: "+687", flag: "🇳🇨" },
+    { name: "New Zealand", phoneNumber: "+64", flag: "🇳🇿" },
+    { name: "Nicaragua", phoneNumber: "+505", flag: "🇳🇮" },
+    { name: "Niger", phoneNumber: "+227", flag: "🇳🇪" },
+    { name: "Nigeria", phoneNumber: "+234", flag: "🇳🇬" },
+    { name: "Niue", phoneNumber: "+683", flag: "🇳🇺" },
+    { name: "Norfolk Island", phoneNumber: "+672", flag: "🇳🇫" },
+    { name: "North Korea", phoneNumber: "+850", flag: "🇰🇵" },
+    { name: "North Macedonia", phoneNumber: "+389", flag: "🇲🇰" },
+    { name: "Northern Mariana Islands", phoneNumber: "+1", flag: "🇲🇵" },
+    { name: "Norway", phoneNumber: "+47", flag: "🇳🇴" },
+    { name: "Oman", phoneNumber: "+968", flag: "🇴🇲" },
+    { name: "Pakistan", phoneNumber: "+92", flag: "🇵🇰" },
+    { name: "Palau", phoneNumber: "+680", flag: "🇵🇼" },
+    { name: "Palestine", phoneNumber: "+970", flag: "🇵🇸" },
+    { name: "Panama", phoneNumber: "+507", flag: "🇵🇦" },
+    { name: "Papua New Guinea", phoneNumber: "+675", flag: "🇵🇬" },
+    { name: "Paraguay", phoneNumber: "+595", flag: "🇵🇾" },
+    { name: "Peru", phoneNumber: "+51", flag: "🇵🇪" },
+    { name: "Philippines", phoneNumber: "+63", flag: "🇵🇭" },
+    { name: "Pitcairn Islands", phoneNumber: "+64", flag: "🇵🇳" },
+    { name: "Poland", phoneNumber: "+48", flag: "🇵🇱" },
+    { name: "Portugal", phoneNumber: "+351", flag: "🇵🇹" },
+    { name: "Puerto Rico", phoneNumber: "+1", flag: "🇵🇷" },
+    { name: "Qatar", phoneNumber: "+974", flag: "🇶🇦" },
+    { name: "Republic of the Congo", phoneNumber: "+242", flag: "🇨🇬" },
+    { name: "Réunion", phoneNumber: "+262", flag: "🇷🇪" },
+    { name: "Romania", phoneNumber: "+40", flag: "🇷🇴" },
+    { name: "Russia", phoneNumber: "+7", flag: "🇷🇺" },
+    { name: "Rwanda", phoneNumber: "+250", flag: "🇷🇼" },
+    { name: "Saint Barthélemy", phoneNumber: "+590", flag: "🇧🇱" },
+    { name: "Saint Helena, Ascension and Tristan da Cunha", phoneNumber: "+290", flag: "🇸🇭" },
+    { name: "Saint Kitts and Nevis", phoneNumber: "+1", flag: "🇰🇳" },
+    { name: "Saint Lucia", phoneNumber: "+1", flag: "🇱🇨" },
+    { name: "Saint Martin", phoneNumber: "+590", flag: "🇲🇫" },
+    { name: "Saint Pierre and Miquelon", phoneNumber: "+508", flag: "🇵🇲" },
+    { name: "Saint Vincent and the Grenadines", phoneNumber: "+1", flag: "🇻🇨" },
+    { name: "Samoa", phoneNumber: "+685", flag: "🇼🇸" },
+    { name: "San Marino", phoneNumber: "+378", flag: "🇸🇲" },
+    { name: "São Tomé and Príncipe", phoneNumber: "+239", flag: "🇸🇹" },
+    { name: "Saudi Arabia", phoneNumber: "+966", flag: "🇸🇦" },
+    { name: "Senegal", phoneNumber: "+221", flag: "🇸🇳" },
+    { name: "Serbia", phoneNumber: "+381", flag: "🇷🇸" },
+    { name: "Seychelles", phoneNumber: "+248", flag: "🇸🇨" },
+    { name: "Sierra Leone", phoneNumber: "+232", flag: "🇸🇱" },
+    { name: "Singapore", phoneNumber: "+65", flag: "🇸🇬" },
+    { name: "Sint Maarten", phoneNumber: "+1", flag: "🇸🇽" },
+    { name: "Slovakia", phoneNumber: "+421", flag: "🇸🇰" },
+    { name: "Slovenia", phoneNumber: "+386", flag: "🇸🇮" },
+    { name: "Solomon Islands", phoneNumber: "+677", flag: "🇸🇧" },
+    { name: "Somalia", phoneNumber: "+252", flag: "🇸🇴" },
+    { name: "South Africa", phoneNumber: "+27", flag: "🇿🇦" },
+    { name: "South Georgia", phoneNumber: "+500", flag: "🇬🇸" },
+    { name: "South Korea", phoneNumber: "+82", flag: "🇰🇷" },
+    { name: "South Sudan", phoneNumber: "+211", flag: "🇸🇸" },
+    { name: "Spain", phoneNumber: "+34", flag: "🇪🇸" },
+    { name: "Sri Lanka", phoneNumber: "+94", flag: "🇱🇰" },
+    { name: "Sudan", phoneNumber: "+249", flag: "🇸🇩" },
+    { name: "Suriname", phoneNumber: "+597", flag: "🇸🇷" },
+    { name: "Svalbard and Jan Mayen", phoneNumber: "+47", flag: "🇸🇯" },
+    { name: "Sweden", phoneNumber: "+46", flag: "🇸🇪" },
+    { name: "Switzerland", phoneNumber: "+41", flag: "🇨🇭" },
+    { name: "Syria", phoneNumber: "+963", flag: "🇸🇾" },
+    { name: "Taiwan", phoneNumber: "+886", flag: "🇹🇼" },
+    { name: "Tajikistan", phoneNumber: "+992", flag: "🇹🇯" },
+    { name: "Tanzania", phoneNumber: "+255", flag: "🇹🇿" },
+    { name: "Thailand", phoneNumber: "+66", flag: "🇹🇭" },
+    { name: "Timor-Leste", phoneNumber: "+670", flag: "🇹🇱" },
+    { name: "Togo", phoneNumber: "+228", flag: "🇹🇬" },
+    { name: "Tokelau", phoneNumber: "+690", flag: "🇹🇰" },
+    { name: "Tonga", phoneNumber: "+676", flag: "🇹🇴" },
+    { name: "Trinidad and Tobago", phoneNumber: "+1", flag: "🇹🇹" },
+    { name: "Tunisia", phoneNumber: "+216", flag: "🇹🇳" },
+    { name: "Turkey", phoneNumber: "+90", flag: "🇹🇷" },
+    { name: "Turkmenistan", phoneNumber: "+993", flag: "🇹🇲" },
+    { name: "Turks and Caicos Islands", phoneNumber: "+1", flag: "🇹🇨" },
+    { name: "Tuvalu", phoneNumber: "+688", flag: "🇹🇻" },
+    { name: "Uganda", phoneNumber: "+256", flag: "🇺🇬" },
+    { name: "Ukraine", phoneNumber: "+380", flag: "🇺🇦" },
+    { name: "United Arab Emirates", phoneNumber: "+971", flag: "🇦🇪" },
+    { name: "United Kingdom", phoneNumber: "+44", flag: "🇬🇧" },
+    { name: "United States", phoneNumber: "+1", flag: "🇺🇸" },
+    { name: "United States Minor Outlying Islands", phoneNumber: "+268", flag: "🇺🇲" },
+    { name: "United States Virgin Islands", phoneNumber: "+1", flag: "🇻🇮" },
+    { name: "Uruguay", phoneNumber: "+598", flag: "🇺🇾" },
+    { name: "Uzbekistan", phoneNumber: "+998", flag: "🇺🇿" },
+    { name: "Vanuatu", phoneNumber: "+678", flag: "🇻🇺" },
+    { name: "Vatican City", phoneNumber: "+379", flag: "🇻🇦" },
+    { name: "Venezuela", phoneNumber: "+58", flag: "🇻🇪" },
+    { name: "Vietnam", phoneNumber: "+84", flag: "🇻🇳" },
+    { name: "Wallis and Futuna", phoneNumber: "+681", flag: "🇼🇫" },
+    { name: "Western Sahara", phoneNumber: "+212", flag: "🇪🇭" },
+    { name: "Yemen", phoneNumber: "+967", flag: "🇾🇪" },
+    { name: "Zambia", phoneNumber: "+260", flag: "🇿🇲" },
+    { name: "Zimbabwe", phoneNumber: "+263", flag: "🇿🇼" },
+]
 
-const getPhoneNumber = (country) => {
-    let result = country.idd.root
-    const suffix = getSuffix(country.idd, country.name.common)
-    result = result + suffix
-    return result
-}
-
-export default getPhoneNumber
+export default countryData
