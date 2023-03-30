@@ -7,7 +7,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     const [countrySearch, setCountrySearch] = useState("")
     const [selectedCountry, setSelectedCountry] = useState({
         name: "United States",
-        phoneNumber: "+1",
+        prefix: "+1",
         flag: "🇺🇸",
     })
     const [open, setOpen] = useState(false)
@@ -21,7 +21,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
         const inputtedValue = e.target.value.replace(/\D/g, "")
         setPhoneNumberInput(inputtedValue)
         if (inputtedValue.length > 3) {
-            const phoneNumber = selectedCountry.phoneNumber + inputtedValue
+            const phoneNumber = selectedCountry.prefix + inputtedValue
             updateAnswer(phoneNumber, questionId)
         } else {
             updateAnswer(null, questionId)
@@ -31,9 +31,9 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     return (
         <div>
             <div className="flex gap-1">
-                <div className="inline-flex">
+                <div className="w-[40%] sm:w-[14%]">
                     <div
-                        className="bg-gray w-[8rem] p-2 pr-1 flex rounded-xl border-2 border-gray cursor-pointer hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 items-center justify-between"
+                        className="bg-gray p-2 pr-1 flex rounded-xl border-2 border-gray cursor-pointer hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 items-center justify-between"
                         onClick={() => {
                             if (open) {
                                 setOpen(false)
@@ -44,7 +44,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                         }}>
                         <div className="inline-flex">
                             <span
-                                className={`inline-flex ${
+                                className={`${
                                     open ? "rotate-180 transition-transform duration-300" : "transition-transform duration-300"
                                 }`}>
                                 <svg
@@ -56,12 +56,12 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                                     <path d="M3.81 4.38 8 8.57l4.19-4.19 1.52 1.53L8 11.62 2.29 5.91l1.52-1.53z" />
                                 </svg>
                             </span>
-                            <SmallText className={`inline-flex select-none px-1 pl-2 font-noto`}>{selectedCountry.flag}</SmallText>
+                            <SmallText className="select-none px-1 pl-2 font-noto">{selectedCountry.flag}</SmallText>
                         </div>
-                        <SmallText className={`inline-flex select-none`}>{selectedCountry.phoneNumber}</SmallText>
+                        <SmallText className="select-none">{selectedCountry.prefix}</SmallText>
                     </div>
                 </div>
-                <div className="inline-flex">
+                <div>
                     <input
                         type="text"
                         placeholder="Enter phone number"
@@ -72,9 +72,9 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                     />
                 </div>
             </div>
-            <div className={`bg-gray ${open ? "py-2" : "py-0"} mt-2 rounded-t-xl rounded-b-xl w-[8rem]`}>
+            <div className={`bg-gray ${open ? "py-2" : "py-0"} mt-2 rounded-t-xl rounded-b-xl w-[40%] sm:w-[14%]`}>
                 <ul className={`overflow-y-auto ${open ? "max-h-60" : "max-h-0"} scrollbar-hide`}>
-                    <div className="flex items-center px-1 w-[8rem] bg-gray border-gray border-2 sticky top-0 p-2">
+                    <div className="flex items-center px-1 bg-gray border-gray border-2 sticky top-0 p-2">
                         <span className="mx-1">
                             <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20">
                                 <path
@@ -86,7 +86,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                         <input
                             type="text"
                             placeholder="Search"
-                            className="w-[5rem] bg-gray focus:outline-none font-bold text-white placeholder:font-normal"
+                            className="w-[70%] bg-gray focus:outline-none font-bold text-white placeholder:font-normal"
                             value={countrySearch}
                             onChange={(e) => handleCountrySearch(e)}
                         />
@@ -97,13 +97,13 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                                 key={country.name}
                                 className={`p-2 border-2 select-none border-gray hover:bg-[#020829]/[.20] hover:border-primary hover:border-opacity-40 duration-100 cursor-pointer items-center justify-between flex
                                             ${
-                                                country.phoneNumber.includes(countrySearch) ||
+                                                country.prefix.includes(countrySearch) ||
                                                 country.name.toLowerCase().includes(countrySearch.toLowerCase())
                                                     ? "block"
                                                     : "hidden"
                                             } ${
                                     country === selectedCountry
-                                        ? "bg-primary border-primary hover:bg-primary hover:bg-opacity-50 hover:border-primary hover:border-opacity-0"
+                                        ? "bg-primary border-primary hover:bg-primary/50 hover:border-primary hover:border-opacity-0"
                                         : "bg-gray"
                                 }`}
                                 onClick={() => {
@@ -112,16 +112,16 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                                         setOpen(false)
                                         setCountrySearch("")
                                         if (phoneNumberInput.length > 3) {
-                                            const phoneNumber = country.phoneNumber + phoneNumberInput
+                                            const phoneNumber = country.prefix + phoneNumberInput
                                             updateAnswer(phoneNumber, questionId)
                                         }
                                     }
                                 }}>
-                                <span className="">
-                                    <SmallText className="inline-flex">{country.phoneNumber}</SmallText>
+                                <span>
+                                    <SmallText>{country.prefix}</SmallText>
                                 </span>
-                                <span className="">
-                                    <SmallText className="inline-flex font-noto">{country.flag}</SmallText>
+                                <span>
+                                    <SmallText className="font-noto">{country.flag}</SmallText>
                                 </span>
                             </li>
                         )
