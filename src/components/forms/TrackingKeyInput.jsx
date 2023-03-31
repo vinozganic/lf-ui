@@ -48,9 +48,6 @@ const TrackingKeyInput = ({ length, className }) => {
         }
     }
     const onSubmit = async () => {
-        if (trackingKey.filter((item) => item == "").length > 0) {
-            return
-        }
         try {
             const data = await get()
             if (fetchError && !data) {
