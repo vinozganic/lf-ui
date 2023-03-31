@@ -6,6 +6,9 @@ import HomePage from "./pages/HomePage"
 import FoundPage from "./pages/FoundPage"
 import MatchFoundPage from "./pages/MatchFoundPage"
 import MatchLostPage from "./pages/MatchLostPage"
+import AboutPage from "./pages/AboutPage"
+import ContactPage from "./pages/ContactPage"
+import PrivacyPage from "./pages/PrivacyPage"
 
 const router = createBrowserRouter([
     {
@@ -24,6 +27,18 @@ const router = createBrowserRouter([
         path: "/matches/lost/:id",
         element: <MatchLostPage />,
     },
+    {
+        path: "/about",
+        element: <AboutPage />,
+    },
+    {
+        path: "/contact",
+        element: <ContactPage />,
+    },
+    {
+        path: "/privacy",
+        element: <PrivacyPage />,
+    }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(<RouterProvider router={router} />)

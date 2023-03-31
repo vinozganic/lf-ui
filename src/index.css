@@ -23,3 +23,7 @@ html {
         background-position: 100% 50%;
     }
 }
+
+.custom-bullet-color li::marker {
+    color: #15bfe6;
+}
