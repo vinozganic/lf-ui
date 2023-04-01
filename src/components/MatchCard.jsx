@@ -1,100 +1,105 @@
-import { React, useState, useRef, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MediumText from './MediumText'
 
-const MatchCard = ({ probability, matchId, lostItem, functionPassID, showProps, handleShowProps, discarded, handleDiscard, lockScrollModal }) => {
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
-    const [isBlured, setIsBlured] = useState(false)
-    const ref = useRef(null)
+const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
     const navigate = useNavigate()
 
-    useEffect(() => {
-        setScreenWidth(window.innerWidth)
-    })
-
-    const redirectToSite = (matchId) => {
-        navigate(`/dm/${matchId}`)
+    const redirectToSite = (id) => {
+        navigate(`/dm/${id}`)
     }
 
+    const toggleShowProps = () => {
+        if (!match.discarded) {
+            handleShowProps(match.data.id)
+        } 
+    }
+
+    const ChatSVG = (
+        <svg className="svg-icon h-5 max-sm:h-5" viewBox="0 0 20 20">
+		    <path d="M14.999,8.543c0,0.229-0.188,0.417-0.416,0.417H5.417C5.187,8.959,5,8.772,5,8.543s0.188-0.417,0.417-0.417h9.167C14.812,8.126,14.999,8.314,14.999,8.543 M12.037,10.213H5.417C5.187,10.213,5,10.4,5,10.63c0,0.229,0.188,0.416,0.417,0.416h6.621c0.229,0,0.416-0.188,0.416-0.416C12.453,10.4,12.266,10.213,12.037,10.213 M14.583,6.046H5.417C5.187,6.046,5,6.233,5,6.463c0,0.229,0.188,0.417,0.417,0.417h9.167c0.229,0,0.416-0.188,0.416-0.417C14.999,6.233,14.812,6.046,14.583,6.046 M17.916,3.542v10c0,0.229-0.188,0.417-0.417,0.417H9.373l-2.829,2.796c-0.117,0.116-0.71,0.297-0.71-0.296v-2.5H2.5c-0.229,0-0.417-0.188-0.417-0.417v-10c0-0.229,0.188-0.417,0.417-0.417h15C17.729,3.126,17.916,3.313,17.916,3.542 M17.083,3.959H2.917v9.167H6.25c0.229,0,0.417,0.187,0.417,0.416v1.919l2.242-2.215c0.079-0.077,0.184-0.12,0.294-0.12h7.881V3.959z"></path>
+        </svg>
+    )
+
+    const TrashCanSVG = (
+        <svg className={`svg-icon h-5 max-sm:h-4`} viewBox="0 0 20 20">
+		    <path fill="black" d="M16.471,5.962c-0.365-0.066-0.709,0.176-0.774,0.538l-1.843,10.217H6.096L4.255,6.5c-0.066-0.362-0.42-0.603-0.775-0.538C3.117,6.027,2.876,6.375,2.942,6.737l1.94,10.765c0.058,0.318,0.334,0.549,0.657,0.549h8.872c0.323,0,0.6-0.23,0.656-0.549l1.941-10.765C17.074,6.375,16.833,6.027,16.471,5.962z"></path>
+			<path fill={`${match.discarded ? "none" : "black"}`} d="M16.594,3.804H3.406c-0.369,0-0.667,0.298-0.667,0.667s0.299,0.667,0.667,0.667h13.188c0.369,0,0.667-0.298,0.667-0.667S16.963,3.804,16.594,3.804z"></path>
+			<path fill={`${match.discarded ? "none" : "black"}`} d="M9.25,3.284h1.501c0.368,0,0.667-0.298,0.667-0.667c0-0.369-0.299-0.667-0.667-0.667H9.25c-0.369,0-0.667,0.298-0.667,0.667C8.583,2.985,8.882,3.284,9.25,3.284z"></path>
+		</svg>
+    )
+
+    const ArrowSVG = (
+        <svg className={`transform transition-all duration-200 ${match.showProps ? "rotate-180" : "rotate-0"} h-[2rem]`} viewBox="0 0 20 20">
+            <path fill={`${match.discarded ? "rgba(255, 255, 255, 0.5)" : "white"}`} d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+		</svg>
+    )
+
+    const CardButton = ({text, iconSVG, onClikHandler, className}) => (
+        <div className={`flex items-center justify-center text-center border-2 border-black
+            font-bold px-6 py-2 gap-x-2 rounded-3xl lg:hover:bg-opacity-80 
+            ${!match.discarded && "cursor-pointer bg-primary"} ${className}`}
+            onClick={(e) => { e.stopPropagation(); onClikHandler(match.data.id) }}>
+            <MediumText className="max-sm:text-base text-xl font-bold text-black">
+                {text}
+            </MediumText>
+            {iconSVG}
+        </div>
+    )
+
     return (
-        <div className="transform lg:scale-100 md:scale-100 scale-90">
-            <div ref={ref} 
-                className={`relative py-6 pl-6 md:pl-8 lg:pl-6 max-md:pr-6 md:pr-8 lg:pr-0 
-                    items-center justify-center flex select-none bg-gray/60 border-2 
-                    border-gray/60 rounded-lg transition ease-in-out duration-150 gap-x-10 w-full h-fit
-                ${discarded ? `bg-gray/20 lg:hover:bg-gray/60` : "cursor-pointer lg:hover:scale-105 lg:hover:bg-gray" }
-                ${isBlured ? "blur-md border-primary/50" : "lg:hover:border-primary" }
-                ${showProps ? "border-primary" : "" }`}
-                onClick={() => {if (!discarded) {handleShowProps(functionPassID); lockScrollModal()} } }
-                >
-                <div className={`w-full grid gap-y-10`}>
-                    <MediumText className={`${(screenWidth < 500) ? "text-2xl" : ""} max-lg:text-center ${discarded ? "text-white/40" : "text-white"}`}>
-                        {`Vjerojatnost: ${probability}`}
+        <nav className='relative'>
+            <div className={`p-4 sm:p-6 md:p-6 lg:px-8 lg:py-6 items-center justify-center flex
+                select-none border-2 border-gray lg:hover:border-primary rounded-lg
+                transition-all ease-in-out duration-150 gap-x-10
+                ${match.discarded ? `bg-gray/30` : "cursor-pointer lg:hover:scale-105 lg:hover:bg-gray bg-gray/60" }
+                ${match.showProps && "border-primary"}`}
+                onClick={toggleShowProps}>
+                <div className="grid md:gap-y-10 sm:gap-y-7 max-sm:gap-y-5">
+                    <MediumText className={`max-lg:text-center max-sm:text-2xl w-full   
+                        ${match.discarded ? "text-white/40" : "text-white"}`}>
+                        {`Vjerojatnost: ${match.data.match_probability}`}
                     </MediumText>
-                    <div className="flex lg:justify-start gap-x-5 max-lg:justify-center">
-                        <div className={`${(discarded && screenWidth < 1024) ? "hidden" : ""} flex gap-2 text-center font-bold px-6 py-2 w-fit items-center justify-center
-                            rounded-3xl hover:bg-opacity-80 ${discarded ? "bg-primary/50" : "cursor-pointer bg-primary"}`}
-                            onClick={(e) => { e.stopPropagation(); redirectToSite(matchId) }}
-                            >
-                            <div className={`${screenWidth < 500 ? "text-[16px]" : "text-xl"} font-bold text-black`}>
-                                Chat
-                            </div>
-                            <svg className={`svg-icon ${screenWidth < 500 ? "h-[22px]" : "h-[26px]"}`} viewBox="0 0 20 20">
-							    <path d="M17.659,3.681H8.468c-0.211,0-0.383,0.172-0.383,0.383v2.681H2.341c-0.21,0-0.383,0.172-0.383,0.383v6.126c0,0.211,0.172,0.383,0.383,0.383h1.532v2.298c0,0.566,0.554,0.368,0.653,0.27l2.569-2.567h4.437c0.21,0,0.383-0.172,0.383-0.383v-2.681h1.013l2.546,2.567c0.242,0.249,0.652,0.065,0.652-0.27v-2.298h1.533c0.211,0,0.383-0.172,0.383-0.382V4.063C18.042,3.853,17.87,3.681,17.659,3.681 M11.148,12.87H6.937c-0.102,0-0.199,0.04-0.27,0.113l-2.028,2.025v-1.756c0-0.211-0.172-0.383-0.383-0.383H2.724V7.51h5.361v2.68c0,0.21,0.172,0.382,0.383,0.382h2.68V12.87z M17.276,9.807h-1.533c-0.211,0-0.383,0.172-0.383,0.383v1.755L13.356,9.92c-0.07-0.073-0.169-0.113-0.27-0.113H8.851v-5.36h8.425V9.807z"></path>
-						    </svg>
-                        </div>
-                        <div className={`${(discarded && screenWidth < 1024) ? "hidden" : ""} flex gap-2 text-center font-bold px-6 py-2 w-fit items-center justify-center
-                            rounded-3xl hover:bg-opacity-80 ${discarded ? "bg-primary/50" : "cursor-pointer bg-primary "}`}
-                            onClick={(e) => { e.stopPropagation(); handleDiscard(functionPassID); }}
-                            >
-                            <div className={`${screenWidth < 500 ? "text-[16px]" : "text-xl"} font-bold text-black`}>
-                                Discard
-                            </div>
-                            <svg className={`svg-icon ${screenWidth < 500 ? "h-[16px]" : "h-[20px]"}`} viewBox="0 0 20 20">
-							    <path fill="black" d="M16.471,5.962c-0.365-0.066-0.709,0.176-0.774,0.538l-1.843,10.217H6.096L4.255,6.5c-0.066-0.362-0.42-0.603-0.775-0.538C3.117,6.027,2.876,6.375,2.942,6.737l1.94,10.765c0.058,0.318,0.334,0.549,0.657,0.549h8.872c0.323,0,0.6-0.23,0.656-0.549l1.941-10.765C17.074,6.375,16.833,6.027,16.471,5.962z"></path>
-							    <path fill="black" d="M16.594,3.804H3.406c-0.369,0-0.667,0.298-0.667,0.667s0.299,0.667,0.667,0.667h13.188c0.369,0,0.667-0.298,0.667-0.667S16.963,3.804,16.594,3.804z"></path>
-							    <path fill="black" d="M9.25,3.284h1.501c0.368,0,0.667-0.298,0.667-0.667c0-0.369-0.299-0.667-0.667-0.667H9.25c-0.369,0-0.667,0.298-0.667,0.667C8.583,2.985,8.882,3.284,9.25,3.284z"></path>
-						    </svg>
-                        </div>
-                        <div className={`${(discarded && screenWidth < 1024) ? "visible" : "hidden"} flex gap-2 text-center font-bold px-6 py-2 w-fit 
-                            items-center justify-center rounded-3xl hover:bg-opacity-80 bg-primary`}
-                            onClick={(e) => { e.stopPropagation(); handleDiscard(functionPassID); }}
-                            >
-                            <div className="text-xl font-bold text-black">
-                                Undo
-                            </div>
-                            <svg className="svg-icon h-[20px]" viewBox="0 0 20 20">
-							    <path fill="black" d="M16.471,5.962c-0.365-0.066-0.709,0.176-0.774,0.538l-1.843,10.217H6.096L4.255,6.5c-0.066-0.362-0.42-0.603-0.775-0.538C3.117,6.027,2.876,6.375,2.942,6.737l1.94,10.765c0.058,0.318,0.334,0.549,0.657,0.549h8.872c0.323,0,0.6-0.23,0.656-0.549l1.941-10.765C17.074,6.375,16.833,6.027,16.471,5.962z"></path>
-						    </svg>
-                        </div>
+                    <div className="flex lg:justify-start gap-x-2 sm:gap-x-5 max-lg:justify-center">
+                        <CardButton 
+                            text="Chat" 
+                            iconSVG={ChatSVG} 
+                            onClikHandler={redirectToSite} 
+                            className={`${match.discarded && "lg:bg-primary/50 max-lg:hidden"}`} 
+                        />
+                        <CardButton 
+                            text="Ukloni" 
+                            iconSVG={TrashCanSVG} 
+                            onClikHandler={handleDiscard}
+                            className={`${match.discarded && "lg:bg-primary/50 max-lg:hidden"}`}
+                        />
+                        {match.discarded &&
+                            <CardButton 
+                                text="Vrati" 
+                                iconSVG={TrashCanSVG}
+                                onClikHandler={handleDiscard} 
+                                className="lg:hidden bg-primary"
+                            />                     
+                        }
                     </div>
                 </div>
-                {lostItem && 
-                    <div className="w-fit items-center mr-4 max-lg:hidden" >
-                        <svg className={`${showProps ? "rotate-180" : "rotate-0"} w-[2rem] h-[2rem]`} viewBox="0 0 20 20">
-                            <path fill={`${discarded ? "rgba(255, 255, 255, 0.5)" : "white"}`} d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
-				        </svg>
-                    </div>
-                }
+                <span className={`max-lg:hidden items-center ${!lostItem && "hidden"}`}>
+                    {ArrowSVG}
+                </span>
             </div>
-            {discarded &&
-                <div className={`max-lg:hidden absolute z-10 opacity-0 hover:opacity-100 h-[168px] w-[434px] max-md:hidden
-                    translate-y-[-168px] rounded-lg flex justify-center items-center`}
-                    onMouseEnter={() => setIsBlured(true)}
-                    onMouseLeave={() => setIsBlured(false)}
-                    >
-                    <div className="flex grid-flow-row justify-center items-center gap-x-2 w-fit h-fit cursor-pointer bg-primary/70 border-2 border-black rounded-3xl px-6 py-2 hover:bg-primary/60"
-                        onClick={(e) => { e.stopPropagation(); handleDiscard(functionPassID); setIsBlured(false) }}>
-                        <MediumText className="text-black">
-                            Undo
-                        </MediumText>
-                        <svg className="svg-icon h-[20px]" viewBox="0 0 20 20">
-                            <path fill="black" d="M16.471,5.962c-0.365-0.066-0.709,0.176-0.774,0.538l-1.843,10.217H6.096L4.255,6.5c-0.066-0.362-0.42-0.603-0.775-0.538C3.117,6.027,2.876,6.375,2.942,6.737l1.94,10.765c0.058,0.318,0.334,0.549,0.657,0.549h8.872c0.323,0,0.6-0.23,0.656-0.549l1.941-10.765C17.074,6.375,16.833,6.027,16.471,5.962z"></path>
-                        </svg>
-                    </div>
+            {match.discarded &&
+                <div className="max-lg:hidden absolute top-0 w-full h-full transition-opacity duration-300 
+                    hover:border-primary/10 opacity-0 hover:opacity-100 rounded-lg flex justify-center 
+                    items-center z-40 hover:backdrop-blur-md">
+                    <CardButton 
+                        text="Vrati"
+                        iconSVG={TrashCanSVG}
+                        onClikHandler={handleDiscard}
+                        className="transition-all duration-200 bg-primary/80 hover:bg-primary/60 z-50"
+                    />
                 </div>
             }
-        </div>
+        </nav>
     )
 }
 
