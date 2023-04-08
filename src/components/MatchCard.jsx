@@ -5,14 +5,14 @@ import MediumText from './MediumText'
 const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
     const navigate = useNavigate()
 
-    const redirectToSite = (id) => {
+    const redirectToDmPage = (id) => {
         navigate(`/dm/${id}`)
     }
 
     const toggleShowProps = () => {
         if (!match.discarded) {
             handleShowProps(match.data.id)
-        } 
+        }
     }
 
     const chatSVG = (
@@ -60,7 +60,7 @@ const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
                     <CardButton 
                         text="Chat" 
                         iconSVG={chatSVG} 
-                        onClikHandler={redirectToSite} 
+                        onClikHandler={redirectToDmPage} 
                         className={`bg-primary ${match.discarded && "hidden"}`}
                     />
                     <CardButton
