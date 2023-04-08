@@ -17,7 +17,7 @@ const Modal = ({ onClose, displayMatch }) => {
 
     return (
         (displayString.length !== 0) &&
-            <nav className="max-lg:fixed max-lg:inset-0 max-lg:justify-center max-lg:items-center max-lg:flex lg:w-full sidebar">
+            <nav className="max-lg:fixed max-lg:inset-0 max-lg:justify-center max-lg:items-center max-lg:flex lg:flex-1">
                 <div className={`lg:hidden fixed z-40 inset-0 min-w-screen min-h-screen
                     bg-black backdrop-blur-sm bg-opacity-25`}
                     onClick={() => onClose()}>
