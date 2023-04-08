@@ -49,7 +49,7 @@ const MatchesList = ({ matches, lostItem }) => {
     }
 
     const sortedListMatchCards = matchesList.map( (match, index) => (
-            <li key={index}>
+            <li key={index} className="w-full">
                 <MatchCard
                     match={match}
                     lostItem={lostItem}
@@ -61,10 +61,10 @@ const MatchesList = ({ matches, lostItem }) => {
 
     return (
         <div className="flex my-10 lg:mx-10 xl:mx-40 max-lg:justify-center">
-            <ul className="grid sm:gap-y-20 gap-y-10">
+            <ul className="  grid sm:gap-y-20 gap-y-10">
                 {sortedListMatchCards}
             </ul>
-            <Modal 
+            <Modal
                 onClose={handleCloseModal}
                 displayMatch={matchesList.find(match => match.showProps === true)?.data || {}} 
             />

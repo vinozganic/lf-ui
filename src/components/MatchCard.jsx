@@ -36,9 +36,9 @@ const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
     )
 
     const CardButton = ({text, iconSVG, onClikHandler, className}) => (
-        <div className={`flex items-center justify-center text-center border-2 border-black
-            font-bold px-6 py-2 gap-x-2 rounded-3xl lg:hover:bg-opacity-80 
-            ${!match.discarded && "cursor-pointer bg-primary"} ${className}`}
+        <div className={`flex items-center justify-center text-center border-2 border-black 
+            font-bold px-6 py-2 gap-x-2 rounded-3xl lg:hover:bg-opacity-50 cursor-pointer 
+            transition-all ease-in-out duration-150 ${className}`}
             onClick={(e) => { e.stopPropagation(); onClikHandler(match.data.id) }}>
             <MediumText className="max-sm:text-base text-xl font-bold text-black">
                 {text}
@@ -48,57 +48,39 @@ const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
     )
 
     return (
-        <nav className='relative'>
-            <div className={`p-4 sm:p-6 md:p-6 lg:px-8 lg:py-6 items-center justify-center flex
-                select-none border-2 border-gray lg:hover:border-primary rounded-lg
-                transition-all ease-in-out duration-150 gap-x-10
-                ${match.discarded ? `bg-gray/30` : "cursor-pointer lg:hover:scale-105 lg:hover:bg-gray bg-gray/60" }
-                ${match.showProps && "border-primary"}`}
-                onClick={toggleShowProps}>
-                <div className="grid md:gap-y-10 sm:gap-y-7 max-sm:gap-y-5">
-                    <MediumText className={`max-lg:text-center max-sm:text-2xl w-full   
-                        ${match.discarded ? "text-white/40" : "text-white"}`}>
-                        {`Vjerojatnost: ${match.data.match_probability}`}
-                    </MediumText>
-                    <div className="flex lg:justify-start gap-x-2 sm:gap-x-5 max-lg:justify-center">
-                        <CardButton 
-                            text="Chat" 
-                            iconSVG={ChatSVG} 
-                            onClikHandler={redirectToSite} 
-                            className={`${match.discarded && "lg:bg-primary/50 max-lg:hidden"}`} 
-                        />
-                        <CardButton 
-                            text="Ukloni" 
-                            iconSVG={TrashCanSVG} 
-                            onClikHandler={handleDiscard}
-                            className={`${match.discarded && "lg:bg-primary/50 max-lg:hidden"}`}
-                        />
-                        {match.discarded &&
-                            <CardButton 
-                                text="Vrati" 
-                                iconSVG={TrashCanSVG}
-                                onClikHandler={handleDiscard} 
-                                className="lg:hidden bg-primary"
-                            />                     
-                        }
-                    </div>
-                </div>
-                <span className={`max-lg:hidden items-center ${!lostItem && "hidden"}`}>
-                    {ArrowSVG}
-                </span>
-            </div>
-            {match.discarded &&
-                <div className="max-lg:hidden absolute top-0 w-full h-full transition-opacity duration-300 
-                    hover:border-primary/10 opacity-0 hover:opacity-100 rounded-lg flex justify-center 
-                    items-center z-40 hover:backdrop-blur-md">
+        <nav className={`max-sm:p-4 sm:p-6 lg:px-8 lg:py-6 items-center justify-center flex
+            select-none border-2 border-gray lg:hover:border-primary rounded-lg
+            transition-all ease-in-out duration-150 gap-x-10
+            ${match.discarded ? `bg-gray/30` : "cursor-pointer lg:hover:scale-105 lg:hover:bg-gray bg-gray/60" }
+            ${match.showProps && "border-primary"}`}
+            onClick={toggleShowProps}>
+            <div className="grid md:gap-y-10 sm:gap-y-7 max-sm:gap-y-5">
+                <MediumText className={`text-center max-sm:text-2xl w-full
+                    ${match.discarded ? "text-white/40" : "text-white"}`}>
+                    {`Vjerojatnost: ${match.data.match_probability}`}
+                </MediumText>
+                <div className={`${match.discarded ? "justify-center items-center flex" : 
+                    "max-sm:flex sm:grid sm:grid-cols-2 max-sm:gap-x-2 sm:gap-x-5"}`}>
                     <CardButton 
-                        text="Vrati"
+                        text="Chat" 
+                        iconSVG={ChatSVG} 
+                        onClikHandler={redirectToSite} 
+                        className={`bg-primary ${match.discarded && "hidden"}`}
+                    />
+                    <CardButton
+                        text="Ukloni" 
                         iconSVG={TrashCanSVG}
                         onClikHandler={handleDiscard}
-                        className="transition-all duration-200 bg-primary/80 hover:bg-primary/60 z-50"
+                        className={`bg-white lg:hover:bg-white/50 ${match.discarded && "hidden"}`}
+                    />
+                    <CardButton
+                        text="Vrati" 
+                        iconSVG={TrashCanSVG}
+                        onClikHandler={handleDiscard} 
+                        className={`bg-primary ${!match.discarded && "hidden"}`}
                     />
                 </div>
-            }
+            </div>
         </nav>
     )
 }
