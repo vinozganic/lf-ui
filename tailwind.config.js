@@ -6,6 +6,12 @@ module.exports = {
             backgroundImage: (theme) => ({
                 vertical: "url('./images/bgVector828x1792.png')",
                 horizontal: "url('./images/bgVector1920x1080.png')",
+                contactVertical: "url('./images/bgContactVector828x1792.png')",
+                contactHorizontal: "url('./images/bgContactVector1920x1080.png')",
+                aboutVertical: "url('./images/bgAboutVector828x1792.png')",
+                aboutHorizontal: "url('./images/bgAboutVector1920x1080.png')",
+                privacyVertical: "url('./images/bgPrivacyVector828x1792.png')",
+                privacyHorizontal: "url('./images/bgPrivacyVector1920x1080.png')",
             }),
             dropShadow: {
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
