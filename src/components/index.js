@@ -14,6 +14,7 @@ import addDatePickerQuestion from "./forms/DatePicker"
 import Form from "./forms/Form"
 import addLocationSelectQuestion from "./forms/LocationSelect"
 import addMultipleChoiceQuestion from "./forms/MultipleChoice"
+import addPhoneNumberQuestion from "./forms/PhoneNumberInput"
 import ProgressBar from "./forms/ProgressBar"
 import Question from "./forms/Question"
 import addSingleChoiceQuestion from "./forms/SingleChoice"
@@ -33,6 +34,7 @@ export {
     Form,
     addLocationSelectQuestion,
     addMultipleChoiceQuestion,
+    addPhoneNumberQuestion,
     ProgressBar,
     Question,
     addSingleChoiceQuestion,

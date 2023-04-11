@@ -46,6 +46,7 @@ const Form = ({ questions, text, type, className }) => {
     }
 
     const updateAnswer = (answer, key) => {
+        console.log(answer, key)
         let newFormAnswers = [...formAnswers]
         newFormAnswers.forEach((item) => {
             if (item.fieldName === key) {
