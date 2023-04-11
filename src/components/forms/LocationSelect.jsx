@@ -125,6 +125,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         let answer = {
             type: "MultiLineString",
             coordinates: newMultiLineString,
+            publicTransportLines: [],
         }
         updateAnswer(answer, questionId)
     }

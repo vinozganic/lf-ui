@@ -30,7 +30,7 @@ const SingleChoice = ({ values, questionId, updateAnswer }) => {
 
     const listRadioItems = radioComponentList.map((item) => (
         <li key={item.id}>
-            <RadioComponent label={item.value} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
+            <RadioComponent label={item.value.toString()} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
         </li>
     ))
 
