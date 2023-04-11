@@ -1,14 +1,19 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import SmallText from "../SmallText"
 import Question from "./Question"
 
 const SingleChoice = ({ values, questionId, updateAnswer }) => {
-    const [radioComponentList, setRadioComponentList] = useState(
-        values.map((item, i = 0) => {
-            const id = i++
-            return { id, value: item, checked: false }
-        })
-    )
+    const initialState = values.map((item, i = 0) => {
+        const id = i++
+        return { id, value: item, checked: false }
+    })
+
+    const [radioComponentList, setRadioComponentList] = useState(initialState)
+
+    useEffect(() => {
+        setRadioComponentList(initialState)
+        updateAnswer(null, questionId)
+    }, [values])
 
     const handleSelectedState = (id) => {
         let selectedValue = null
@@ -25,7 +30,7 @@ const SingleChoice = ({ values, questionId, updateAnswer }) => {
 
     const listRadioItems = radioComponentList.map((item) => (
         <li key={item.id}>
-            <RadioComponent label={item.value} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
+            <RadioComponent label={item.value.toString()} id={item.id} handleSelectedState={handleSelectedState} checked={item.checked} />
         </li>
     ))
 

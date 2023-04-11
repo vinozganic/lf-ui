@@ -62,7 +62,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
         }
     }
 
-    return <div className={`rounded-md bg-gray p-4 ${className}`}>{renderLocationSelect()}</div>
+    return <div className={`${className}`}>{renderLocationSelect()}</div>
 }
 
 const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {
@@ -125,6 +125,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         let answer = {
             type: "MultiLineString",
             coordinates: newMultiLineString,
+            publicTransportLines: [],
         }
         updateAnswer(answer, questionId)
     }
