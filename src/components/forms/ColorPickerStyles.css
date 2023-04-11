@@ -1,0 +1,5 @@
+/* delete second occurence of element where class = flexbox-fix inside of element where class = chrome-picker */
+
+.flexbox-fix:nth-child(2) {
+    display: none !important;
+}

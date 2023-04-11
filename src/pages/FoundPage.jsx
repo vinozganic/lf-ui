@@ -1,11 +1,11 @@
-import React, { useState } from "react"
-import { addDatePicker, BigText, Page } from "../components"
-import addColourPicker from "../components/forms/ColourPicker"
-import Form from "../components/forms/Form"
-import addLocationSelectQuestion from "../components/forms/LocationSelect"
-import addMultipleChoiceQuestion from "../components/forms/MultipleChoice"
-import addSingleChoiceQuestion from "../components/forms/SingleChoice"
-import addDatePickerQuestion from "../components/forms/DatePicker"
+import {
+    addColorPickerQuestion,
+    addDatePickerQuestion,
+    addLocationSelectQuestion,
+    addSingleChoiceQuestion,
+    Form,
+    Page,
+} from "../components"
 
 const questions = [
     {
@@ -19,7 +19,7 @@ const questions = [
         dependsOn: "type",
         text: "Odaberi podtip. Ako nije ponuđen, odaberi 'other'",
         options: {
-            tech: [
+            clothes: [
                 "tshirt",
                 "shirt",
                 "lstshirt",
@@ -43,7 +43,7 @@ const questions = [
                 "socks",
                 "other",
             ],
-            clothes: [
+            tech: [
                 "mobilePhone",
                 "laptop",
                 "tablet",
@@ -89,7 +89,7 @@ const questions = [
         fieldName: "subtype",
     },
     {
-        create: addColourPicker,
+        create: addColorPickerQuestion,
         text: "Koje boje je pronađeni predmet. Pokušaj što preciznije odrediti boju.",
         fieldName: "color",
     },
@@ -118,9 +118,10 @@ const FoundPage = () => {
     return (
         <Page className="h-auto min-h-screen flex justify-center overflow-y-auto">
             <Form
-                text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preci"
+                text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preciznije odgovoriš, veće su šanse da pronađeš vlasnika."
                 questions={questions}
-                type="found" className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 "
+                type="found"
+                className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 "
             />
         </Page>
     )

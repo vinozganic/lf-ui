@@ -12,6 +12,7 @@ const SingleChoice = ({ values, questionId, updateAnswer }) => {
 
     useEffect(() => {
         setRadioComponentList(initialState)
+        updateAnswer(null, questionId)
     }, [values])
 
     const handleSelectedState = (id) => {
