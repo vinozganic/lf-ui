@@ -33,3 +33,7 @@ html {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+.custom-bullet-color li::marker {
+    color: #15bfe6;
+}
