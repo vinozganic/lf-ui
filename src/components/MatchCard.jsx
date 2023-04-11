@@ -71,35 +71,37 @@ const MatchCard = ({ match, lostItem, handleShowProps, handleDiscard }) => {
     }
 
     return (
-        <nav className={`max-sm:p-4 sm:p-6 lg:px-8 lg:py-6 items-center justify-center flex
+        <nav className={`max-sm:p-2 sm:p-6 lg:px-8 lg:py-6 items-center justify-center flex
             select-none border-2 border-gray lg:hover:border-primary rounded-lg w-full
             transition-all ease-in-out duration-150
             ${match.discarded ? `bg-gray/30` : "lg:hover:scale-105 lg:hover:bg-gray bg-gray/60" }
             ${match.showProps && "border-primary"}`}>
             <div className="grid w-full md:gap-y-10 sm:gap-y-7 max-sm:gap-y-5">
                 <ProgressBar />
-                <div className={`${match.discarded ? "justify-center items-center flex" : 
+                <div className={`relative ${match.discarded ? "flex items-centers max-sm:gap-x-8 sm:gap-x-10" : 
                     "flex items-centers max-sm:gap-x-8 sm:gap-x-10"}`}>
                     <CardButton
                         iconSVG={trashCanSVG}
                         onClickHandler={handleDiscard}
-                        className={`ml-4 bg-white/20 border-white/50 ${match.discarded && "hidden"}`}
+                        className={`ml-4 bg-white/20 border-white/50 ${match.discarded && "invisible"}`}
                     />
                     <CardButton
                         iconSVG={infoSVG}
                         onClickHandler={toggleShowProps}
-                        className={`bg-white/20 border-white/50 ${match.discarded && "hidden"}`}
-                    />
-                    <CardButton 
-                        iconSVG={chatSVG}
-                        onClickHandler={redirectToDmPage} 
-                        className={`mr-4 bg-primary border-black ${match.discarded && "hidden"}`}
+                        className={`bg-white/20 border-white/50 ${match.discarded && "invisible"}`}
                     />
                     <CardButton
-                        iconSVG={trashCanSVG}
-                        onClickHandler={handleDiscard} 
-                        className={`bg-primary ${!match.discarded && "hidden"}`}
+                        iconSVG={chatSVG}
+                        onClickHandler={redirectToDmPage} 
+                        className={`mr-4 bg-primary border-black ${match.discarded && "invisible"}`}
                     />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <CardButton
+                            iconSVG={trashCanSVG}
+                            onClickHandler={handleDiscard} 
+                            className={`bg-primary ${!match.discarded && "hidden"}`}
+                        />
+                    </div>
                 </div>
             </div>
         </nav>
