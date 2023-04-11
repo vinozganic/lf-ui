@@ -14,9 +14,6 @@ import addDatePickerQuestion from "./forms/DatePicker"
 import Form from "./forms/Form"
 import addLocationSelectQuestion from "./forms/LocationSelect"
 import addMultipleChoiceQuestion from "./forms/MultipleChoice"
-import Modal from "./Modal"
-import MatchCard from "./MatchCard"
-import MatchesList from "./MatchesList"
 import addPhoneNumberQuestion from "./forms/PhoneNumberInput"
 import ProgressBar from "./forms/ProgressBar"
 import Question from "./forms/Question"
@@ -40,13 +37,12 @@ export {
     Form,
     addLocationSelectQuestion,
     addMultipleChoiceQuestion,
-    addDatePicker,
-    Modal,
-    MatchCard,
-    MatchesList,
     addPhoneNumberQuestion,
     ProgressBar,
     Question,
     addSingleChoiceQuestion,
     TrackingKeyInput,
+    Modal,
+    MatchCard,
+    MatchesList,
 }
