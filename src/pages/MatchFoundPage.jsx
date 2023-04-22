@@ -28,7 +28,7 @@ const MatchFoundPage = () => {
     }, [])
 
     return (
-        <Page className="h-auto min-h-screen justify-center ">
+        <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
             <MatchesList matches={matches} lostItem={true} />
         </Page>
     )
