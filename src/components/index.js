@@ -20,6 +20,9 @@ import ProgressBar from "./forms/ProgressBar"
 import Question from "./forms/Question"
 import addSingleChoiceQuestion from "./forms/SingleChoice"
 import TrackingKeyInput from "./forms/TrackingKeyInput"
+import Modal from "./Modal"
+import MatchCard from "./MatchCard"
+import MatchesList from "./MatchesList"
 
 export {
     BigText,
@@ -41,4 +44,7 @@ export {
     Question,
     addSingleChoiceQuestion,
     TrackingKeyInput,
+    Modal,
+    MatchCard,
+    MatchesList,
 }

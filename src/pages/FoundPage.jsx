@@ -112,12 +112,6 @@ const questions = [
         text: "Unesi svoj broj telefona.",
         fieldName: "phoneNumber",
     },
-    {
-        create: addSingleChoiceQuestion,
-        text: "Može li se prema izgubljenom predmetu utvrditi identitet vlasnika? Npr. negdje piše ime.",
-        options: [true, false],
-        fieldName: "identifiable",
-    },
 ]
 
 const FoundPage = () => {

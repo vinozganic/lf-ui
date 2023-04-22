@@ -8,7 +8,11 @@ const MatchLostPage = () => {
     const { id } = useParams()
     const { loading, error, data: { matches = [] } = {} } = useFetch(`${API_URL}/matches/lost/${id}`, {}, [])
 
-    return <Page>{loading && <Spinner />}</Page>
+    return (
+        <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
+            {loading && <Spinner />}
+        </Page>
+    )
 }
 
 export default MatchLostPage

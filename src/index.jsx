@@ -43,6 +43,10 @@ const router = createBrowserRouter([
     {
         path: "/privacy",
         element: <PrivacyPage />,
+    },
+    {
+        path: "/dm/:id",
+        element: <HomePage />,
     }
 ])
 
