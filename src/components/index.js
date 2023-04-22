@@ -1,6 +1,7 @@
 // components
 import BigText from "./BigText"
 import Button from "./Button"
+import Footer from "./Footer"
 import MediumText from "./MediumText"
 import Page from "./Page"
 import SmallText from "./SmallText"
@@ -23,6 +24,7 @@ import TrackingKeyInput from "./forms/TrackingKeyInput"
 export {
     BigText,
     Button,
+    Footer,
     MediumText,
     Page,
     SmallText,

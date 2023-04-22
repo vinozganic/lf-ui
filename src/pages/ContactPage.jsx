@@ -4,7 +4,7 @@ import Page from "../components/Page"
 
 const ContactPage = () => {
     return (
-        <Page className="h-auto min-h-screen bg-contactVertical lg:bg-contactHorizontal bg-cover bg-no-repeat flex flex-col items-center px-6 lg:px-16">
+        <Page className="bg-contactVertical lg:bg-contactHorizontal bg-cover bg-no-repeat flex flex-col items-center px-6 lg:px-16">
             <BigText className="mt-8 lg:mt-20 lg:text-center text-center text-4xl mb-10 lg:mb-4">Kontaktirajte nas</BigText>
             <MediumText className="lg:mt-8 flex flex-col justify-center items-center mb-4 lg:mb-0">
                 Email adresa:{" "}
@@ -13,7 +13,7 @@ const ContactPage = () => {
                 </a>
             </MediumText>
             <MediumText className="lg:mt-4 flex flex-col justify-center items-center mb-4 lg:mb-0">
-                <a>Telefon:{" "}</a>
+                <a>Telefon: </a>
                 <a href="tel:+395123456789" className="text-primary font-medium">
                     +395 123 456 789
                 </a>
