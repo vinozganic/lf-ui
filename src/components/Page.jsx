@@ -1,24 +1,13 @@
 import React from "react"
-import TopBar from "./TopBar"
+import { TopBar, Footer } from "./"
 
-const Page = ({ children, className, bgImage }) => {
-    const background = bgImage ? (
-        <div
-            style={{
-                backgroundImage: `url(${bgImage})`,
-            }}
-            className={`p-6 pt-24 bg-background ${className}`}>
-            {children}
-        </div>
-    ) : (
-        <div className={`p-6 pt-24 bg-background ${className}`}>{children}</div>
-    )
-
+const Page = ({ children, className, bgClassName }) => {
     return (
-        <>
+        <div className={`min-h-screen pt-24 bg-background ${bgClassName} flex flex-col justify-between `}>
             <TopBar />
-            {background}
-        </>
+            <div className={`flex-grow ${className}`}>{children}</div>
+            <Footer />
+        </div>
     )
 }
 

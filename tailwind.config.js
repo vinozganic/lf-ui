@@ -4,8 +4,8 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: (theme) => ({
-                vertical: "url('/images/bgVector828x1792.png')",
-                horizontal: "url('/images/bgVector1920x1080.png')",
+                vertical: "linear-gradient(rgba(255, 255, 255, 0) 40%, #020829 100%), url('/images/bgVector828x1792.png')",
+                horizontal: "linear-gradient(rgba(255, 255, 255, 0) 40%, #020829 100%), url('/images/bgVector1920x1080.png')",
                 contactVertical: "url('/images/bgContactVector828x1792.png')",
                 contactHorizontal: "url('/images/bgContactVector1920x1080.png')",
                 aboutVertical: "url('/images/bgAboutVector828x1792.png')",
@@ -30,6 +30,7 @@ module.exports = {
             black: "#000000",
             white: "rgba(255, 255, 255, 0.9)",
             gray: "#384866",
+            transparent: "transparent",
             green: "rgb(13, 199, 0)",
             yellow: "rgb(225, 240, 2)",
             red: "rgb(217, 64, 50)",

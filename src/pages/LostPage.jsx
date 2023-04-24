@@ -116,12 +116,12 @@ const questions = [
 
 const FoundPage = () => {
     return (
-        <Page className="h-auto min-h-screen flex justify-center overflow-y-auto">
+        <Page className="flex justify-center overflow-y-auto">
             <Form
                 text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preciznije odgovoriš, veće su šanse da pronađeš vlasnika."
                 questions={questions}
                 type="lost"
-                className="w-full md:w-3/4 xl:w-2/3 flex flex-col gap-y-12 "
+                className="w-full md:w-3/4 xl:w-2/3 flex flex-col items-center gap-y-12 "
             />
         </Page>
     )
