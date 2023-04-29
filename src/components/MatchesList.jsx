@@ -22,7 +22,6 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
 
     const scrollLeft = () => {
         scrollContainer.current.scrollLeft -= 180
-        console.log(currentMatch)
     }
 
     const scrollRight = () => {

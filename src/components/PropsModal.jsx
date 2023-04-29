@@ -21,9 +21,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
         const types = await typeRequest.get(`/config/types`)
         if (typeResponse.ok) {
             setTypes(types.data)
-            console.log(types.data)
         }
-        console.log(currentMatch)
     }, [typeRequest, typeResponse])
 
     useEffect(() => {

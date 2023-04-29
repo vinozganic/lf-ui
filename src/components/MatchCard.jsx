@@ -16,7 +16,7 @@ const MatchCard = ({ match, className, itemDatas, setCurrentMatch, handleDiscard
                 <div
                     className={`h-full rounded-2xl ${progressColor} px-4 flex justify-center items-center text-background font-bold`}
                     style={{ width: `${match.data.matchProbability * 100}%` }}>
-                    {match.data.matchProbability * 100}%
+                    {Math.round(match.data.matchProbability * 100, 2)}%
                 </div>
             </div>
         )
