@@ -1,35 +1,47 @@
-import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { Page, MatchesList } from "../components"
+import React, { useState, useEffect, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
+import { Page, MatchesList, Spinner, SmallText } from '../components'
+import { useFetch } from 'use-http'
+import { API_URL } from '../constants'
 
 const MatchFoundPage = () => {
     const { id } = useParams()
-    const [matches, setMatches] = useState([
-        { id: 2, found_id: 20, lost_id: 10, match_probability: 1},
-        { id: 3, found_id: 20, lost_id: 11, match_probability: 0.7},
-        { id: 1, found_id: 20, lost_id: 12, match_probability: 0.5},
-        { id: 4, found_id: 20, lost_id: 13, match_probability: 0.4},
-        { id: 5, found_id: 20, lost_id: 14, match_probability: 0.3},
-        { id: 6, found_id: 20, lost_id: 15, match_probability: 0.8},
-    ])
+    const [matches, setMatches] = useState([])
+    const [resolved, setResolved] = useState(false)
+
+    const { loading: matchesLoading, error: matchesError, request: matchesRequest, response: matchesResponse } = useFetch(`${API_URL}`)
+    const { loading: foundItemLoading, error: foundItemError, request: foundItemRequest, response: foundItemResponse } = useFetch(`${API_URL}`)
+
+    const getMatches = useCallback(async () => {
+        const matchesdata = await matchesRequest.get(`/matches/found/${id}`)
+        if (matchesResponse.ok) {
+            setMatches(matchesdata.data)
+        }
+    }, [matchesRequest, matchesResponse])
+
+    const getFoundItem = useCallback(async () => {
+        const foundItemData = await foundItemRequest.post(`/found/batch`, [id])
+        if (foundItemResponse.ok && foundItemData.data[0].resolved) {
+            setResolved(true)
+        }
+    }, [foundItemRequest, foundItemResponse])
 
     useEffect(() => {
-        const getMatches = async (id) => {
-            try {
-                const apiUri = import.meta.env.VITE_API_URI
-                const response = await fetch(`${apiUri}/matches/found/${id}`)
-                const data = await response.json()
-                setMatches(data.matches)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        getMatches(id)
-    }, [])
+        getMatches()
+        getFoundItem()
+    }, [getMatches, getFoundItem])
 
     return (
         <Page className="h-auto min-h-screen justify-center ">
-            <MatchesList matches={matches} lostItem={true} />
+            {(matchesLoading || foundItemLoading) && <Spinner />}
+            {!matchesLoading && !foundItemLoading && resolved && (
+                <div>
+                    <SmallText>Predmet je vraćen vlasniku</SmallText>
+                </div>
+            )}
+            {!matchesLoading && !foundItemLoading && !resolved && (
+                <MatchesList matches={matches.filter((match) => match.resolved === false)} lostItem={true} resolveItem={null} />
+            )}
         </Page>
     )
 }
