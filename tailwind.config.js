@@ -14,6 +14,8 @@ module.exports = {
                 privacyHorizontal: "url('/images/bgPrivacyVector1920x1080.png')",
                 matchesVertical: "url('/images/bgMatchesVector828x1792.png')",
                 matchesHorizontal: "url('/images/bgMatchesVector1920x1080.png')",
+                formVertical: "url('/images/bgFormVector828x1792.png')",
+                formHorizontal: "url('/images/bgFormVector1920x1080.png')"
             }),
             dropShadow: {
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
