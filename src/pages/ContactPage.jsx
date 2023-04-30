@@ -4,7 +4,7 @@ import Page from "../components/Page"
 
 const ContactPage = () => {
     return (
-        <Page className="bg-contactVertical lg:bg-contactHorizontal bg-cover bg-no-repeat flex flex-col items-center px-6 lg:px-16">
+        <Page bgClassName="bg-contactVertical lg:bg-contactHorizontal bg-cover bg-no-repeat bg-fixed" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="mt-8 lg:mt-20 lg:text-center text-center text-4xl mb-10 lg:mb-4">Kontaktirajte nas</BigText>
             <MediumText className="lg:mt-8 flex flex-col justify-center items-center mb-4 lg:mb-0">
                 Email adresa:{" "}
