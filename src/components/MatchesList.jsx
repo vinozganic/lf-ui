@@ -79,8 +79,7 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
             <MatchCard
                 className={`${currentMatch?.data.id === match.data.id ? 'border-primary' : ''}`}
                 match={match}
-                lostItem={lostItem}
-                itemDatas={!lostItem ? null : foundItems?.data}
+                itemData={!lostItem ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
                 setCurrentMatch={setCurrentMatch}
             />
         </div>

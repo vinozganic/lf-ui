@@ -13,7 +13,7 @@ const MatchLostPage = () => {
     const { loading: resolvedLoading, error: resolvedError, request: resolvedRequest, response: resolvedResponse } = useFetch(`${API_URL}`)
     const { loading: lostItemLoading, error: lostItemError, request: lostItemRequest, response: lostItemResponse } = useFetch(`${API_URL}`)
 
-    const resolveItemWithoutCards = useCallback(async (body) => {
+    const resolveItem = useCallback(async (body) => {
         if (body === null) {
             const resolveData = await resolvedRequest.post(`/lost/resolve`, { lostId: id })
         } else {
@@ -53,7 +53,7 @@ const MatchLostPage = () => {
                 <MatchesList
                     matches={matches.filter((match) => match.resolved === false)}
                     lostItem={false}
-                    resolveItem={resolveItemWithoutCards}
+                    resolveItem={resolveItem}
                 />
             )}
         </Page>

@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import SmallText from './SmallText'
 
-const MatchCard = ({ match, className, itemDatas, setCurrentMatch, handleDiscard }) => {
+const MatchCard = ({ match, className, setCurrentMatch, itemData }) => {
     const [progressColor, setProgressColor] = useState('')
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const MatchCard = ({ match, className, itemDatas, setCurrentMatch, handleDiscard
             onClick={() => {
                 setCurrentMatch({
                     data: match.data,
-                    itemData: itemDatas === null ? null : itemDatas.find((item) => item._id === match.data.lostId),
+                    itemData: itemData,
                     showProps: false,
                 })
             }}>

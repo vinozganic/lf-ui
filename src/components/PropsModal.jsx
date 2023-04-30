@@ -44,10 +44,10 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 <SmallText>Vrsta:</SmallText>
                             </div>
                             <div className="text-center p-2">
-                            {
-                                // doljnja linija treba biti izmjenja u:
-                                // <SmallText>{types.find((type) => type.name === currentMatch.itemData.type).niceName}</SmallText>
-                            }
+                                {
+                                    // doljnja linija treba biti izmjenja u:
+                                    // <SmallText>{types.find((type) => type.name === currentMatch.itemData.type).niceName}</SmallText>
+                                }
                                 <SmallText>{types.find((type) => type.name === currentMatch.itemData.subtype).niceName}</SmallText>
                             </div>
                             <div className="text-left p-2">
@@ -89,6 +89,17 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                     </>
                                 )}
                                 {currentMatch.itemData.location.type == 'Point' && <Marker position={center} />}
+                                {currentMatch.itemData.location.hasOwnProperty('publicTransportLines') ? (
+                                    currentMatch.itemData.location.publicTransportLines.map((line) => (
+                                        <Polyline
+                                            key={line.coordinates}
+                                            pathOptions={{ color: 'red', weight: 5 }}
+                                            positions={line.coordinates.map((innerCoords) => [innerCoords[1], innerCoords[0]])}
+                                        />
+                                    ))
+                                ) : (
+                                    <></>
+                                )}
                             </MapContainer>
                         </div>
                         <Button onClick={() => handleShowProps()} className="pt-4">
