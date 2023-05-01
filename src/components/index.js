@@ -1,6 +1,7 @@
 // components
 import BigText from "./BigText"
 import Button from "./Button"
+import Chat from "./ChatBox"
 import Footer from "./Footer"
 import MediumText from "./MediumText"
 import Page from "./Page"
@@ -27,6 +28,7 @@ import MatchesList from "./MatchesList"
 export {
     BigText,
     Button,
+    Chat,
     Footer,
     MediumText,
     Page,
