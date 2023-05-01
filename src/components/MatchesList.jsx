@@ -1,7 +1,13 @@
-import { React, useEffect, useState } from "react"
+import { React, useEffect, useState, useRef, useEffect, useCallback } from "react"
 import { StreamChat } from "stream-chat"
 import MatchCard from "./MatchCard"
-import Modal from "./Modal"
+import SmallText from "./SmallText"
+import Button from "./Button"
+import ResolvedModal from "./ResolvedModal"
+import "./MatchesListStyles.css"
+import { useFetch } from "use-http"
+import { API_URL } from "../constants"
+import PropsModal from "./PropsModal"
 import Chat from "./ChatBox"
 
 const MatchesList = ({ matches, lostItem, item }) => {
@@ -31,60 +37,69 @@ const MatchesList = ({ matches, lostItem, item }) => {
         )
     }, [matches])
 
-    const handleShowProps = (index) => {
-        const newSelectMatches = matchesList.map((match) => {
-            if (index === match.data.id) {
-                return { ...match, showProps: !match.showProps }
-            }
-            return { ...match, showProps: false }
-        })
-        setMatchesList(newSelectMatches)
+    const handleResolvedChange = () => {
+        setResolvedModalVisible(true)
+        setItemToResolveWith(null)
     }
 
-    const handleCloseModal = () => {
-        const newMatches = matchesList.map((match) => {
-            return { ...match, showProps: false }
-        })
-        setMatchesList(newMatches)
+    const handleResolveWithCard = () => {
+        setResolvedModalVisible(true)
+        setItemToResolveWith({ foundId: currentMatch.data.foundId })
     }
 
-    const handleDiscard = (index) => {
-        const newDiscardedMathces = matchesList
-            .map((match) => {
-                if (index === match.data.id) {
-                    if (match.discarded) {
-                        return { ...match, discarded: !match.discarded }
-                    }
-                    return { ...match, showProps: false, discarded: !match.discarded }
-                }
-                return { ...match }
-            })
-            .sort((a, b) => {
-                if (a.discarded && !b.discarded) {
-                    return 1
-                } else if (!a.discarded && b.discarded) {
-                    return -1
-                } else {
-                    return b.data.matchProbability - a.data.matchProbability
-                }
-            })
-        setMatchesList(newDiscardedMathces)
+    const handleShowProps = () => {
+        setCurrentMatch({ data: currentMatch.data, itemData: currentMatch.itemData, showProps: !currentMatch.showProps })
+    }
+
+    const getItems = useCallback(async () => {
+        const items = await foundRequest.post(
+            `/lost/batch`,
+            matches.map((match) => match.lostId)
+        )
+        if (foundResponse.ok) {
+            setFoundItems(items)
+        }
+    }, [foundRequest, foundResponse])
+
+    useEffect(() => {
+        if (lostItem) {
+            getItems()
+        }
+    }, [getItems])
+
+    const ArrowRightSvg = () => {
+        return (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white">
+                <path d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z" />
+            </svg>
+        )
+    }
+
+    const ArrowLeftSvg = () => {
+        return (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white">
+                <path d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z" />
+            </svg>
+        )
     }
 
     const sortedListMatchCards = matchesList.map((match, index) => (
-        <li key={index} className="w-full">
-            <MatchCard match={match} lostItem={lostItem} handleShowProps={handleShowProps} handleDiscard={handleDiscard} />
-        </li>
+        <div key={index} className={`w-full snap-start`}>
+            <MatchCard
+                className={`${currentMatch?.data.id === match.data.id ? "border-primary" : ""}`}
+                match={match}
+                itemData={!lostItem ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
+                setCurrentMatch={setCurrentMatch}
+            />
+        </div>
     ))
 
     if (!chatClient) return null
 
     return (
         <div className="flex my-10 lg:mx-10 xl:mx-40 max-lg:justify-center">
-            <ul className="grid sm:gap-y-20 gap-y-10">{sortedListMatchCards}</ul>
-            <Modal onClose={handleCloseModal} displayMatch={matchesList.find((match) => match.showProps === true)?.data || {}}>
-                <Chat matchId={matchesList.find((match) => match.showProps === true)?.data.id || {}} chatClient={chatClient} />
-            </Modal>
+            <ul className="  grid sm:gap-y-20 gap-y-10">{sortedListMatchCards}</ul>
+            <Modal onClose={handleCloseModal} displayMatch={matchesList.find((match) => match.showProps === true)?.data || {}} />
         </div>
     )
 }

@@ -4,7 +4,7 @@ import Page from "../components/Page"
 
 const AboutPage = () => {
     return (
-        <Page className="bg-aboutVertical lg:bg-aboutHorizontal bg-cover bg-center bg-no-repeat flex flex-col items-center px-6 lg:px-16">
+        <Page bgClassName="bg-aboutVertical lg:bg-aboutHorizontal bg-cover bg-center bg-fixed bg-no-repeat" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="text-center mt-12 lg:mt-20">O aplikaciji</BigText>
             <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Dobrodošli</MediumText>
             <SmallText className="mx-2 mt-5 lg:w-3/4 text-left font-medium">

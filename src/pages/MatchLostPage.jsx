@@ -1,19 +1,57 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
+import { Page, Spinner, MatchesList, SmallText } from "../components"
 import { useFetch } from "use-http"
-import { Page, Spinner, MatchesList } from "../components"
 import { API_URL } from "../constants"
 
 const MatchLostPage = () => {
     const { id } = useParams()
-    const { matchesLoading, matchesError, data: { data: matches = [] } = {} } = useFetch(`${API_URL}/matches/lost/${id}`, {}, [])
-    let { itemLoading, itemError, data: { data: item = {} } = {} } = useFetch(`${API_URL}/lost/batch`, { method: "POST", body: [id] }, [])
-    item = item[0]
+    const [resolved, setResolved] = useState(false)
+    const [matches, setMatches] = useState([])
+
+    const { loading: matchesLoading, error: matchesError, request: matchesRequest, response: matchesResponse } = useFetch(`${API_URL}`)
+    const { loading: resolvedLoading, error: resolvedError, request: resolvedRequest, response: resolvedResponse } = useFetch(`${API_URL}`)
+    const { loading: lostItemLoading, error: lostItemError, request: lostItemRequest, response: lostItemResponse } = useFetch(`${API_URL}`)
+
+    const resolveItem = useCallback(async (body) => {
+        if (body === null) {
+            const resolveData = await resolvedRequest.post(`/lost/resolve`, { lostId: id })
+        } else {
+            const resolveData = await resolvedRequest.post(`/lost/resolve`, { lostId: id, foundId: body.foundId })
+        }
+        setResolved(true)
+    }, [])
+
+    const getLostItem = useCallback(async () => {
+        const lostItemData = await lostItemRequest.post(`/lost/batch`, [id])
+        if (lostItemResponse.ok && lostItemData.data[0].resolved) {
+            setResolved(true)
+        }
+    }, [lostItemRequest, lostItemResponse])
+
+    const getMatches = useCallback(async () => {
+        const matchesdata = await matchesRequest.get(`/matches/lost/${id}`)
+        if (matchesResponse.ok) {
+            setMatches(matchesdata.data)
+        }
+    }, [matchesRequest, matchesResponse])
+
+    useEffect(() => {
+        getMatches()
+        getLostItem()
+    }, [getMatches, getLostItem, resolved])
 
     return (
-        <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
-            {(matchesLoading || itemLoading) && <Spinner />}
-            {matches && item && <MatchesList matches={matches} lostItem={true} item={item} />}
+        <Page className="h-auto min-h-screen justify-center ">
+            {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}
+            {!matchesLoading && !resolvedLoading && !lostItemLoading && resolved && (
+                <div>
+                    <SmallText>Predmet je pronađen</SmallText>
+                </div>
+            )}
+            {!matchesLoading && !resolvedLoading && !lostItemLoading && !resolved && (
+                <MatchesList matches={matches.filter((match) => match.resolved === false)} lostItem={false} resolveItem={resolveItem} />
+            )}
         </Page>
     )
 }

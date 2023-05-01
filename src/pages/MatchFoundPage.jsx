@@ -1,21 +1,54 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
+import { Page, MatchesList, Spinner, SmallText } from "../components"
 import { useFetch } from "use-http"
-import { Page, Spinner, MatchesList } from "../components"
 import { API_URL } from "../constants"
 
 const MatchLostPage = () => {
     const { id } = useParams()
-    const { matchesLoading, matchesError, data: { data: matches = [] } = {} } = useFetch(`${API_URL}/matches/found/${id}`, {}, [])
-    let { itemLoading, itemError, data: { data: item = {} } = {} } = useFetch(`${API_URL}/found/batch`, { method: "POST", body: [id] }, [])
-    item = item[0]
+    const [matches, setMatches] = useState([])
+    const [resolved, setResolved] = useState(false)
+
+    const { loading: matchesLoading, error: matchesError, request: matchesRequest, response: matchesResponse } = useFetch(`${API_URL}`)
+    const {
+        loading: foundItemLoading,
+        error: foundItemError,
+        request: foundItemRequest,
+        response: foundItemResponse,
+    } = useFetch(`${API_URL}`)
+
+    const getMatches = useCallback(async () => {
+        const matchesdata = await matchesRequest.get(`/matches/found/${id}`)
+        if (matchesResponse.ok) {
+            setMatches(matchesdata.data)
+        }
+    }, [matchesRequest, matchesResponse])
+
+    const getFoundItem = useCallback(async () => {
+        const foundItemData = await foundItemRequest.post(`/found/batch`, [id])
+        if (foundItemResponse.ok && foundItemData.data[0].resolved) {
+            setResolved(true)
+        }
+    }, [foundItemRequest, foundItemResponse])
+
+    useEffect(() => {
+        getMatches()
+        getFoundItem()
+    }, [getMatches, getFoundItem])
 
     return (
         <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
-            {(matchesLoading || itemLoading) && <Spinner />}
-            {matches && item && <MatchesList matches={matches} lostItem={false} item={item} />}
+            {(matchesLoading || foundItemLoading) && <Spinner />}
+            {!matchesLoading && !foundItemLoading && resolved && (
+                <div>
+                    <SmallText>Predmet je vraćen vlasniku</SmallText>
+                </div>
+            )}
+            {!matchesLoading && !foundItemLoading && !resolved && (
+                <MatchesList matches={matches.filter((match) => match.resolved === false)} lostItem={true} resolveItem={null} />
+            )}
         </Page>
     )
 }
 
-export default MatchLostPage
+export default MatchFoundPage
