@@ -4,11 +4,15 @@
 
 .flexbox-fix:first-of-type > div:nth-child(2) {
     position: absolute;
-    top: 10px;
+    top: 0.3rem;
     width: 100%;
 }
 
 .flexbox-fix:nth-child(1) > div:nth-child(1),
 .flexbox-fix:nth-child(2) > div {
     display: none;
+}
+
+div.hue-horizontal {
+    border-radius: 0.3rem;
 }

@@ -16,12 +16,12 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
     }
 
     return (
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start sm:h-60">
             <ChromePicker
                 color={color}
                 onChange={handleChangeComplete}
                 disableAlpha={true}
-                className="pb-2"
+                className="pb-2 sm:ml-0 sm:mt-0 sm:mb-0"
                 styles={{
                     default: {
                         picker: {
@@ -35,18 +35,16 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
                             borderTopRightRadius: "0.5rem",
                         },
                     },
-                }}                
+                }}
             />
-            <div className="ml-5">
+            <div className="flex flex-col items-center ml-0 mt-4 sm:ml-8 sm:mt-0 sm:mb-0">
                 <div
-                    className="w-[150px] h-[123.75px] px-4 py-2 border-2 border-gray bg-primary"
+                    className="sm:mb-0 w-28 h-28 px-4 py-2 border-2 border-gray rounded-full bg-primary"
                     style={{
                         backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
-                        marginBottom: "1rem",
-                        borderRadius: "0.5rem",
                     }}
                 ></div>
-                <div className="w-full text-center bg-gray px-4 py-2 
+                <div className="w-full text-center bg-gray px-4 py-2 mt-4 sm:mt-4
                 border-gray border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 rounded-xl duration-100 cursor-pointer" onClick={handleSelectColor}>
                     <SmallText className="select-none">Odaberi boju</SmallText>
                 </div>
