@@ -1,5 +1,5 @@
 import React from "react"
-import { TopBar, Footer } from "./"
+import { TopBar, Footer } from "../components"
 
 const Page = ({ children, className, bgClassName }) => {
     return (

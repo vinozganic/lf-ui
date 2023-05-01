@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
-import Question from "./Question"
-import SmallText from "../SmallText"
 import countryData from "../../helpers/phoneNumberHelper"
+import { SmallText, Question } from "../../components"
 
 const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     const [countrySearch, setCountrySearch] = useState("")

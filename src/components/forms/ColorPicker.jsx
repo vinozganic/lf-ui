@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { ChromePicker } from "react-color"
-import Question from "./Question"
+import { Question, SmallText } from "../../components"
 import "./ColorPickerStyles.css"
-import { SmallText } from "../"
 
 const ColorPicker = ({ questionId, updateAnswer }) => {
     const [color, setColor] = useState("#15bfe6")

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { SmallText } from "./"
+import { SmallText } from "../components"
 
 const Footer = () => {
     return (

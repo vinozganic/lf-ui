@@ -1,6 +1,5 @@
 import { React, useState} from "react"
-import MatchCard from "./MatchCard"
-import Modal from "./Modal"
+import { MatchCard, Modal } from "../components"
 
 const MatchesList = ({ matches, lostItem }) => {
     const [matchesList, setMatchesList] = useState (

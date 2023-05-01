@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import SmallText from "../SmallText"
-import Question from "./Question"
+import { Question, SmallText } from "../../components"
+
 
 const SingleChoice = ({ values, questionId, updateAnswer }) => {
     const initialState = values.map((item, i = 0) => {

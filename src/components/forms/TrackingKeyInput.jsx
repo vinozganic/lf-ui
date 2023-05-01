@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
-import { Button, MediumText, Spinner } from "../"
+import { Button, MediumText, Spinner } from "../../components"
 import { API_URL } from "../../constants"
 
 const TrackingKeyInput = ({ length, className }) => {
