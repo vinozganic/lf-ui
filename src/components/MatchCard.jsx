@@ -37,10 +37,7 @@ const MatchCard = ({ match, className, setCurrentMatch, itemData }) => {
                 })
             }}>
             <div className="grid w-full lg:gap-y-10 gap-y-7">
-                {
-                    // Crna Ovca je "placeholder" za nickname
-                }
-                <SmallText className="text-center">Crna Ovca</SmallText>
+                <SmallText className="text-center">{match.data.nickname}</SmallText>
                 <ProgressBar />
             </div>
         </nav>

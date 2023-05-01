@@ -44,11 +44,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 <SmallText>Vrsta:</SmallText>
                             </div>
                             <div className="text-center p-2">
-                                {
-                                    // doljnja linija treba biti izmjenja u:
-                                    // <SmallText>{types.find((type) => type.name === currentMatch.itemData.type).niceName}</SmallText>
-                                }
-                                <SmallText>{types.find((type) => type.name === currentMatch.itemData.subtype).niceName}</SmallText>
+                                <SmallText>{types.find((type) => type.name === currentMatch.itemData.type).niceName}</SmallText>
                             </div>
                             <div className="text-left p-2">
                                 <SmallText>Boja:</SmallText>
