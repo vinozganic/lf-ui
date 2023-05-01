@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import "react-datepicker/dist/react-datepicker.css"
-import "./DatePickerStyles.css" // imported custom styles for DatePicker component
+import "./DatePickerStyles.css"
 import hrHR from "date-fns/locale/hr"
 import Question from "./Question"
 import ReactDatePicker, { registerLocale } from "react-datepicker"
@@ -22,10 +22,11 @@ const DatePicker = ({ questionId, updateAnswer }) => {
 
     const handleShowCalendar = () => {
         setShowCalendar(!showCalendar)
+        updateAnswer(selectedDate, questionId)
     }
 
     return (
-        <div className="grid gap-y-2 ">
+        <div className="grid gap-y-2">
             <div
                 onClick={handleShowCalendar}
                 className={`grid-flow-row gap-4 items-center justify-start flex

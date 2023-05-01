@@ -4,14 +4,18 @@ module.exports = {
     theme: {
         extend: {
             backgroundImage: (theme) => ({
-                vertical: "url('./images/bgVector828x1792.png')",
-                horizontal: "url('./images/bgVector1920x1080.png')",
-                contactVertical: "url('./images/bgContactVector828x1792.png')",
-                contactHorizontal: "url('./images/bgContactVector1920x1080.png')",
-                aboutVertical: "url('./images/bgAboutVector828x1792.png')",
-                aboutHorizontal: "url('./images/bgAboutVector1920x1080.png')",
-                privacyVertical: "url('./images/bgPrivacyVector828x1792.png')",
-                privacyHorizontal: "url('./images/bgPrivacyVector1920x1080.png')",
+                vertical: "url('/images/bgHomeVector828x1792.png')",
+                horizontal: "url('/images/bgHomeVector1920x1080.png')",
+                contactVertical: "url('/images/bgContactVector828x1792.png')",
+                contactHorizontal: "url('/images/bgContactVector1920x1080.png')",
+                aboutVertical: "url('/images/bgAboutVector828x1792.png')",
+                aboutHorizontal: "url('/images/bgAboutVector1920x1080.png')",
+                privacyVertical: "url('/images/bgPrivacyVector828x1792.png')",
+                privacyHorizontal: "url('/images/bgPrivacyVector1920x1080.png')",
+                matchesVertical: "url('/images/bgMatchesVector828x1792.png')",
+                matchesHorizontal: "url('/images/bgMatchesVector1920x1080.png')",
+                formVertical: "url('/images/bgFormVector828x1792.png')",
+                formHorizontal: "url('/images/bgFormVector1920x1080.png')"
             }),
             dropShadow: {
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
@@ -28,6 +32,7 @@ module.exports = {
             black: "#000000",
             white: "rgba(255, 255, 255, 0.9)",
             gray: "#384866",
+            transparent: "transparent",
             green: "rgb(13, 199, 0)",
             yellow: "rgb(225, 240, 2)",
             red: "rgb(217, 64, 50)",

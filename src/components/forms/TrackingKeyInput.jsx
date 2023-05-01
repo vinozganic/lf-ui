@@ -84,17 +84,17 @@ const TrackingKeyInput = ({ length, className }) => {
                             value={value}
                             onChange={(e) => handleChange(e, index)}
                             onKeyDown={(e) => handleKeyDown(e, index)}
-                            className="h-9 w-9 md:h-11 md:w-11 p-1 text-black border-black border-2 rounded-md text-center placeholder:opacity-30 focus:outline-1 caret-white cursor-pointer"
+                            className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
                         />
                     ))}
                 </div>
-                {loading && <Spinner />}
                 {trackingKey.filter((item) => item == "").length == 0 && (
                     <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
                         Prati
                     </Button>
                 )}
             </div>
+            {loading && <Spinner />}
             {error && <div className="text-red-500">{error}</div>}
         </div>
     )

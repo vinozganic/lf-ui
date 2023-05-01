@@ -1,6 +1,7 @@
 // components
 import BigText from "./BigText"
 import Button from "./Button"
+import Footer from "./Footer"
 import MediumText from "./MediumText"
 import Page from "./Page"
 import SmallText from "./SmallText"
@@ -25,6 +26,7 @@ import MatchesList from "./MatchesList"
 export {
     BigText,
     Button,
+    Footer,
     MediumText,
     Page,
     SmallText,

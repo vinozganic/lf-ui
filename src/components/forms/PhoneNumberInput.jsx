@@ -22,7 +22,6 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
         setPhoneNumberInput(inputtedValue)
         if (inputtedValue.length > 3) {
             const phoneNumber = selectedCountry.prefix + inputtedValue
-            console.log(phoneNumber, questionId)
             updateAnswer(phoneNumber, questionId)
         }
     }
@@ -39,6 +38,12 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                                 setCountrySearch("")
                             } else {
                                 setOpen(true)
+                                if (phoneNumberInput.length > 3) {
+                                    const phoneNumber = selectedCountry.prefix + phoneNumberInput
+                                    updateAnswer(phoneNumber, questionId)
+                                } else {
+                                    updateAnswer(null, questionId)
+                                }
                             }
                         }}>
                         <div className="inline-flex">

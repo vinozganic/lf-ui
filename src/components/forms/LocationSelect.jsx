@@ -19,12 +19,14 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                 <Button
                     style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6" }}
                     className="rounded-md w-full text-white"
+                    buttonClassName="border-none"
                     onClick={() => updateLocationType("exact")}>
                     Znam točnu lokaciju
                 </Button>
                 <Button
                     style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6" }}
                     className="rounded-md bg-blue w-full text-white"
+                    buttonClassName="border-none"
                     onClick={() => updateLocationType("nonExact")}>
                     Ne znam točnu lokaciju
                 </Button>

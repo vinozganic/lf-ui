@@ -23,12 +23,12 @@ const Form = ({ questions, text, type, className }) => {
     const ref = useRef(null)
 
     const scrollToBottom = () => {
-        ref.current.scrollIntoView({ behavior: "smooth" })
+        ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }
 
     useEffect(() => {
         scrollToBottom()
-    }, [progress])
+    }, [progress, formAnswers])
 
     const addQuestion = (questionObject, updateAnswer) => {
         let dependsOnAnswer = null
@@ -133,9 +133,9 @@ const Form = ({ questions, text, type, className }) => {
     }
 
     return (
-        <div className={`${className} relative flex items-center`}>
+        <div className={`${className} relative mx-6`}>
             <ProgressBar progress={progress} />
-            <BigText className="mt-28 w-full">{text}</BigText>
+            <BigText className="mt-32 w-full max-w-7xl">{text}</BigText>
             <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
                 <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
@@ -144,7 +144,7 @@ const Form = ({ questions, text, type, className }) => {
             )}
             {loading && <Spinner />}
             {error && <p className="text-white">{error}</p>}
-            <div ref={ref}></div>
+            <div ref={ref} className="mt-8"></div>
         </div>
     )
 }

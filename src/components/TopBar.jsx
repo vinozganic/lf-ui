@@ -19,9 +19,7 @@ function TopBar() {
 
     return (
         <nav
-            className={`${
-                isSticky ? "bg-background border-opacity-100" : "bg-transparent border-opacity-40"
-            } fixed w-full top-0 z-50 py-4 transition-colors duration-300 ease-in-out border-b-2 border-primary `}>
+            className={`bg-background fixed w-full top-0 z-50 py-4 transition-colors duration-300 ease-in-out border-b-2 border-primary/40 `}>
             <div className="mx-8 lg:mx-16">
                 <div className="flex justify-between">
                     <div className="flex-shrink-0">

@@ -32,7 +32,7 @@ const MatchFoundPage = () => {
     }, [getMatches, getFoundItem])
 
     return (
-        <Page className="h-auto min-h-screen justify-center ">
+        <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
             {(matchesLoading || foundItemLoading) && <Spinner />}
             {!matchesLoading && !foundItemLoading && resolved && (
                 <div>
