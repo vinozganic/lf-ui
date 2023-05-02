@@ -2,9 +2,8 @@ import React, { useState } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import "./DatePickerStyles.css"
 import hrHR from "date-fns/locale/hr"
-import Question from "./Question"
+import { Question, SmallText } from "../../components"
 import ReactDatePicker, { registerLocale } from "react-datepicker"
-import { SmallText } from "../"
 
 const DatePicker = ({ questionId, updateAnswer }) => {
     const [selectedDate, setSelectedDate] = useState(null)

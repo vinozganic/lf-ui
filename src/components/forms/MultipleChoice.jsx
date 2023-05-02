@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import SmallText from "../SmallText"
-import Question from "./Question"
+import { SmallText, Question } from "../../components"
 
 const MultipleChoice = ({ values, questionId, updateAnswer }) => {
     const [checkboxItems, setCheckboxItems] = useState(

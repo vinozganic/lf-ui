@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import SmallText from "./SmallText"
+import { SmallText } from "../components"
 
 function TopBar() {
     const [activeLink, setActiveLink] = useState("")
