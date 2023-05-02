@@ -4,21 +4,20 @@ import { Chat, Channel, ChannelHeader, MessageInput, MessageList, Thread, Window
 import "./ChatStyles.css"
 import "stream-chat-react/dist/css/v2/index.css"
 
-const ChatBox = ({ matchId, chatClient }) => {
+const ChatBox = ({ chatId, channelName, chatClient }) => {
     const [channel, setChannel] = useState(null)
 
     useEffect(() => {
         const connectToChat = async () => {
-            const channel = await chatClient.channel("messaging", matchId, {
-                name: matchId,
+            const channel = await chatClient.channel("messaging", chatId, {
+                name: channelName,
             })
 
             setChannel(channel)
-            console.log(channel)
         }
 
         connectToChat()
-    }, [matchId, chatClient])
+    }, [chatId, chatClient])
 
     if (!chatClient || !channel) return null
 

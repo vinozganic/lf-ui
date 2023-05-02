@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useRef, useEffect, useCallback } from "react"
+import { React, useState, useRef, useEffect, useCallback } from "react"
 import { StreamChat } from "stream-chat"
 import MatchCard from "./MatchCard"
 import SmallText from "./SmallText"
@@ -8,10 +8,20 @@ import "./MatchesListStyles.css"
 import { useFetch } from "use-http"
 import { API_URL } from "../constants"
 import PropsModal from "./PropsModal"
-import Chat from "./ChatBox"
+import ChatBox from "./ChatBox"
 
-const MatchesList = ({ matches, lostItem, item }) => {
-    const [matchesList, setMatchesList] = useState([])
+const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
+    const scrollContainer = useRef(null)
+    const [resolvedModalVisible, setResolvedModalVisible] = useState(false)
+    const [matchesList, setMatchesList] = useState(
+        matches.map((match) => ({ data: match, showProps: false })).sort((a, b) => b.data.matchProbability - a.data.matchProbability)
+    )
+    const [currentMatch, setCurrentMatch] = useState(null)
+    const [foundItems, setFoundItems] = useState([])
+    const [itemToResolveWith, setItemToResolveWith] = useState(null)
+
+    const { loading: foundLoading, error: foundError, request: foundRequest, response: foundResponse } = useFetch(`${API_URL}`)
+
     const [chatClient, setChatClient] = useState(null)
 
     useEffect(() => {
@@ -29,13 +39,13 @@ const MatchesList = ({ matches, lostItem, item }) => {
         connectToChatClient()
     }, [item])
 
-    useEffect(() => {
-        setMatchesList(
-            matches
-                .map((match) => ({ data: match, showProps: false, discarded: false }))
-                .sort((a, b) => b.data.matchProbability - a.data.matchProbability)
-        )
-    }, [matches])
+    const scrollLeft = () => {
+        scrollContainer.current.scrollLeft -= 180
+    }
+
+    const scrollRight = () => {
+        scrollContainer.current.scrollLeft += 180
+    }
 
     const handleResolvedChange = () => {
         setResolvedModalVisible(true)
@@ -94,13 +104,85 @@ const MatchesList = ({ matches, lostItem, item }) => {
         </div>
     ))
 
-    if (!chatClient) return null
-
     return (
-        <div className="flex my-10 lg:mx-10 xl:mx-40 max-lg:justify-center">
-            <ul className="  grid sm:gap-y-20 gap-y-10">{sortedListMatchCards}</ul>
-            <Modal onClose={handleCloseModal} displayMatch={matchesList.find((match) => match.showProps === true)?.data || {}} />
-        </div>
+        <>
+            {matchesList.length === 0 && (
+                <div>
+                    <SmallText>Trenutno nema potencijalnih spojeva</SmallText>
+                </div>
+            )}
+            {!foundLoading && matchesList.length > 0 && (
+                <div className="flex items-start justify-center">
+                    <div className="w-full my-0 lg:my-10 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
+                        {!lostItem && (
+                            <div className="flex items-center justify-start">
+                                <Button
+                                    className="mb-2 sm:mb-5 2xl:w-1/4 xl:w-1/3 lg:w-2/5 max-sm:w-full"
+                                    buttonClassName="drop-shadow-none"
+                                    onClick={handleResolvedChange}>
+                                    <SmallText>Predmet je pronađen bez tuđe pomoći</SmallText>
+                                </Button>
+                                {resolvedModalVisible && (
+                                    <ResolvedModal
+                                        setVisible={setResolvedModalVisible}
+                                        resolveItem={resolveItem}
+                                        body={itemToResolveWith}
+                                    />
+                                )}
+                            </div>
+                        )}
+                        <div className="sm:pb-5 pb-2">
+                            <SmallText>Tekst na karticama služi samo za razlikovanje kartica.</SmallText>
+                        </div>
+                        <div className="relative border-2 border-[rgb(255,255,255)] border-opacity-30 shadow-[rgb(255,255,255)] rounded-2xl">
+                            <Button
+                                className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
+                                onClick={scrollLeft}
+                                buttonClassName="drop-shadow-none">
+                                <ArrowLeftSvg />
+                            </Button>
+                            <div
+                                className="grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] p-4 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 sm:p-6 touch-pan-x scroll-smooth will-change-scroll"
+                                ref={scrollContainer}>
+                                {sortedListMatchCards}
+                            </div>
+                            <Button
+                                className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2"
+                                onClick={scrollRight}
+                                buttonClassName="drop-shadow-none">
+                                <ArrowRightSvg />
+                            </Button>
+                        </div>
+                        {currentMatch && (
+                            <div className="mt-4 bg-gray px-4 py-6 rounded-xl">
+                                <div className="flex justify-start align-middle gap-4">
+                                    {lostItem && (
+                                        <>
+                                            <Button onClick={handleShowProps} buttonClassName="drop-shadow-none">
+                                                Prikaži detalje
+                                            </Button>
+                                            <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
+                                        </>
+                                    )}
+                                    {!lostItem && (
+                                        <Button buttonClassName="drop-shadow-none" onClick={handleResolveWithCard}>
+                                            Uz pomoć ove kartice je pronađen predmet
+                                        </Button>
+                                    )}
+                                </div>
+                                <div className=" bg-gray h-full mt-6 border-t-2">
+                                    <ChatBox
+                                        chatId={currentMatch.data.id}
+                                        channelName={currentMatch.data.niceName}
+                                        chatClient={chatClient}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

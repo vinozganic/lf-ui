@@ -6,6 +6,7 @@ import { API_URL } from "../constants"
 
 const MatchLostPage = () => {
     const { id } = useParams()
+    const [item, setItem] = useState(null)
     const [resolved, setResolved] = useState(false)
     const [matches, setMatches] = useState([])
 
@@ -24,6 +25,7 @@ const MatchLostPage = () => {
 
     const getLostItem = useCallback(async () => {
         const lostItemData = await lostItemRequest.post(`/lost/batch`, [id])
+        setItem(lostItemData.data[0])
         if (lostItemResponse.ok && lostItemData.data[0].resolved) {
             setResolved(true)
         }
@@ -42,7 +44,7 @@ const MatchLostPage = () => {
     }, [getMatches, getLostItem, resolved])
 
     return (
-        <Page className="h-auto min-h-screen justify-center ">
+        <Page className="h-auto min-h-screen justify-center">
             {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}
             {!matchesLoading && !resolvedLoading && !lostItemLoading && resolved && (
                 <div>
@@ -50,7 +52,12 @@ const MatchLostPage = () => {
                 </div>
             )}
             {!matchesLoading && !resolvedLoading && !lostItemLoading && !resolved && (
-                <MatchesList matches={matches.filter((match) => match.resolved === false)} lostItem={false} resolveItem={resolveItem} />
+                <MatchesList
+                    matches={matches.filter((match) => match.resolved === false)}
+                    item={item}
+                    lostItem={false}
+                    resolveItem={resolveItem}
+                />
             )}
         </Page>
     )

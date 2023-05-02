@@ -4,7 +4,7 @@ import { Page, MatchesList, Spinner, SmallText } from "../components"
 import { useFetch } from "use-http"
 import { API_URL } from "../constants"
 
-const MatchLostPage = () => {
+const MatchFoundPage = () => {
     const { id } = useParams()
     const [matches, setMatches] = useState([])
     const [resolved, setResolved] = useState(false)
