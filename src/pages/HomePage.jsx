@@ -5,7 +5,7 @@ import Page from "../components/Page"
 
 const HomePage = () => {
     return (
-        <Page bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat" className="h-auto flex flex-col items-center px-6 lg:px-16">
+        <Page bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat bg-fixed" className="h-auto flex flex-col items-center px-6 lg:px-16">
             <VeryBigText className="text-center lg:mt-20">Lost & Found</VeryBigText>
             <MediumText className="mx-8 mt-16 lg:mt-20 md:w-3/4 lg:w-1-2 text-left drop-shadow-lg">
                 Ostavio si torbu u tramvaju? Ostala ti je majica u teretani? Pronađi izgubljene predmete u nekoliko klikova.
