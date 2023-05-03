@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 
 const Button = ({ children, onClick, className, link, style, buttonClassName }) => {
     const button = (
@@ -12,9 +12,9 @@ const Button = ({ children, onClick, className, link, style, buttonClassName }) 
             style={style}>
             {children}
         </button>
-    );
+    )
 
-    return <div className={`${className}`}>{link ? <Link to={link}>{button}</Link> : button}</div>;
-};
+    return <div className={`${className}`}>{link ? <Link to={link}>{button}</Link> : button}</div>
+}
 
-export default Button;
+export default Button
