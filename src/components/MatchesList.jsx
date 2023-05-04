@@ -99,7 +99,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
     const sortedListMatchCards = matchesList.map((match, index) => (
         <div key={index} className={`w-full snap-start`}>
             <MatchCard
-                className={`${currentMatch?.data.id === match.data.id ? "border-primary" : ""}`}
+                className={`${currentMatch?.data.id === match.data.id ? "border-primary" : ""} h-full`}
                 match={match}
                 itemData={itemType === "lost" ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
                 setCurrentMatch={setCurrentMatch}
@@ -120,10 +120,10 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                         {itemType === "lost" && (
                             <div className="flex items-center justify-start">
                                 <Button
-                                    className="mb-2 sm:mb-5 2xl:w-1/4 xl:w-1/3 lg:w-2/5 max-sm:w-full"
+                                    className="mb-2 sm:mb-5 w-full sm:w-2/3 md:w-1/2 xl:w-1/3 2xl:w-1/4"
                                     buttonClassName="drop-shadow-none"
                                     onClick={handleResolvedChange}>
-                                    <SmallText>Predmet je pronađen bez tuđe pomoći</SmallText>
+                                    <SmallText className="text-[1rem]">Predmet je pronađen bez tuđe pomoći</SmallText>
                                 </Button>
                                 {resolvedModalVisible && (
                                     <ResolvedModal
@@ -134,11 +134,8 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                 )}
                             </div>
                         )}
-                        <div className="sm:pb-5 pb-2">
-                            <SmallText>Tekst na karticama služi samo za razlikovanje kartica.</SmallText>
-                        </div>
-                        <div className="relative border-y-2 border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
-                            <div className="relative px-8">
+                        <div className="mx-1 mt-6 relative border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
+                            <div className="relative sm:px-8">
                                 <Button
                                     className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
                                     onClick={scrollLeft}
@@ -146,7 +143,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                     <ArrowLeftSvg />
                                 </Button>
                                 <div
-                                    className="mx-4 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
+                                    className="mx-4 px-4 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
                                     ref={scrollContainer}>
                                     {sortedListMatchCards}
                                 </div>
@@ -158,32 +155,34 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                 </Button>
                             </div>
                         </div>
+                        <div className="sm:pb-5 pb-2 px-4">
+                            <SmallText className="text-sm font-semibold">
+                                Napomena: Imena na karticama služe samo za razlikovanje spojeva. Ne predstavljaju stvarna imena korisnika.
+                            </SmallText>
+                        </div>
                         {currentMatch && (
                             <div className="mt-4 bg-gray/60 px-4 py-6 rounded-xl">
-                                <div className="flex justify-start align-middle gap-4">
-                                    {itemType === "found" && (
-                                        <>
-                                            <Button
-                                                onClick={handleShowProps}
-                                                buttonClassName="drop-shadow-none"
-                                                className="w-full sm:w-2/3 lg:w-1/3">
-                                                Prikaži detalje
-                                            </Button>
-                                            <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
-                                        </>
-                                    )}
-                                    {itemType === "lost" && (
-                                        <Button buttonClassName="drop-shadow-none" onClick={handleResolveWithCard}>
-                                            Uz pomoć ove kartice je pronađen predmet
-                                        </Button>
-                                    )}
-                                </div>
-                                <div className="p-1 h-[26rem] lg:h-[30rem] mt-6 ">
+                                <div className="p-1 h-[26rem] lg:h-[30rem] mb-6 ">
                                     <ChatBox
                                         channelId={currentMatch.data.id}
                                         channelName={currentMatch.data.nickname}
                                         chatClient={chatClient}
                                     />
+                                </div>
+                                <div className="flex justify-start align-middle gap-4">
+                                    {itemType === "found" && (
+                                        <>
+                                            <Button onClick={handleShowProps} className="w-full sm:w-2/3 lg:w-1/3">
+                                                <SmallText className="text-[1rem]">Prikaži detalje</SmallText>
+                                            </Button>
+                                            <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
+                                        </>
+                                    )}
+                                    {itemType === "lost" && (
+                                        <Button className="w-full sm:w-2/3 md:w-1/2 xl:w-1/3 2xl:w-1/4" onClick={handleResolveWithCard}>
+                                            <SmallText className="text-[1rem]">Slučaj je riješen pomoću ovog spoja</SmallText>
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         )}
