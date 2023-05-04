@@ -6,6 +6,7 @@ import { API_URL } from "../constants"
 
 const MatchFoundPage = () => {
     const { id } = useParams()
+    const [item, setItem] = useState(null)
     const [matches, setMatches] = useState([])
     const [resolved, setResolved] = useState(false)
 
@@ -26,8 +27,11 @@ const MatchFoundPage = () => {
 
     const getFoundItem = useCallback(async () => {
         const foundItemData = await foundItemRequest.post(`/found/batch`, [id])
-        if (foundItemResponse.ok && foundItemData.data[0].resolved) {
-            setResolved(true)
+        if (foundItemResponse.ok) {
+            if (foundItemData.data[0].resolved) {
+                setResolved(true)
+            }
+            setItem(foundItemData.data[0])
         }
     }, [foundItemRequest, foundItemResponse])
 
@@ -37,7 +41,7 @@ const MatchFoundPage = () => {
     }, [getMatches, getFoundItem])
 
     return (
-        <Page className="h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
+        <Page className="mx-4 h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
             {(matchesLoading || foundItemLoading) && <Spinner />}
             {!matchesLoading && !foundItemLoading && resolved && (
                 <div>
@@ -45,7 +49,12 @@ const MatchFoundPage = () => {
                 </div>
             )}
             {!matchesLoading && !foundItemLoading && !resolved && (
-                <MatchesList matches={matches.filter((match) => match.resolved === false)} lostItem={true} resolveItem={null} />
+                <MatchesList
+                    matches={matches.filter((match) => match.resolved === false)}
+                    item={item}
+                    itemType="found"
+                    resolveItem={null}
+                />
             )}
         </Page>
     )

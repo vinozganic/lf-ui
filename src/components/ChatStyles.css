@@ -2,3 +2,7 @@
     border: 1rem solid white !important;
     border-radius: 1rem !important;
 }
+
+.str-chat__header-livestream-left--members {
+    display: none !important;
+}

@@ -10,6 +10,7 @@ import { useFetch } from "use-http"
 
 const PropsModal = ({ currentMatch, handleShowProps }) => {
     const [types, setTypes] = useState("")
+    console.log(currentMatch)
     const date = new Date(currentMatch.itemData.date)
     const day = date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`
     const month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`

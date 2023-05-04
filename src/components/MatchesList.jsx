@@ -10,12 +10,14 @@ import { API_URL } from "../constants"
 import PropsModal from "./PropsModal"
 import ChatBox from "./ChatBox"
 
-const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
+const MatchesList = ({ matches, item, itemType, resolveItem }) => {
     const scrollContainer = useRef(null)
+
+    const matchesList = matches
+        .map((match) => ({ data: match, showProps: false }))
+        .sort((a, b) => b.data.matchProbability - a.data.matchProbability)
+
     const [resolvedModalVisible, setResolvedModalVisible] = useState(false)
-    const [matchesList, setMatchesList] = useState(
-        matches.map((match) => ({ data: match, showProps: false })).sort((a, b) => b.data.matchProbability - a.data.matchProbability)
-    )
     const [currentMatch, setCurrentMatch] = useState(null)
     const [foundItems, setFoundItems] = useState([])
     const [itemToResolveWith, setItemToResolveWith] = useState(null)
@@ -25,11 +27,12 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
     const [chatClient, setChatClient] = useState(null)
 
     useEffect(() => {
+        if (!item) return
         const connectToChatClient = async () => {
             const chatClient = StreamChat.getInstance("smqmafukudwa")
             await chatClient.connectUser(
                 {
-                    name: item.streamChatToken,
+                    name: "Korisnik",
                     id: item.id,
                 },
                 item.streamChatToken
@@ -64,7 +67,7 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
     const getItems = useCallback(async () => {
         const items = await foundRequest.post(
             `/lost/batch`,
-            matches.map((match) => match.lostId)
+            matchesList.map((match) => match.data.lostId)
         )
         if (foundResponse.ok) {
             setFoundItems(items)
@@ -72,7 +75,7 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
     }, [foundRequest, foundResponse])
 
     useEffect(() => {
-        if (lostItem) {
+        if (itemType === "found") {
             getItems()
         }
     }, [getItems])
@@ -98,7 +101,7 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
             <MatchCard
                 className={`${currentMatch?.data.id === match.data.id ? "border-primary" : ""}`}
                 match={match}
-                itemData={!lostItem ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
+                itemData={itemType === "lost" ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
                 setCurrentMatch={setCurrentMatch}
             />
         </div>
@@ -114,7 +117,7 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
             {!foundLoading && matchesList.length > 0 && (
                 <div className="flex items-start justify-center">
                     <div className="w-full my-0 lg:my-10 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
-                        {!lostItem && (
+                        {itemType === "lost" && (
                             <div className="flex items-center justify-start">
                                 <Button
                                     className="mb-2 sm:mb-5 2xl:w-1/4 xl:w-1/3 lg:w-2/5 max-sm:w-full"
@@ -134,46 +137,51 @@ const MatchesList = ({ matches, item, lostItem, resolveItem }) => {
                         <div className="sm:pb-5 pb-2">
                             <SmallText>Tekst na karticama služi samo za razlikovanje kartica.</SmallText>
                         </div>
-                        <div className="relative border-2 border-[rgb(255,255,255)] border-opacity-30 shadow-[rgb(255,255,255)] rounded-2xl">
-                            <Button
-                                className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
-                                onClick={scrollLeft}
-                                buttonClassName="drop-shadow-none">
-                                <ArrowLeftSvg />
-                            </Button>
-                            <div
-                                className="grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] p-4 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 sm:p-6 touch-pan-x scroll-smooth will-change-scroll"
-                                ref={scrollContainer}>
-                                {sortedListMatchCards}
+                        <div className="relative border-y-2 border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
+                            <div className="relative px-8">
+                                <Button
+                                    className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
+                                    onClick={scrollLeft}
+                                    buttonClassName="py-1 px-1 drop-shadow-none">
+                                    <ArrowLeftSvg />
+                                </Button>
+                                <div
+                                    className="mx-4 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
+                                    ref={scrollContainer}>
+                                    {sortedListMatchCards}
+                                </div>
+                                <Button
+                                    className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2"
+                                    onClick={scrollRight}
+                                    buttonClassName="py-1 px-1 drop-shadow-none">
+                                    <ArrowRightSvg />
+                                </Button>
                             </div>
-                            <Button
-                                className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2"
-                                onClick={scrollRight}
-                                buttonClassName="drop-shadow-none">
-                                <ArrowRightSvg />
-                            </Button>
                         </div>
                         {currentMatch && (
-                            <div className="mt-4 bg-gray px-4 py-6 rounded-xl">
+                            <div className="mt-4 bg-gray/60 px-4 py-6 rounded-xl">
                                 <div className="flex justify-start align-middle gap-4">
-                                    {lostItem && (
+                                    {itemType === "found" && (
                                         <>
-                                            <Button onClick={handleShowProps} buttonClassName="drop-shadow-none">
+                                            <Button
+                                                onClick={handleShowProps}
+                                                buttonClassName="drop-shadow-none"
+                                                className="w-full sm:w-2/3 lg:w-1/3">
                                                 Prikaži detalje
                                             </Button>
                                             <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
                                         </>
                                     )}
-                                    {!lostItem && (
+                                    {itemType === "lost" && (
                                         <Button buttonClassName="drop-shadow-none" onClick={handleResolveWithCard}>
                                             Uz pomoć ove kartice je pronađen predmet
                                         </Button>
                                     )}
                                 </div>
-                                <div className=" bg-gray h-full mt-6 border-t-2">
+                                <div className="p-1 h-[26rem] lg:h-[30rem] mt-6 ">
                                     <ChatBox
-                                        chatId={currentMatch.data.id}
-                                        channelName={currentMatch.data.niceName}
+                                        channelId={currentMatch.data.id}
+                                        channelName={currentMatch.data.nickname}
                                         chatClient={chatClient}
                                     />
                                 </div>

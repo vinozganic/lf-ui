@@ -1,39 +1,35 @@
 import { useEffect, useState } from "react"
-import { StreamChat } from "stream-chat"
 import { Chat, Channel, ChannelHeader, MessageInput, MessageList, Thread, Window } from "stream-chat-react"
 import "./ChatStyles.css"
 import "stream-chat-react/dist/css/v2/index.css"
 
-const ChatBox = ({ chatId, channelName, chatClient }) => {
+const ChatBox = ({ channelId, channelName, chatClient }) => {
     const [channel, setChannel] = useState(null)
 
     useEffect(() => {
         const connectToChat = async () => {
-            const channel = await chatClient.channel("messaging", chatId, {
+            const channel = await chatClient.channel("messaging", channelId, {
                 name: channelName,
             })
-
             setChannel(channel)
         }
 
         connectToChat()
-    }, [chatId, chatClient])
+    }, [channelId, chatClient])
 
     if (!chatClient || !channel) return null
 
     return (
-        <div className="p-3 h-1/2">
-            <Chat client={chatClient} theme="messaging">
-                <Channel channel={channel}>
-                    <Window>
-                        <ChannelHeader />
-                        <MessageList />
-                        <MessageInput />
-                    </Window>
-                    <Thread />
-                </Channel>
-            </Chat>
-        </div>
+        <Chat client={chatClient} theme="messaging">
+            <Channel channel={channel}>
+                <Window>
+                    <ChannelHeader title={channelName} />
+                    <MessageList disableDateSeparator={true} />
+                    <MessageInput />
+                </Window>
+                <Thread />
+            </Channel>
+        </Chat>
     )
 }
 
