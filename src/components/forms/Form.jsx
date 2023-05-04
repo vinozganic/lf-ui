@@ -91,7 +91,6 @@ const Form = ({ questions, text, type, className }) => {
 
         try {
             const data = await post(payload)
-            console.log(data)
             if (fetchError && !data) {
                 setError(fetchError.message)
                 return
