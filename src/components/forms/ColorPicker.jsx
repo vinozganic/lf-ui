@@ -4,8 +4,7 @@ import { Question, SmallText } from "../../components"
 import "./ColorPickerStyles.css"
 
 const ColorPicker = ({ questionId, updateAnswer }) => {
-    const [color, setColor] = useState("#15bfe6")
-
+    const [color, setColor] = useState({ r: 21, g: 191, b: 230 })
     const handleChangeComplete = (color) => {
         setColor(color.rgb)
     }
