@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
-import Question from "./Question"
-import SmallText from "../SmallText"
 import countryData from "../../helpers/phoneNumberHelper"
+import { SmallText, Question } from "../../components"
 
 const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     const [countrySearch, setCountrySearch] = useState("")
@@ -29,7 +28,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     return (
         <div>
             <div className="flex gap-1">
-                <div className="w-[40%] sm:w-[14%]">
+                <div className="w-[40%] sm:w-[14%] sm:min-w-max">
                     <div
                         className="bg-gray p-2 pr-1 flex rounded-xl border-2 border-gray cursor-pointer hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 items-center justify-between"
                         onClick={() => {

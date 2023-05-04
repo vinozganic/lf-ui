@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { API_URL } from "../../constants"
-import ProgressBar from "./ProgressBar"
-import Button from "../Button"
-import BigText from "../BigText"
-import Spinner from "../Spinner"
+import { Button, BigText, Spinner, ProgressBar } from "../../components"
 
 const Form = ({ questions, text, type, className }) => {
     const initialState = questions.map((question) => {

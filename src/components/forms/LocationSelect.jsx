@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
 import "leaflet/dist/leaflet.css"
 import "leaflet-draw/dist/leaflet.draw.css"
-import { Button, Question } from "../"
+import { Button, Question } from "../../components"
 
 const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
