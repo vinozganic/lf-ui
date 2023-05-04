@@ -1,12 +1,12 @@
-import { React, useState, useRef, useEffect, useCallback } from 'react'
-import MatchCard from './MatchCard'
-import SmallText from './SmallText'
-import Button from './Button'
-import ResolvedModal from './ResolvedModal'
-import './MatchesListStyles.css'
-import { useFetch } from 'use-http'
-import { API_URL } from '../constants'
-import PropsModal from './PropsModal'
+import { React, useState, useRef, useEffect, useCallback } from "react"
+import MatchCard from "./MatchCard"
+import SmallText from "./SmallText"
+import Button from "./Button"
+import ResolvedModal from "./ResolvedModal"
+import "./MatchesListStyles.css"
+import { useFetch } from "use-http"
+import { API_URL } from "../constants"
+import PropsModal from "./PropsModal"
 
 const MatchesList = ({ matches, lostItem, resolveItem }) => {
     const scrollContainer = useRef(null)
@@ -77,7 +77,7 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
     const sortedListMatchCards = matchesList.map((match, index) => (
         <div key={index} className={`w-full snap-start`}>
             <MatchCard
-                className={`${currentMatch?.data.id === match.data.id ? 'border-primary' : ''}`}
+                className={`${currentMatch?.data.id === match.data.id ? "border-primary" : ""}`}
                 match={match}
                 itemData={!lostItem ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
                 setCurrentMatch={setCurrentMatch}
@@ -112,14 +112,11 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
                                 )}
                             </div>
                         )}
-                        <div className='sm:pb-5 pb-2'>
+                        <div className="sm:pb-5 pb-2">
                             <SmallText>Tekst na karticama služi samo za razlikovanje kartica.</SmallText>
                         </div>
                         <div className="relative border-2 border-[rgb(255,255,255)] border-opacity-30 shadow-[rgb(255,255,255)] rounded-2xl">
-                            <Button
-                                className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
-                                onClick={scrollLeft}
-                                buttonClassName="drop-shadow-none">
+                            <Button className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2" onClick={scrollLeft}>
                                 <ArrowLeftSvg />
                             </Button>
                             <div
@@ -127,10 +124,7 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
                                 ref={scrollContainer}>
                                 {sortedListMatchCards}
                             </div>
-                            <Button
-                                className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2"
-                                onClick={scrollRight}
-                                buttonClassName="drop-shadow-none">
+                            <Button className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2" onClick={scrollRight}>
                                 <ArrowRightSvg />
                             </Button>
                         </div>
@@ -139,17 +133,11 @@ const MatchesList = ({ matches, lostItem, resolveItem }) => {
                                 <div className="flex justify-start align-middle gap-4">
                                     {lostItem && (
                                         <>
-                                            <Button onClick={handleShowProps} buttonClassName="drop-shadow-none">
-                                                Prikaži detalje
-                                            </Button>
+                                            <Button onClick={handleShowProps}>Prikaži detalje</Button>
                                             <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
                                         </>
                                     )}
-                                    {!lostItem && (
-                                        <Button buttonClassName="drop-shadow-none" onClick={handleResolveWithCard}>
-                                            Uz pomoć ove kartice je pronađen predmet
-                                        </Button>
-                                    )}
+                                    {!lostItem && <Button onClick={handleResolveWithCard}>Uz pomoć ove kartice je pronađen predmet</Button>}
                                 </div>
                                 <div className=" bg-gray h-56 mt-6 border-t-2">TODO: DM</div>
                             </div>

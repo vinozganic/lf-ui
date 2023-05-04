@@ -15,10 +15,12 @@ module.exports = {
                 matchesVertical: "url('/images/bgMatchesVector828x1792.png')",
                 matchesHorizontal: "url('/images/bgMatchesVector1920x1080.png')",
                 formVertical: "url('/images/bgFormVector828x1792.png')",
-                formHorizontal: "url('/images/bgFormVector1920x1080.png')"
+                formHorizontal: "url('/images/bgFormVector1920x1080.png')",
             }),
-            dropShadow: {
+            boxShadow: {
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
+            },
+            textShadow: {
                 lg: "0 0px 20px rgba(21, 191, 230, 0.6)",
                 xl: "0 0px 35px rgba(255, 255, 255, 0.5)",
             },
