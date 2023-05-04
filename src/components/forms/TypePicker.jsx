@@ -117,7 +117,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
     )
 }
 
-const addTypePicker = (questionText, options, key, updateAnswer) => {
+const addTypePicker = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
             <TypePicker questionId={key} updateAnswer={updateAnswer} />

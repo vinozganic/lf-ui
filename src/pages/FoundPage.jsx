@@ -5,7 +5,7 @@ import {
     addPhoneNumberQuestion,
     Form,
     Page,
-    addTypePicker
+    addTypePicker,
 } from "../components"
 
 const questions = [
@@ -27,9 +27,6 @@ const questions = [
     {
         create: addLocationSelectQuestion,
         text: "Gdje si pronašao/la predmet?",
-        options: {
-            mapCenter: [45.813, 15.977],
-        },
         fieldName: "location",
     },
     {
@@ -41,7 +38,9 @@ const questions = [
 
 const FoundPage = () => {
     return (
-        <Page bgClassName="bg-formVertical lg:bg-formHorizontal bg-cover bg-center bg-fixed bg-no-repeat" className="flex justify-center overflow-y-auto">
+        <Page
+            bgClassName="bg-formVertical lg:bg-formHorizontal bg-cover bg-center bg-fixed bg-no-repeat"
+            className="flex justify-center overflow-y-auto">
             <Form
                 text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preciznije odgovoriš, veće su šanse da pronađeš vlasnika."
                 questions={questions}
