@@ -4,7 +4,7 @@ import Page from "../components/Page"
 
 const AboutPage = () => {
     return (
-        <Page className="h-auto min-h-screen bg-aboutVertical lg:bg-aboutHorizontal bg-cover bg-center bg-no-repeat flex flex-col items-center px-6 lg:px-16">
+        <Page bgClassName="bg-aboutVertical lg:bg-aboutHorizontal bg-cover bg-center bg-fixed bg-no-repeat" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="text-center mt-12 lg:mt-20">O aplikaciji</BigText>
             <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Dobrodošli</MediumText>
             <SmallText className="mx-2 mt-5 lg:w-3/4 text-left font-medium">
@@ -22,13 +22,15 @@ const AboutPage = () => {
                 ili pronašla vaš predmet. Ne morate brinuti o sigurnosti svojih informacija - svaki podnesak je identificiran jedinstvenim
                 ključem za praćenje, a kreiranje korisničkog računa nije potrebno.
             </SmallText>
-            <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Sigurnost i sofisticirani algoritam</MediumText>
+            <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">
+                Sigurnost i sofisticirani algoritam
+            </MediumText>
             <SmallText className="mx-2 mt-5 lg:w-3/4 text-left font-medium">
                 Razvili smo sofisticirani algoritam koji osigurava brzo i točno povezivanje korisnika temeljem unesenih podataka. Svi
                 podnesci pohranjuju se u sigurnoj i zaštićenoj bazi podataka te se koriste isključivo u svrhu povezivanja korisnika.
                 Aplikacija je dizajnirana kako bi osigurala sigurnost, privatnost i zadovoljstvo naših korisnika.
             </SmallText>
-            <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Korisničlka podrška</MediumText>
+            <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Korisnička podrška</MediumText>
             <SmallText className="mx-2 mt-5 lg:w-3/4 text-left font-medium">
                 U slučaju pitanja ili potrebe za podrškom, naš za korisničku podršku uvijek je spreman pomoći. Posjetite našu stranicu za
                 kontakt kako biste pronašli sve potrebne informacije za komunikaciju s nama. Vaša sigurnost i zadovoljstvo su nam prioritet,

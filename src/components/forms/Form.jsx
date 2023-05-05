@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { API_URL } from "../../constants"
-import ProgressBar from "./ProgressBar"
-import Button from "../Button"
-import BigText from "../BigText"
-import Spinner from "../Spinner"
+import { Button, BigText, Spinner, ProgressBar } from "../../components"
 
 const Form = ({ questions, text, type, className }) => {
     const initialState = questions.map((question) => {
@@ -23,30 +20,19 @@ const Form = ({ questions, text, type, className }) => {
     const ref = useRef(null)
 
     const scrollToBottom = () => {
-        ref.current.scrollIntoView({ behavior: "smooth" })
+        ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }
 
     useEffect(() => {
         scrollToBottom()
-    }, [progress])
+    }, [progress, formAnswers])
 
     const addQuestion = (questionObject, updateAnswer) => {
-        let dependsOnAnswer = null
-        if (questionObject.dependsOn) {
-            dependsOnAnswer = formAnswers.find((item) => item.fieldName === questionObject.dependsOn)?.answer
-            if (!dependsOnAnswer) {
-                return null
-            }
-        }
-
-        const options = dependsOnAnswer ? questionObject.options[dependsOnAnswer] : questionObject.options
-
-        const questionElement = questionObject.create(questionObject.text, options, questionObject.fieldName, updateAnswer)
+        const questionElement = questionObject.create(questionObject.text, questionObject.fieldName, updateAnswer)
         return questionElement
     }
 
     const updateAnswer = (answer, key) => {
-        console.log(answer, key)
         let newFormAnswers = [...formAnswers]
         newFormAnswers.forEach((item) => {
             if (item.fieldName === key) {
@@ -62,14 +48,6 @@ const Form = ({ questions, text, type, className }) => {
             })
         }
 
-        const dependentQuestions = questions.filter((question) => question.dependsOn === key)
-        dependentQuestions.forEach((question) => {
-            newFormAnswers.forEach((item) => {
-                if (item.fieldName === question.fieldName) {
-                    item.answer = null
-                }
-            })
-        })
         setFormAnswers(newFormAnswers)
 
         const progress = Math.round((newFormAnswers.filter((item) => item.answer !== null).length / questions.length) * 100)
@@ -113,7 +91,6 @@ const Form = ({ questions, text, type, className }) => {
 
         try {
             const data = await post(payload)
-            console.log(data)
             if (fetchError && !data) {
                 setError(fetchError.message)
                 return
@@ -133,9 +110,9 @@ const Form = ({ questions, text, type, className }) => {
     }
 
     return (
-        <div className={`${className} relative flex items-center`}>
+        <div className={`${className} relative mx-6`}>
             <ProgressBar progress={progress} />
-            <BigText className="mt-28 w-full">{text}</BigText>
+            <BigText className="mt-32 w-full max-w-7xl">{text}</BigText>
             <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
                 <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
@@ -144,7 +121,7 @@ const Form = ({ questions, text, type, className }) => {
             )}
             {loading && <Spinner />}
             {error && <p className="text-white">{error}</p>}
-            <div ref={ref}></div>
+            <div ref={ref} className="mt-8"></div>
         </div>
     )
 }

@@ -7,7 +7,7 @@ const ProgressBar = ({ progress }) => {
                 <div className="w-full flex">
                     <div
                         style={{ width: `${progress}%` }}
-                        className="transition-width ease rounded-full p-4 bg-white bg-gradient-to-r from-primary via-primary to-white background-animate drop-shadow-lg"></div>
+                        className="transition-width ease rounded-full p-4 bg-white bg-gradient-to-r from-primary via-primary to-white background-animate shadow-lg"></div>
                 </div>
             </div>
         </div>

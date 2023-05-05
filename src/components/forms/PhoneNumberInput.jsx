@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
-import Question from "./Question"
-import SmallText from "../SmallText"
 import countryData from "../../helpers/phoneNumberHelper"
+import { SmallText, Question } from "../../components"
 
 const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     const [countrySearch, setCountrySearch] = useState("")
@@ -22,7 +21,6 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
         setPhoneNumberInput(inputtedValue)
         if (inputtedValue.length > 3) {
             const phoneNumber = selectedCountry.prefix + inputtedValue
-            console.log(phoneNumber, questionId)
             updateAnswer(phoneNumber, questionId)
         }
     }
@@ -30,7 +28,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     return (
         <div>
             <div className="flex gap-1">
-                <div className="w-[40%] sm:w-[14%]">
+                <div className="w-[40%] sm:w-[14%] sm:min-w-max">
                     <div
                         className="bg-gray p-2 pr-1 flex rounded-xl border-2 border-gray cursor-pointer hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 items-center justify-between"
                         onClick={() => {
@@ -39,6 +37,12 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                                 setCountrySearch("")
                             } else {
                                 setOpen(true)
+                                if (phoneNumberInput.length > 3) {
+                                    const phoneNumber = selectedCountry.prefix + phoneNumberInput
+                                    updateAnswer(phoneNumber, questionId)
+                                } else {
+                                    updateAnswer(null, questionId)
+                                }
                             }
                         }}>
                         <div className="inline-flex">
@@ -131,7 +135,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     )
 }
 
-const addPhoneNumberInputQuestion = (questionText, options, key, updateAnswer) => {
+const addPhoneNumberInputQuestion = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
             <PhoneNumberInput questionId={key} updateAnswer={updateAnswer} />

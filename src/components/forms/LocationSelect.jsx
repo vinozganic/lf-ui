@@ -8,7 +8,7 @@ import { Button, MediumText, Question, SmallText, Spinner } from "../"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
 
-const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
+const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
     const pageType = useLocation().pathname.split("/").pop()
 
@@ -21,14 +21,16 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
         return (
             <div className="flex flex-col items-start justify-start gap-x-12 gap-y-4 mx-2 md:flex-row md:items-end md:justify-between">
                 <Button
-                    style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6" }}
+                    style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6", boxShadow: "none" }}
                     className="rounded-md w-full text-white"
+                    buttonClassName="border-none"
                     onClick={() => updateLocationType("exact")}>
                     Znam točnu lokaciju
                 </Button>
                 <Button
-                    style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6" }}
+                    style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6", boxShadow: "none" }}
                     className="rounded-md bg-blue w-full text-white"
+                    buttonClassName="border-none"
                     onClick={() => updateLocationType("nonExact")}>
                     {pageType === "found" ? "Javni prijevoz" : "Ne znam točnu lokaciju"}
                 </Button>
@@ -44,7 +46,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                     <ExactLocationSelect
                         updateAnswer={updateAnswer}
                         questionId={questionId}
-                        mapCenter={values?.mapCenter}
+                        mapCenter={[45.815399, 15.966568]}
                         className="mt-6"
                     />
                 </>
@@ -56,7 +58,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                     <NonExactLocationSelect
                         updateAnswer={updateAnswer}
                         questionId={questionId}
-                        mapCenter={values?.mapCenter}
+                        mapCenter={[45.815399, 15.966568]}
                         className="mt-6"
                         pageType={pageType}
                     />
@@ -393,11 +395,10 @@ const RadioComponent = ({ isMultiple, label, checked }) => {
         </div>
     )
 }
-
-const addLocationSelectQuestion = (questionText, options, key, updateAnswer, ) => {
+const addLocationSelectQuestion = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
-            <LocationSelect values={options} questionId={key} updateAnswer={updateAnswer} />
+            <LocationSelect questionId={key} updateAnswer={updateAnswer} />
         </Question>
     )
 }
