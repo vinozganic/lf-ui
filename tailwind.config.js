@@ -18,6 +18,8 @@ module.exports = {
                 formHorizontal: "url('/images/bgFormVector1920x1080.png')",
             }),
             boxShadow: {
+                lg: "0 0px 20px rgba(21, 191, 230, 0.6)",
+                xl: "0 0px 35px rgba(255, 255, 255, 0.5)",
                 button: "0 5px 20px rgba(21, 191, 230, 0.3)",
             },
             textShadow: {
