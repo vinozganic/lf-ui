@@ -66,7 +66,7 @@ const DatePicker = ({ questionId, updateAnswer }) => {
     )
 }
 
-const addDatePicker = (questionText, options, key, updateAnswer) => {
+const addDatePicker = (questionText, key, updateAnswer) => {
     registerLocale("hr-HR", hrHR)
     return (
         <Question questionText={questionText} key={key}>

@@ -135,7 +135,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     )
 }
 
-const addPhoneNumberInputQuestion = (questionText, options, key, updateAnswer) => {
+const addPhoneNumberInputQuestion = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
             <PhoneNumberInput questionId={key} updateAnswer={updateAnswer} />

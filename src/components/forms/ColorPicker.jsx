@@ -4,8 +4,7 @@ import { Question, SmallText } from "../../components"
 import "./ColorPickerStyles.css"
 
 const ColorPicker = ({ questionId, updateAnswer }) => {
-    const [color, setColor] = useState("#15bfe6")
-
+    const [color, setColor] = useState({ r: 21, g: 191, b: 230 })
     const handleChangeComplete = (color) => {
         setColor(color.rgb)
     }
@@ -41,10 +40,11 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
                     className="sm:mb-0 w-28 h-28 px-4 py-2 border-2 border-gray rounded-full bg-primary"
                     style={{
                         backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
-                    }}
-                ></div>
-                <div className="w-full text-center bg-gray px-4 py-2 mt-4 sm:mt-4
-                border-gray border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 rounded-xl duration-100 cursor-pointer" onClick={handleSelectColor}>
+                    }}></div>
+                <div
+                    className="w-full text-center bg-gray px-4 py-2 mt-4 sm:mt-4
+                border-gray border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 rounded-xl duration-100 cursor-pointer"
+                    onClick={handleSelectColor}>
                     <SmallText className="select-none">Odaberi boju</SmallText>
                 </div>
             </div>
@@ -52,7 +52,7 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
     )
 }
 
-const addColorPicker = (questionText, options, key, updateAnswer) => {
+const addColorPicker = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
             <ColorPicker questionId={key} updateAnswer={updateAnswer} />

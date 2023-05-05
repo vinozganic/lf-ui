@@ -13,7 +13,7 @@ const ResolvedModal = ({ setVisible, resolveItem, body }) => {
 
     return (
         <div className="px-4 fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black bg-opacity-25 select-none backdrop-blur-sm">
-            <div className="relative p-10 border-2 border-gray bg-gray/80 rounded-xl">
+            <div className="w-full md:w-1/2 relative p-10 border-2 border-gray bg-gray/80 rounded-xl">
                 <div className="p-6 pt-8 text-2xl font-bold">
                     {body?.foundId ? (
                         <SmallText>Jeste li sigurni da želite označiti predmet kao pronađen uz pomoć ovog spoja?</SmallText>

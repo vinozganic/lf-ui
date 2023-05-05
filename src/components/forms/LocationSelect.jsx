@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css"
 import "leaflet-draw/dist/leaflet.draw.css"
 import { Button, Question } from "../../components"
 
-const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
+const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
 
     const updateLocationType = (type) => {
@@ -42,7 +42,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                     <ExactLocationSelect
                         updateAnswer={updateAnswer}
                         questionId={questionId}
-                        mapCenter={values?.mapCenter}
+                        mapCenter={[45.815399, 15.966568]}
                         className="mt-6"
                     />
                 </>
@@ -54,7 +54,7 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                     <NonExactLocationSelect
                         updateAnswer={updateAnswer}
                         questionId={questionId}
-                        mapCenter={values?.mapCenter}
+                        mapCenter={[45.815399, 15.966568]}
                         className="mt-6"
                     />
                 </>
@@ -164,10 +164,10 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         </MapContainer>
     )
 }
-const addLocationSelectQuestion = (questionText, options, key, updateAnswer) => {
+const addLocationSelectQuestion = (questionText, key, updateAnswer) => {
     return (
         <Question questionText={questionText} key={key}>
-            <LocationSelect values={options} questionId={key} updateAnswer={updateAnswer} />
+            <LocationSelect questionId={key} updateAnswer={updateAnswer} />
         </Question>
     )
 }

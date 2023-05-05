@@ -17,11 +17,9 @@ import addColorPickerQuestion from "./forms/ColorPicker"
 import addDatePickerQuestion from "./forms/DatePicker"
 import Form from "./forms/Form"
 import addLocationSelectQuestion from "./forms/LocationSelect"
-import addMultipleChoiceQuestion from "./forms/MultipleChoice"
 import addPhoneNumberQuestion from "./forms/PhoneNumberInput"
 import ProgressBar from "./forms/ProgressBar"
 import Question from "./forms/Question"
-import addSingleChoiceQuestion from "./forms/SingleChoice"
 import TrackingKeyInput from "./forms/TrackingKeyInput"
 import addTypePicker from "./forms/TypePicker"
 import SvgList from "./forms/SvgList"
@@ -41,11 +39,9 @@ export {
     addDatePickerQuestion,
     Form,
     addLocationSelectQuestion,
-    addMultipleChoiceQuestion,
     addPhoneNumberQuestion,
     ProgressBar,
     Question,
-    addSingleChoiceQuestion,
     TrackingKeyInput,
     MatchCard,
     MatchesList,
