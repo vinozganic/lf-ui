@@ -134,25 +134,21 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                 )}
                             </div>
                         )}
-                        <div className="mx-1 mt-6 relative border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
-                            <div className="relative sm:px-8">
-                                <Button
-                                    className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
-                                    onClick={scrollLeft}
-                                    buttonClassName="py-1 px-1 drop-shadow-none">
-                                    <ArrowLeftSvg />
-                                </Button>
-                                <div
-                                    className="mx-4 px-4 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
-                                    ref={scrollContainer}>
-                                    {sortedListMatchCards}
-                                </div>
-                                <Button
-                                    className="absolute right-0 z-30 translate-x-1/2 -translate-y-1/2 top-1/2"
-                                    onClick={scrollRight}
-                                    buttonClassName="py-1 px-1 drop-shadow-none">
-                                    <ArrowRightSvg />
-                                </Button>
+                        <div className="mx-1 mt-6 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
+                            <div
+                                className="bg-primary hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] max-w-[3rem] grow rounded-l-xl flex justify-center items-center cursor-pointer"
+                                onClick={scrollLeft}>
+                                <ArrowLeftSvg />
+                            </div>
+                            <div
+                                className="px-4 grid grow grid-flow-col scrollbar-hide border-y-2 border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)] scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[60%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
+                                ref={scrollContainer}>
+                                {sortedListMatchCards}
+                            </div>
+                            <div
+                                className="bg-primary max-w-[3rem] hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] grow rounded-r-xl flex justify-center items-center cursor-pointer"
+                                onClick={scrollRight}>
+                                <ArrowRightSvg />
                             </div>
                         </div>
                         <div className="sm:pb-5 pb-2 px-4">
