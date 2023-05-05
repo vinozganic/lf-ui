@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
-import Button from './Button'
-import React from 'react'
-import Spinner from './Spinner'
-import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet'
-import './PropsModalStyles.css'
-import SmallText from './SmallText'
-import { API_URL } from '../constants'
-import { useFetch } from 'use-http'
+import { useState, useEffect, useCallback } from "react"
+import Button from "./Button"
+import React from "react"
+import Spinner from "./Spinner"
+import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet"
+import "./PropsModalStyles.css"
+import SmallText from "./SmallText"
+import { API_URL } from "../constants"
+import { useFetch } from "use-http"
 
 const PropsModal = ({ currentMatch, handleShowProps }) => {
-    const [types, setTypes] = useState('')
+    const [types, setTypes] = useState("")
     const date = new Date(currentMatch.itemData.date)
     const day = date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`
     const month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
@@ -28,7 +28,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
         getTypes()
     }, [getTypes])
     const center =
-        typeof currentMatch?.itemData.location.coordinates[1] === 'number'
+        typeof currentMatch?.itemData.location.coordinates[1] === "number"
             ? [currentMatch?.itemData.location.coordinates[1], currentMatch?.itemData.location.coordinates[0]]
             : [currentMatch?.itemData.location.coordinates[0][0][1], currentMatch?.itemData.location.coordinates[0][0][0]]
 
@@ -60,12 +60,12 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 <SmallText>Datum:</SmallText>
                             </div>
                             <div className="text-center p-2">
-                                <SmallText>{day + '.' + month + '.' + year}</SmallText>
+                                <SmallText>{day + "." + month + "." + year}</SmallText>
                             </div>
                         </div>
                         <div className="text-center col-start-1 col-end-2 pb-2">
                             <MapContainer
-                                style={{ height: '200px', width: '100%', border: '1px solid rgb(56,72,102)', borderRadius: '0.5rem' }}
+                                style={{ height: "200px", width: "100%", border: "1px solid rgb(56,72,102)", borderRadius: "0.5rem" }}
                                 center={center}
                                 zoom={13}
                                 scrollWheelZoom={false}
@@ -73,23 +73,23 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 tap={false}
                                 dragging={false}>
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                                {currentMatch.itemData.location.type === 'MultiLineString' && (
+                                {currentMatch.itemData.location.type === "MultiLineString" && (
                                     <>
                                         {currentMatch.itemData.location.coordinates.map((coords) => (
                                             <Polyline
                                                 key={coords}
-                                                pathOptions={{ color: 'blue', weight: 5 }}
+                                                pathOptions={{ color: "blue", weight: 5 }}
                                                 positions={coords.map((innerCoords) => [innerCoords[1], innerCoords[0]])}
                                             />
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.type == 'Point' && <Marker position={center} />}
-                                {currentMatch.itemData.location.hasOwnProperty('publicTransportLines') ? (
+                                {currentMatch.itemData.location.type == "Point" && <Marker position={center} />}
+                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
                                             key={line.coordinates}
-                                            pathOptions={{ color: 'red', weight: 5 }}
+                                            pathOptions={{ color: "red", weight: 5 }}
                                             positions={line.coordinates.map((innerCoords) => [innerCoords[1], innerCoords[0]])}
                                         />
                                     ))

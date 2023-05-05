@@ -17,14 +17,14 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
         return (
             <div className="flex flex-col items-start justify-start gap-x-12 gap-y-4 mx-2 md:flex-row md:items-end md:justify-between">
                 <Button
-                    style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6" }}
+                    style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6", boxShadow: "none" }}
                     className="rounded-md w-full text-white"
                     buttonClassName="border-none"
                     onClick={() => updateLocationType("exact")}>
                     Znam točnu lokaciju
                 </Button>
                 <Button
-                    style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6" }}
+                    style={{ backgroundColor: locationType != "nonExact" ? "#384866" : "#15bfe6", boxShadow: "none" }}
                     className="rounded-md bg-blue w-full text-white"
                     buttonClassName="border-none"
                     onClick={() => updateLocationType("nonExact")}>
