@@ -135,7 +135,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                             </div>
                         )}
                         <div className="mx-1 mt-6 relative border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
-                            <div className="relative sm:px-8">
+                            <div className="relative">
                                 <Button
                                     className="absolute left-0 z-30 -translate-x-1/2 -translate-y-1/2 top-1/2"
                                     onClick={scrollLeft}
@@ -143,7 +143,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                     <ArrowLeftSvg />
                                 </Button>
                                 <div
-                                    className="mx-4 px-4 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
+                                    className="px-2 grid grid-flow-col scrollbar-hide scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[45%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
                                     ref={scrollContainer}>
                                     {sortedListMatchCards}
                                 </div>
