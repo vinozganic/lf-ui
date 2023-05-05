@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect } from "react"
+import { React, useState, useRef, useEffect, useCallback } from "react"
 import { useLocation } from "react-router-dom"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
@@ -7,11 +7,12 @@ import "leaflet-draw/dist/leaflet.draw.css"
 import { Button, MediumText, Question, SmallText, Spinner } from "../"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
+// import "../MatchesListStyles.css"
 
 const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
     const pageType = useLocation().pathname.split("/").pop()
-    
+
     const updateLocationType = (type) => {
         setLocationType(type)
         updateAnswer(null, questionId)
@@ -58,7 +59,6 @@ const LocationSelect = ({ values, questionId, updateAnswer, className }) => {
                         questionId={questionId}
                         mapCenter={values?.mapCenter}
                         className="mt-6"
-
                         pageType={pageType}
                     />
                 </>
@@ -122,20 +122,28 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
 
 const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className, pageType }) => {
     const fgRef = useRef(null)
-    const [linesSelected, setLinesSelected] = useState([])
+    const scrollRef = useRef(null)
     const [multiLineString, setMultiLineString] = useState([])
+    const [typeShownID, setTypeShownID] = useState(null)
+    const [linesSelected, setLinesSelected] = useState([])
+    const [lineSearch, setLineSearch] = useState("")
 
-    const AreaCode = "Zagreb"
-    const { data: {data: {transportLines = []} = {}} = {}, loading, error: fetchError } = useFetch(`${API_URL}/config/transportLines/${AreaCode}`, { cachePolicy: "no-cache" }, [])
-    if (fetchError)
-        console.error("A useFetch error occurred: ", fetchError)
+    const AreaCode = "Zagreb"   
+    const { loading: loading, error: fetchError, request: linesReq, response: linesRes } = useFetch(`${API_URL}`)
+    const getTransportLines = useCallback(async () => {
+        const dataGet = await linesReq.get(`/config/transportLines/${AreaCode}`)
+        if (linesRes.ok) {
+            setLinesSelected(dataGet.data.transportLines.map(item => {
+                return { ...item, select: false}
+            }))
+        }
+    }, [linesReq, linesRes])
 
     useEffect(() => {
-        if (loading === false)
-            setLinesSelected(transportLines.map(item => {
-                return { ...item, select: false}
-            }).sort((a, b) => a.number - b.number))
-    }, [loading])
+        if (fetchError)
+            console.error("A useFetch error occurred: ", fetchError)
+        getTransportLines()
+    }, [])
 
     useEffect(() => {
         if (linesSelected.length === 0 && multiLineString.length === 0) {
@@ -150,22 +158,33 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                 coordinates: multiLineString,
                 publicTransportLines: selectedTransportLines,
             }
-            if (selectedTransportLines.length === 0 && multiLineString.length === 0)
+
+            if (selectedTransportLines.length === 0 && multiLineString.length === 0) {
                 updateAnswer(null, questionId)
-            else 
+            }
+            else { 
                 updateAnswer(answer, questionId)
+            }
         }
     }, [multiLineString, linesSelected])
     
     const separateLines = linesSelected.reduce((acc, item) => {
-        const index = acc.findIndex((group) => group[0]?.type === item.type);
+        const index = acc.findIndex((group) => group[0]?.type === item.type)
         if (index === -1) {
-          acc.push([item]);
+          acc.push([item])
         } else {
-          acc[index].push(item);
+          acc[index].push(item)
         }
-        return acc;
+        acc.sort((a, b) => a.number - b.number)
+        return acc
     }, [])
+    
+    const handletypeShownID = (idx) => {
+        if (typeShownID === idx)
+            setTypeShownID(null)
+        else
+            setTypeShownID(idx)
+    }
 
     const handleSelectedLines = (id) => {
         const newlinesSelected = linesSelected.map((item) => {
@@ -183,6 +202,11 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         }
         setMultiLineString(newMultiLineString)
     }
+
+    useEffect(() => {
+        if (typeShownID !== null)
+            scrollRef.current.scrollIntoView({ behavior: "smooth" })
+    }, [typeShownID])
 
     return (
         loading ? <Spinner /> :
@@ -219,76 +243,144 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     </FeatureGroup>
                 </MapContainer>
             }
-            <div className="flex flex-col items-center justify-center mt-2">
-                    <MediumText className="my-2">Kojim linijama si se vozio?</MediumText>
-                    {separateLines.map((linesByType, index) => {
-                        return (
-                            <PublicTransportType key={index} lines={linesByType}
-                                pageType={pageType} handleSelectedLines={handleSelectedLines} />
-                        )
-                    })}
-            </div>
+            <MediumText className="w-full text-center my-4">Kojim linijama si se vozio?</MediumText>
+            <RenderTypeList
+                separateLines={separateLines} 
+                typeShownID={typeShownID} 
+                handletypeShownID={handletypeShownID} 
+            />
+            {typeShownID !== null &&
+                <nav className="pt-2 rounded-xl bg-gray relative">
+                    <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
+                        <span className="mr-6">
+                            <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="26">
+                                <path d="M21.15 19.74a12 12 0 1 0-1.41 1.41l10.55 10.56 1.41-1.41zM12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10z"/>
+                            </svg>
+                        </span>
+                        <input type="text"
+                            placeholder="Pretraži"
+                            className="w-full text-lg bg-gray focus:outline-none font-bold text-white placeholder:font-normal placeholder:text-lg"
+                            value={lineSearch}
+                            onChange={(ev) => setLineSearch(ev.target.value)}
+                        />
+                    </div>
+                    <ChoiceType
+                        isMultiple={pageType !== "found"} 
+                        values={separateLines[typeShownID]} 
+                        getSelectedValue={handleSelectedLines} 
+                        lineSearch={lineSearch}
+                    />
+                </nav>
+            }
+            <div ref={scrollRef}></div>
         </>
     )
 }
 
-const PublicTransportType = ({lines, pageType, handleSelectedLines }) => {
-    const [open, setOpen] = useState(false)
-    const refScroll = useRef(null)
+const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
+    const slider = useRef(null)
+    const [isScrollable, setIsScrollable] = useState(false)
 
     useEffect(() => {
-        if (open) {
-            refScroll.current.scrollIntoView({ behavior: "smooth" })
+        console.log(isScrollable)
+        if (slider.current.scrollWidth > slider.current.offsetWidth) {
+            setIsScrollable(true);
         }
-    }, [open]);
+    }, []);
+
+    const slideLeft = () => {
+        slider.current.scrollLeft = slider.current.scrollLeft - 200
+    }
+
+    const slideRight = () => {
+        slider.current.scrollLeft = slider.current.scrollLeft + 200
+    }
+
+    const renderTypeList = separateLines.map((linesByType, index) => {
+        let numberOfSelected = 0
+        linesByType.forEach(elem => {
+            if (elem.select) numberOfSelected += 1
+        })
+        return (
+            <div key={index} className="grid grid-flow-col rounded-xl justify-between items-center
+                px-4 py-1 bg-gray cursor-pointer w-52"
+                onClick={() => handletypeShownID(index)}>
+                <SmallText className="items-center">{linesByType[0].type}</SmallText>
+                <span className="flex flex-row w-fit h-auto">
+                    <span className={`transition-opacity duration-300 ${numberOfSelected === 0 ? "opacity-0" : "opacity-100"} 
+                        border-2 border-white rounded-xl px-3 py-1 my-1 mr-1 text-xs font-bold`}>
+                        {numberOfSelected === 0 ? 1 : numberOfSelected}
+                    </span>
+                    <svg className={`fill-white transition-all duration-300 ${typeShownID === index && "rotate-180"}`} 
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="30">
+                        <path d="M3.81 4.38 8 8.57l4.19-4.19 1.52 1.53L8 11.62 2.29 5.91l1.52-1.53z" />
+                    </svg>
+                </span>
+            </div>
+        )
+    })
 
     return (
-        <nav className="w-full flex flex-col items-center justify-center">
-            <div className="my-4 flex items-center justify-center gap-x-2 w-fit h-fit px-4 py-2 rounded-xl border-2 border-primary cursor-pointer select-none" 
-                onClick={() => setOpen(!open)}>
-                <SmallText>{lines[0].type}</SmallText>
-                <svg className={`h-4 w-auto transition-all duration-200 ${open && "rotate-180"}`} xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
+        <div className="relative flex gap-x-2 w-full mb-2">
+            <span className={`border-2 border-gray rounded-s-xl cursor-pointer min-h-full w-fit flex items-center
+                ${!isScrollable && "hidden"}`}
+                onClick={() => slideLeft()}>
+               <svg className="rotate-180 fill-white w-6" viewBox="0 0 20 20">
+	               <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+               </svg>
+            </span>
+            <div ref={slider} className={`grid grid-flow-col w-full gap-x-4
+                ${isScrollable 
+                    ? "overflow-x-auto scroll-smooth scrollbar-hide snap-type-inline-mandatory touch-pan-x overscroll-x-contain" 
+                    : "justify-evenly"
+                }`}>
+                {renderTypeList}
             </div>
-            {open &&
-                <ChoiceType isMultiple={pageType !== "found"}
-                    values={lines} 
-                    getSelectedValue={(id) => handleSelectedLines(id)} 
-                />
-            }
-            <div ref={refScroll}></div>
-        </nav>
+            <span className={`border-2 border-gray rounded-e-xl cursor-pointer min-h-full w-fit flex items-center justify-end
+                ${!isScrollable && "hidden"}`}
+                onClick={() => slideRight()}>
+               <svg className="fill-white h-auto w-6" viewBox="0 0 20 20">
+	               <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+               </svg>
+            </span>
+        </div>
     )
 }
 
-const ChoiceType = ({ isMultiple, values, getSelectedValue }) => {
+const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
     const listRadioItems = values.map((item, index) => {
+        const fullName = `${item.name} ${item.number}`
         return (
-            <li key={index}>
-                <RadioComponent isMultiple={isMultiple} label={`${item.name} ${item.number}`} id={item.id} 
-                    handleSelectedState={(id) => getSelectedValue(id)} checked={item.select} />
+            <li key={index} className={`${
+                fullName.toLowerCase().includes(lineSearch.toLowerCase())
+                ? 'block'
+                : 'hidden'} xl:w-1/3 sm:w-1/2 w-full h-fit flex-[0 1 33.33%]`}
+                onClick={() => getSelectedValue(item.id)}>
+                <RadioComponent 
+                    isMultiple={isMultiple} 
+                    label={fullName} 
+                    checked={item.select} 
+                />
             </li>
         )
     })
     return (
-        <nav className="w-full flex justify-center items-center">
-            <ul className="grid w-fit grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-8 gap-y-4 list-none">{listRadioItems}</ul>
-        </nav>
+        <div className="py-2">
+        <ul className="w-full max-h-[13.5rem] h-fit overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide list-none">
+            {listRadioItems}
+        </ul></div>
     )
 }
 
-const RadioComponent = ({ isMultiple, label, id, handleSelectedState, checked }) => {
+const RadioComponent = ({ isMultiple, label, checked }) => {
     return (
-        <div
-            className={`rounded-xl items-center flex border-2 max-w-xs
-                hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 cursor-pointer 
-                ${checked ? "bg-primary border-primary" : "bg-gray border-gray"}
-                ${isMultiple ? "pl-3 py-1" : "pl-2 py-2"}`}
-            onClick={() => handleSelectedState(id)}>
+        <div className={`border-2 mx-2 h-full box-border rounded-xl px-3 py-2 hover:border-2 flex items-center
+            transition ease-in-out delay-50 hover:scale-[1.02] duration-100 cursor-pointer gap-x-3
+            ${checked ? 'border-primary bg-primary hover:bg-primary/50 hover:border-white' 
+            : 'border-white bg-gray hover:bg-[#020829]/[.20] hover:border-primary'}`
+            }>
             {isMultiple &&
-                <div className={`w-6 h-6 rounded-md bg-white flex items-center justify-center ${checked ? "bg-secondary" : ""}`}>
+                <div className={`w-6 h-6 rounded-md bg-white flex items-center justify-center ${checked && "bg-secondary"}`}>
                     {checked && (
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-primary">
                             <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
@@ -296,7 +388,7 @@ const RadioComponent = ({ isMultiple, label, id, handleSelectedState, checked })
                     )}
                 </div>
             }
-            <SmallText className="inline-block mx-3 select-none text-sm">{label}</SmallText>
+            <SmallText className="px-2 select-none">{label}</SmallText>
         </div>
     )
 }
