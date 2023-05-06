@@ -8,8 +8,8 @@ const HomePage = () => {
         <Page
             bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat bg-fixed"
             className="h-auto flex flex-col items-center px-6 lg:px-16">
-            <VeryBigText className="text-center lg:mt-20 text-shadow-xl">Lost & Found</VeryBigText>
-            <MediumText className="mx-8 mt-16 lg:mt-20 md:w-3/4 lg:w-1-2 text-left text-shadow-lg">
+            <img src="/images/logo.png" className="w-64 lg:w-1/4 mt-4 lg:mt-12" />
+            <MediumText className="mx-8 mt-14 lg:mt-20 md:w-3/4 lg:w-1-2 text-left text-shadow-lg">
                 Ostavio si torbu u tramvaju? Ostala ti je majica u teretani? Pronađi izgubljene predmete u nekoliko klikova.
             </MediumText>
             <div className="flex flex-col justify-center gap-y-8 gap-4 lg:gap-16 xl:gap-32 mt-24 lg:mt-40 w-full">
