@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
-import { Page, Spinner, MatchesList, SmallText } from '../components'
-import { useFetch } from 'use-http'
-import { API_URL } from '../constants'
+import React, { useState, useEffect, useCallback } from "react"
+import { useParams } from "react-router-dom"
+import { Page, Spinner, MatchesList, SmallText } from "../components"
+import { useFetch } from "use-http"
+import { API_URL } from "../constants"
 
 const MatchLostPage = () => {
     const { id } = useParams()
+    const [item, setItem] = useState(null)
     const [resolved, setResolved] = useState(false)
     const [matches, setMatches] = useState([])
 
@@ -14,18 +15,19 @@ const MatchLostPage = () => {
     const { loading: lostItemLoading, error: lostItemError, request: lostItemRequest, response: lostItemResponse } = useFetch(`${API_URL}`)
 
     const resolveItem = useCallback(async (body) => {
-        if (body === null) {
-            const resolveData = await resolvedRequest.post(`/lost/resolve`, { lostId: id })
-        } else {
-            const resolveData = await resolvedRequest.post(`/lost/resolve`, { lostId: id, foundId: body.foundId })
+        await resolvedRequest.post(`/lost/resolve`, { lostId: id, foundId: body?.foundId })
+        if (resolvedResponse.ok) {
+            setResolved(true)
         }
-        setResolved(true)
     }, [])
 
     const getLostItem = useCallback(async () => {
         const lostItemData = await lostItemRequest.post(`/lost/batch`, [id])
-        if (lostItemResponse.ok && lostItemData.data[0].resolved) {
-            setResolved(true)
+        if (lostItemResponse.ok) {
+            if (lostItemData.data[0].resolved) {
+                setResolved(true)
+            }
+            setItem(lostItemData.data[0])
         }
     }, [lostItemRequest, lostItemResponse])
 
@@ -42,7 +44,7 @@ const MatchLostPage = () => {
     }, [getMatches, getLostItem, resolved])
 
     return (
-        <Page className="h-auto min-h-screen justify-center ">
+        <Page className="mx-4 h-auto min-h-screen justify-center">
             {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}
             {!matchesLoading && !resolvedLoading && !lostItemLoading && resolved && (
                 <div>
@@ -52,7 +54,8 @@ const MatchLostPage = () => {
             {!matchesLoading && !resolvedLoading && !lostItemLoading && !resolved && (
                 <MatchesList
                     matches={matches.filter((match) => match.resolved === false)}
-                    lostItem={false}
+                    item={item}
+                    itemType="lost"
                     resolveItem={resolveItem}
                 />
             )}

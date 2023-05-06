@@ -65,7 +65,6 @@ const TrackingKeyInput = ({ length, className }) => {
             const redirectUrl = `/matches/${itemType}/${id}`
             navigate(redirectUrl)
         } catch (error) {
-            console.log(error)
             setError("error")
         }
     }
