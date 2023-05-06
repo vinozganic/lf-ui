@@ -19,12 +19,12 @@ function TopBar() {
 
     return (
         <nav
-            className={`bg-background fixed w-full top-0 z-50 py-4 transition-colors duration-300 ease-in-out border-b-2 border-primary/40 `}>
-            <div className="mx-8 lg:mx-16">
+            className={`bg-background fixed w-full top-0 z-50 py-3 transition-colors duration-300 ease-in-out border-b-2 border-primary/40 `}>
+            <div className="mx-6 lg:mx-10">
                 <div className="flex justify-between">
                     <div className="flex-shrink-0">
-                        <Link to="/" className="text-white hover:underline font-bold text-2xl transition duration-300">
-                            <SmallText className={`text-white hover:scale-105 transition duration-300`}>Lost & Found</SmallText>
+                        <Link to="/">
+                            <img src="images/long-logo.png" className="hover:scale-105 h-6 lg:h-7 pl-0 ml-0 transition duration-300" />
                         </Link>
                     </div>
                     <div className="hidden md:flex items-center">
