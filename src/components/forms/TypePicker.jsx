@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from "react"
-import { SmallText, MediumText, Spinner, Question, SvgList } from "../../components"
+import React, { useState, useCallback, useEffect, useRef } from "react"
+import { SmallText, Spinner, Question, SvgList } from "../../components"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
 
@@ -8,13 +8,16 @@ const TypePicker = ({ questionId, updateAnswer }) => {
     const [open, setOpen] = useState(false)
     const [selectedType, setSelectedType] = useState(null)
     const [typeSearch, setTypeSearch] = useState("")
+    const ref = useRef(null)
 
     const { loading: typesLoading, error: typesError, request: typesRequest, response: typesResponse } = useFetch(`${API_URL}`)
+
+    const collator = new Intl.Collator("hr")
 
     const getTypes = useCallback(async () => {
         const types = await typesRequest.get(`/config/types`)
         if (typesResponse.ok) {
-            setTypes(types.data)
+            setTypes(types.data.sort((a, b) => collator.compare(a.niceName, b.niceName)))
         }
     }, [typesRequest, typesResponse])
 
@@ -40,6 +43,21 @@ const TypePicker = ({ questionId, updateAnswer }) => {
         getTypes()
     }, [])
 
+    useEffect(() => {
+        if (open) {
+            const offsetPercentage = 20 
+            const windowHeight = window.innerHeight
+            const elementPosition = ref.current.offsetTop
+            const offsetPixels = (windowHeight * offsetPercentage) / 100
+            // the above code is used to determine the offset of the element from the top of the page
+            // offsetPercentage is hardcoded to 20% beacuse it looked nice
+            window.scrollTo({
+                top: elementPosition - offsetPixels,
+                behavior: "smooth",
+            })
+        }
+    }, [open])
+
     const toLowerCaseWithoutSpecialCharacters = (string) => {
         return string.toLowerCase().replace(/č/g, "c").replace(/ć/g, "c").replace(/š/g, "s").replace(/đ/g, "d").replace(/ž/g, "z")
     }
@@ -49,6 +67,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
             {(typesLoading || !typesResponse.ok) && <Spinner />}
             {!typesLoading && typesResponse.ok && (
                 <div
+                    ref={ref}
                     className="w-full bg-gray py-2 px-4 inline-flex justify-between items-center mb-2 rounded-xl border-2 border-gray cursor-pointer hover:border-primary hover:border-2 hover:bg-opacity-60"
                     onClick={handleClickOpen}>
                     <SmallText className="">{selectedType === null ? "Unesite vrstu" : selectedType.niceName}</SmallText>
