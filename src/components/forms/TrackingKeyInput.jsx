@@ -11,7 +11,24 @@ const TrackingKeyInput = ({ length, className }) => {
     const navigate = useNavigate()
     const inputRefs = useRef(Array(length).fill(null))
 
-    const { get, loading, error: fetchError } = useFetch(`${API_URL}/track/${trackingKey.join("")}`, { cachePolicy: "no-cache" })
+    const {
+        loading,
+        error: trackingKeyError,
+        request: trackingKeyRequest,
+        response: trackingKeyResponse,
+    } = useFetch(`${API_URL}`, { cachePolicy: "no-cache" })
+
+    const submitTrackingKey = async () => {
+        const trackingKeyResult = await trackingKeyRequest.get(`/track/${trackingKey.join("")}`)
+        if (trackingKeyResponse.ok) {
+            const itemType = trackingKeyResult.data.type
+            const id = trackingKeyResult.data.id
+            const redirectUrl = `/matches/${itemType}/${id}`
+            navigate(redirectUrl)
+        } else {
+            setError(trackingKeyResponse.data.message)
+        }
+    }
 
     const handleChange = (e, index) => {
         const { value } = e.target
@@ -47,27 +64,6 @@ const TrackingKeyInput = ({ length, className }) => {
             inputRefs.current[index + 1].focus()
         }
     }
-    const onSubmit = async () => {
-        try {
-            const data = await get()
-            if (fetchError && !data) {
-                setError(fetchError.message)
-                return
-            }
-
-            if (data.success === false) {
-                setError(data.error.message)
-                return
-            }
-
-            const itemType = data.item.type
-            const id = data.item.id
-            const redirectUrl = `/matches/${itemType}/${id}`
-            navigate(redirectUrl)
-        } catch (error) {
-            setError("error")
-        }
-    }
 
     return (
         <div className={`flex flex-col items-center gap-1 w-full ${className}`}>
@@ -88,7 +84,7 @@ const TrackingKeyInput = ({ length, className }) => {
                     ))}
                 </div>
                 {trackingKey.filter((item) => item == "").length == 0 && (
-                    <Button onClick={onSubmit} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
+                    <Button onClick={submitTrackingKey} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
                         Prati
                     </Button>
                 )}
