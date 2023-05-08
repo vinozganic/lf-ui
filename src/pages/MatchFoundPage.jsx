@@ -40,10 +40,6 @@ const MatchFoundPage = () => {
         getFoundItem()
     }, [getMatches, getFoundItem])
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
-
     return (
         <Page className="mx-4 h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
             {(matchesLoading || foundItemLoading) && <Spinner />}

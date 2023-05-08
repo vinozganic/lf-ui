@@ -1,10 +1,7 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, MediumText, SmallText, Page, TrackingKeyInput } from "../components"
 
 const HomePage = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
     return (
         <Page
             bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat bg-fixed"

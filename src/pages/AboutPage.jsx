@@ -1,10 +1,7 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, MediumText, BigText, SmallText, Page } from "../components"
 
 const AboutPage = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
     return (
         <Page bgClassName="bg-aboutVertical lg:bg-aboutHorizontal bg-cover bg-center bg-fixed bg-no-repeat" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="text-center mt-12 lg:mt-20">O aplikaciji</BigText>

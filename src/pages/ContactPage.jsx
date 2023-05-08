@@ -1,10 +1,7 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, BigText, MediumText, Page } from "../components"
 
 const ContactPage = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
     return (
         <Page bgClassName="bg-contactVertical lg:bg-contactHorizontal bg-cover bg-no-repeat bg-fixed" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="mt-8 lg:mt-20 lg:text-center text-center text-4xl mb-10 lg:mb-4">Kontaktirajte nas</BigText>

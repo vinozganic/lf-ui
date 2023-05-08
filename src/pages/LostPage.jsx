@@ -7,7 +7,6 @@ import {
     Page,
     addTypePicker,
 } from "../components"
-import { useEffect } from "react"
 
 const questions = [
     {
@@ -38,9 +37,6 @@ const questions = [
 ]
 
 const FoundPage = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
     return (
         <Page
             bgClassName="bg-formVertical lg:bg-formHorizontal bg-cover bg-center bg-fixed bg-no-repeat"

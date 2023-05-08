@@ -1,10 +1,7 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, SmallText, MediumText, BigText, Page } from "../components"
 
 const PrivacyPage = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
     return (
         <Page bgClassName="bg-privacyVertical lg:bg-privacyHorizontal bg-cover bg-center bg-no-repeat bg-fixed" className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="text-center mt-16 lg:mt-20">Prikupljanje podataka</BigText>
