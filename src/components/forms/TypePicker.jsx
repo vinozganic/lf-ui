@@ -17,7 +17,17 @@ const TypePicker = ({ questionId, updateAnswer }) => {
     const getTypes = useCallback(async () => {
         const types = await typesRequest.get(`/config/types`)
         if (typesResponse.ok) {
-            setTypes(types.data.sort((a, b) => collator.compare(a.niceName, b.niceName)))
+            setTypes(
+                types.data.sort((a, b) => {
+                    if (a.niceName === "Ostalo") {
+                        return 1
+                    } else if (b.niceName === "Ostalo") {
+                        return -1
+                    } else {
+                        return collator.compare(a.niceName, b.niceName)
+                    }
+                })
+            )
         }
     }, [typesRequest, typesResponse])
 
@@ -45,7 +55,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
 
     useEffect(() => {
         if (open) {
-            const offsetPercentage = 20 
+            const offsetPercentage = 20
             const windowHeight = window.innerHeight
             const elementPosition = ref.current.offsetTop
             const offsetPixels = (windowHeight * offsetPercentage) / 100
@@ -97,7 +107,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
                             onChange={handleTypeSearch}
                         />
                     </div>
-                    <ul className="w-full p-2 max-h-80 overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide">
+                    <ul className="w-full p-2 max-h-[17rem] overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide">
                         {types.map((type) => (
                             <li
                                 key={type.name}
