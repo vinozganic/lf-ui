@@ -16,13 +16,16 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
         setCountrySearch(e.target.value)
     }
 
+    useEffect(() => {
+        if (phoneNumberInput.length > 3) {
+            const phoneNumber = selectedCountry.prefix + phoneNumberInput
+            updateAnswer(phoneNumber, questionId)
+        }
+    }, [phoneNumberInput])
+
     const handlePhoneNumberInput = (e) => {
         const inputtedValue = e.target.value.replace(/\D/g, "")
         setPhoneNumberInput(inputtedValue)
-        if (inputtedValue.length > 3) {
-            const phoneNumber = selectedCountry.prefix + inputtedValue
-            updateAnswer(phoneNumber, questionId)
-        }
     }
 
     return (
