@@ -43,6 +43,10 @@ const MatchLostPage = () => {
         getLostItem()
     }, [getMatches, getLostItem, resolved])
 
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
+
     return (
         <Page className="mx-4 h-auto min-h-screen justify-center">
             {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}

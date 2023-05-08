@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react"
-import SmallText from "./SmallText"
+import { SmallText } from "../components"
 
 const MatchCard = ({ match, className, setCurrentMatch, itemData }) => {
     const [progressColor, setProgressColor] = useState("")

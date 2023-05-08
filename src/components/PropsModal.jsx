@@ -1,12 +1,9 @@
-import { useState, useEffect, useCallback } from "react"
-import Button from "./Button"
-import React from "react"
-import Spinner from "./Spinner"
+import React, { useState, useEffect, useCallback } from "react"
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet"
 import "./PropsModalStyles.css"
-import SmallText from "./SmallText"
 import { API_URL } from "../constants"
 import { useFetch } from "use-http"
+import { Button, SmallText, Spinner } from "../components"
 
 const PropsModal = ({ currentMatch, handleShowProps }) => {
     const [types, setTypes] = useState("")
