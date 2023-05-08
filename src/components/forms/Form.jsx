@@ -9,12 +9,7 @@ const Form = ({ questions, text, type, className }) => {
         return { fieldName: question.fieldName, answer: null }
     })
 
-    const {
-        loading,
-        error: formError,
-        request: formRequest,
-        response: formResponse,
-    } = useFetch(`${API_URL}`, { headers: { "Content-Type": "application/json" } })
+    const { loading, error: formError, request: formRequest, response: formResponse } = useFetch(`${API_URL}`)
 
     const [formAnswers, setFormAnswers] = useState(initialState)
     const [progress, setProgress] = useState(0)
