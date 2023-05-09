@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react"
-import { SmallText, MediumText, Spinner, Question, SvgList } from "../../components"
+import { SmallText, Spinner, Question, SvgList } from "../../components"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
 

@@ -1,6 +1,5 @@
 import React from "react"
-import { Button, BigText, MediumText } from "../components"
-import Page from "../components/Page"
+import { Button, BigText, MediumText, Page } from "../components"
 
 const ContactPage = () => {
     return (

@@ -1,6 +1,5 @@
 import React from "react"
-import { Button, SmallText, MediumText, BigText } from "../components"
-import Page from "../components/Page"
+import { Button, SmallText, MediumText, BigText, Page } from "../components"
 
 const PrivacyPage = () => {
     return (

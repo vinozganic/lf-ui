@@ -1,7 +1,5 @@
 import React from "react"
-import { Button, MediumText, SmallText, VeryBigText } from "../components"
-import TrackingKeyInput from "../components/forms/TrackingKeyInput"
-import Page from "../components/Page"
+import { Button, MediumText, SmallText, Page, TrackingKeyInput } from "../components"
 
 const HomePage = () => {
     return (

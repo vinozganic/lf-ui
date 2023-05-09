@@ -11,6 +11,8 @@ import TopBar from "./TopBar"
 import VeryBigText from "./VeryBigText"
 import MatchCard from "./MatchCard"
 import MatchesList from "./MatchesList"
+import ResolvedModal from "./ResolvedModal"
+import PropsModal from "./PropsModal"
 
 // form components
 import addColorPickerQuestion from "./forms/ColorPicker"
@@ -47,4 +49,6 @@ export {
     MatchesList,
     addTypePicker,
     SvgList,
+    ResolvedModal,
+    PropsModal,
 }
