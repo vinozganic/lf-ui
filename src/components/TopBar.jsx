@@ -24,7 +24,7 @@ function TopBar() {
                 <div className="flex justify-between">
                     <div className="flex-shrink-0">
                         <Link to="/">
-                            <img src="images/long-logo.png" className="hover:scale-105 h-6 lg:h-7 pl-0 ml-0 transition duration-300" />
+                            <img src="/images/long-logo.png" className="hover:scale-105 h-6 lg:h-7 pl-0 ml-0 transition duration-300" />
                         </Link>
                     </div>
                     <div className="hidden md:flex items-center">

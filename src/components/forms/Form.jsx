@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { API_URL } from "../../constants"
@@ -9,23 +9,35 @@ const Form = ({ questions, text, type, className }) => {
         return { fieldName: question.fieldName, answer: null }
     })
 
-    const { post, loading, error: fetchError } = useFetch(`${API_URL}/${type}`, { headers: { "Content-Type": "application/json" } })
+    const { loading, error: formError, request: formRequest, response: formResponse } = useFetch(`${API_URL}`)
 
     const [formAnswers, setFormAnswers] = useState(initialState)
     const [progress, setProgress] = useState(0)
-    const [error, setError] = useState(null)
 
     const navigate = useNavigate()
 
     const ref = useRef(null)
 
-    const scrollToBottom = () => {
-        ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
-    }
+    const submitForm = useCallback(async () => {
+        const payload = {}
+        formAnswers.forEach((item) => {
+            payload[item.fieldName] = item.answer
+        })
+        const formResult = await formRequest.post(`/${type}`, payload)
+        if (formResponse.ok) {
+            const id = formResult.data.id
+            const redirectUrl = `/matches/${type}/${id}`
+            navigate(redirectUrl)
+        }
+    }, [formRequest, formResponse, navigate, type])
 
     useEffect(() => {
         scrollToBottom()
     }, [progress, formAnswers])
+
+    const scrollToBottom = () => {
+        ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+    }
 
     const addQuestion = (questionObject, updateAnswer) => {
         const questionElement = questionObject.create(questionObject.text, questionObject.fieldName, updateAnswer)
@@ -78,49 +90,17 @@ const Form = ({ questions, text, type, className }) => {
         return questionElements
     }
 
-    const generatePayload = () => {
-        const payload = {}
-        formAnswers.forEach((item) => {
-            payload[item.fieldName] = item.answer
-        })
-        return payload
-    }
-
-    const handleSubmit = async () => {
-        const payload = generatePayload()
-
-        try {
-            const data = await post(payload)
-            if (fetchError && !data) {
-                setError(fetchError.message)
-                return
-            }
-
-            if (data.success === false) {
-                setError(data.error.message)
-                return
-            }
-
-            const id = data[type]._id
-            const redirectUrl = `/matches/${type}/${id}`
-            navigate(redirectUrl)
-        } catch (error) {
-            setError("error")
-        }
-    }
-
     return (
         <div className={`${className} relative mx-6`}>
             <ProgressBar progress={progress} />
             <BigText className="mt-32 w-full max-w-7xl">{text}</BigText>
             <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
-                <Button onClick={handleSubmit} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
+                <Button onClick={submitForm} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
                     Submit
                 </Button>
             )}
             {loading && <Spinner />}
-            {error && <p className="text-white">{error}</p>}
             <div ref={ref} className="mt-8"></div>
         </div>
     )
