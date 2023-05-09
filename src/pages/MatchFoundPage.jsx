@@ -43,6 +43,11 @@ const MatchFoundPage = () => {
     return (
         <Page className="mx-4 h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
             {(matchesLoading || foundItemLoading) && <Spinner />}
+            {item && (
+                <div>
+                    <SmallText>Ključ za praćenje: {item.trackingKey}</SmallText>
+                </div>
+            )}
             {!matchesLoading && !foundItemLoading && resolved && (
                 <div>
                     <SmallText>Predmet je vraćen vlasniku</SmallText>

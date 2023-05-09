@@ -1,6 +1,5 @@
 import { React } from "react"
-import Button from "./Button"
-import { SmallText } from "./"
+import { SmallText, Button } from "../components"
 
 const ResolvedModal = ({ setVisible, resolveItem, body }) => {
     const handleResolveItem = () => {
