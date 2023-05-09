@@ -55,16 +55,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
 
     useEffect(() => {
         if (open) {
-            const offsetPercentage = 20
-            const windowHeight = window.innerHeight
-            const elementPosition = ref.current.offsetTop
-            const offsetPixels = (windowHeight * offsetPercentage) / 100
-            // the above code is used to determine the offset of the element from the top of the page
-            // offsetPercentage is hardcoded to 20% beacuse it looked nice
-            window.scrollTo({
-                top: elementPosition - offsetPixels,
-                behavior: "smooth",
-            })
+            ref.current.scrollIntoView({ behavior: "smooth", block: "end" })
         }
     }, [open])
 
@@ -77,7 +68,6 @@ const TypePicker = ({ questionId, updateAnswer }) => {
             {(typesLoading || !typesResponse.ok) && <Spinner />}
             {!typesLoading && typesResponse.ok && (
                 <div
-                    ref={ref}
                     className="w-full bg-gray py-2 px-4 inline-flex justify-between items-center mb-2 rounded-xl border-2 border-gray cursor-pointer hover:border-primary hover:border-2 hover:bg-opacity-60"
                     onClick={handleClickOpen}>
                     <SmallText className="">{selectedType === null ? "Unesite vrstu" : selectedType.niceName}</SmallText>
@@ -141,6 +131,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
                     </ul>
                 </div>
             )}
+            <div ref={ref} className="p-2"></div>
         </>
     )
 }
