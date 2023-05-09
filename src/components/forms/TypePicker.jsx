@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useRef } from "react"
 import { SmallText, Spinner, Question, SvgList } from "../../components"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
@@ -8,13 +8,26 @@ const TypePicker = ({ questionId, updateAnswer }) => {
     const [open, setOpen] = useState(false)
     const [selectedType, setSelectedType] = useState(null)
     const [typeSearch, setTypeSearch] = useState("")
+    const ref = useRef(null)
 
     const { loading: typesLoading, error: typesError, request: typesRequest, response: typesResponse } = useFetch(`${API_URL}`)
+
+    const collator = new Intl.Collator("hr")
 
     const getTypes = useCallback(async () => {
         const types = await typesRequest.get(`/config/types`)
         if (typesResponse.ok) {
-            setTypes(types.data)
+            setTypes(
+                types.data.sort((a, b) => {
+                    if (a.niceName === "Ostalo") {
+                        return 1
+                    } else if (b.niceName === "Ostalo") {
+                        return -1
+                    } else {
+                        return collator.compare(a.niceName, b.niceName)
+                    }
+                })
+            )
         }
     }, [typesRequest, typesResponse])
 
@@ -39,6 +52,12 @@ const TypePicker = ({ questionId, updateAnswer }) => {
     useEffect(() => {
         getTypes()
     }, [])
+
+    useEffect(() => {
+        if (open) {
+            ref.current.scrollIntoView({ behavior: "smooth", block: "end" })
+        }
+    }, [open])
 
     const toLowerCaseWithoutSpecialCharacters = (string) => {
         return string.toLowerCase().replace(/č/g, "c").replace(/ć/g, "c").replace(/š/g, "s").replace(/đ/g, "d").replace(/ž/g, "z")
@@ -78,7 +97,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
                             onChange={handleTypeSearch}
                         />
                     </div>
-                    <ul className="w-full p-2 max-h-80 overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide">
+                    <ul className="w-full p-2 max-h-[17rem] overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide">
                         {types.map((type) => (
                             <li
                                 key={type.name}
@@ -112,6 +131,7 @@ const TypePicker = ({ questionId, updateAnswer }) => {
                     </ul>
                 </div>
             )}
+            <div ref={ref} className="p-2"></div>
         </>
     )
 }
