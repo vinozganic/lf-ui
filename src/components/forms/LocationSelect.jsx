@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect, useCallback, forwardRef } from "react"
+import { React, useState, useRef, useEffect, useCallback } from "react"
 import { useLocation } from "react-router-dom"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
@@ -11,21 +11,11 @@ import { useFetch } from "use-http"
 const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
     const pageType = useLocation().pathname.split("/").pop()
-    const ref = useRef(null)
 
     const updateLocationType = (type) => {
-        if (locationType !== type) {
-            if (pageType === "found" && type === "nonExact") 
-                updateAnswer(null, questionId)
-            setLocationType(type)
-        }
-        else
-            ref.current?.scrollIntoView({behavior: "smooth", block: "end"})
+        setLocationType(type)
+        updateAnswer(null, questionId)
     }
-
-    useEffect(() => {
-        ref.current?.scrollIntoView({behavior: "smooth", block: "end"})
-    }, [locationType])
 
     const renderLocationTypeSelect = () => {
         return (
@@ -54,7 +44,6 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
                 <>
                     {renderLocationTypeSelect()}
                     <ExactLocationSelect
-                        ref={ref}
                         updateAnswer={updateAnswer}
                         questionId={questionId}
                         mapCenter={[45.815399, 15.966568]}
@@ -67,7 +56,6 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
                 <>
                     {renderLocationTypeSelect()}
                     <NonExactLocationSelect
-                        ref={ref}
                         updateAnswer={updateAnswer}
                         questionId={questionId}
                         mapCenter={[45.815399, 15.966568]}
@@ -84,7 +72,7 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
     return <div className={`${className}`}>{renderLocationSelect()}</div>
 }
 
-const ExactLocationSelect = forwardRef(({ updateAnswer, questionId, mapCenter, className }, ref) => {
+const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {
     const fgRef = useRef(null)
 
     const onCreated = (e) => {
@@ -95,119 +83,122 @@ const ExactLocationSelect = forwardRef(({ updateAnswer, questionId, mapCenter, c
         fgRef.current.addLayer(e.layer)
 
         let point = e.layer.toGeoJSON()["geometry"]["coordinates"]
-        let answer = {
+
+        let path = {
             type: "Point",
             coordinates: point,
+        }
+
+        let answer = {
+            path,
+            publicTransportLines: [],
         }
         updateAnswer(answer, questionId)
     }
 
     return (
-        <>
-            <MapContainer
-                center={mapCenter}
-                zoom={13}
-                style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
-                className={`z-0 rounded-xl ${className}`}>
-                <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                <FeatureGroup ref={fgRef}>
-                    <EditControl
-                        position="topright"
-                        onCreated={onCreated}
-                        on
-                        draw={{
-                            rectangle: false,
-                            circle: false,
-                            circlemarker: false,
-                            polyline: false,
-                            polygon: false,
-                            marker: {
-                                icon: new L.Icon({
-                                    iconUrl: "/images/marker.png",
-                                    iconSize: [40, 40],
-                                }),
-                            },
-                        }}
-                    />
-                </FeatureGroup>
-            </MapContainer>
-            <nav className="mt-8" ref={ref}></nav>
-        </>
+        <MapContainer
+            center={mapCenter}
+            zoom={13}
+            style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
+            className={`z-0 rounded-xl ${className}`}>
+            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+            <FeatureGroup ref={fgRef}>
+                <EditControl
+                    position="topright"
+                    onCreated={onCreated}
+                    on
+                    draw={{
+                        rectangle: false,
+                        circle: false,
+                        circlemarker: false,
+                        polyline: false,
+                        polygon: false,
+                        marker: {
+                            icon: new L.Icon({
+                                iconUrl: "/images/marker.png",
+                                iconSize: [40, 40],
+                            }),
+                        },
+                    }}
+                />
+            </FeatureGroup>
+        </MapContainer>
     )
-})
+}
 
-const NonExactLocationSelect = forwardRef( ({ updateAnswer, questionId, mapCenter, className, pageType }, ref) => {
+const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className, pageType }) => {
     const fgRef = useRef(null)
     const scrollRef = useRef(null)
     const [multiLineString, setMultiLineString] = useState([])
     const [typeShownID, setTypeShownID] = useState(null)
     const [linesSelected, setLinesSelected] = useState([])
     const [lineSearch, setLineSearch] = useState("")
-    const [firstRender, setFirstRender] = useState(true)
 
-    const AreaCode = "Zagreb"   
+    const AreaCode = "Zagreb"
     const { loading: loading, error: fetchError, request: linesReq, response: linesRes } = useFetch(`${API_URL}`)
     const getTransportLines = useCallback(async () => {
         const dataGet = await linesReq.get(`/config/transportLines/${AreaCode}`)
         if (linesRes.ok) {
-            setLinesSelected(dataGet.data.transportLines.map(item => {
-                return { ...item, select: false}
-            }))
+            setLinesSelected(
+                dataGet.data.transportLines.map((item) => {
+                    return { ...item, select: false }
+                })
+            )
         }
     }, [linesReq, linesRes])
 
     useEffect(() => {
-        if (fetchError)
-            console.error("A useFetch error occurred: ", fetchError)
+        if (fetchError) console.error("A useFetch error occurred: ", fetchError)
         getTransportLines()
     }, [])
-    
+
     useEffect(() => {
         if (linesSelected.length === 0 && multiLineString.length === 0) {
-            return
+            updateAnswer(null, questionId)
         } else {
-            const selectedTransportLines = linesSelected
-                .filter(x => x.select === true)
-                .map(x => x.id)
+            const selectedTransportLines = linesSelected.filter((x) => x.select === true).map((x) => x.id)
+
+            let path = null
+            if (multiLineString.length > 0) {
+                path = {
+                    type: "MultiLineString",
+                    coordinates: multiLineString,
+                }
+            }
 
             let answer = {
-                type: "MultiLineString",
-                coordinates: multiLineString,
+                path,
                 publicTransportLines: selectedTransportLines,
             }
 
             if (selectedTransportLines.length === 0 && multiLineString.length === 0) {
-                firstRender ? setFirstRender(false) : updateAnswer(null, questionId)
-            }
-            else {
+                updateAnswer(null, questionId)
+            } else {
                 updateAnswer(answer, questionId)
             }
         }
     }, [multiLineString, linesSelected])
-    
+
     const separateLines = linesSelected.reduce((acc, item) => {
         const index = acc.findIndex((group) => group[0]?.type === item.type)
         if (index === -1) {
-          acc.push([item])
+            acc.push([item])
         } else {
-          acc[index].push(item)
+            acc[index].push(item)
         }
         acc.sort((a, b) => a.number - b.number)
         return acc
     }, [])
-    
+
     const handletypeShownID = (idx) => {
-        if (typeShownID === idx)
-            setTypeShownID(null)
-        else
-            setTypeShownID(idx)
+        if (typeShownID === idx) setTypeShownID(null)
+        else setTypeShownID(idx)
     }
 
     const handleSelectedLines = (id) => {
         const newlinesSelected = linesSelected.map((item) => {
-            return item.id === id
-            ? { ...item, select: !item.select }
-            : {...item, select: (pageType === "found" ? false : item.select) }
+            return item.id === id ? { ...item, select: !item.select } : { ...item, select: pageType === "found" ? false : item.select }
         })
         setLinesSelected(newlinesSelected)
     }
@@ -221,14 +212,14 @@ const NonExactLocationSelect = forwardRef( ({ updateAnswer, questionId, mapCente
     }
 
     useEffect(() => {
-        if (typeShownID !== null)
-            scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest"})
-        }, [typeShownID])
-        
-        return (
-            loading ? <Spinner /> :
+        if (typeShownID !== null) scrollRef.current.scrollIntoView({ behavior: "smooth" })
+    }, [typeShownID])
+
+    return loading ? (
+        <Spinner />
+    ) : (
         <>
-            {pageType === "lost" &&
+            {pageType === "lost" && (
                 <MapContainer
                     center={mapCenter}
                     zoom={13}
@@ -259,23 +250,19 @@ const NonExactLocationSelect = forwardRef( ({ updateAnswer, questionId, mapCente
                         />
                     </FeatureGroup>
                 </MapContainer>
-            }
-            <MediumText className="w-full text-center my-2">{linesRes.ok ? "Kojim linijama si se vozio?" : ""}</MediumText>
-            <RenderTypeList
-                separateLines={separateLines}
-                typeShownID={typeShownID} 
-                handletypeShownID={handletypeShownID}
-            />
-            <div ref={ref} ></div>
-            {typeShownID !== null &&
+            )}
+            {linesRes.ok && <MediumText className="w-full text-center my-4">Kojim linijama si se vozio?</MediumText>}
+            <RenderTypeList separateLines={separateLines} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
+            {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
                     <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
                         <span className="mr-6">
                             <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="26">
-                                <path d="M21.15 19.74a12 12 0 1 0-1.41 1.41l10.55 10.56 1.41-1.41zM12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10z"/>
+                                <path d="M21.15 19.74a12 12 0 1 0-1.41 1.41l10.55 10.56 1.41-1.41zM12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10z" />
                             </svg>
                         </span>
-                        <input type="text"
+                        <input
+                            type="text"
                             placeholder="Pretraži"
                             className="w-full text-lg bg-gray focus:outline-none font-bold text-white placeholder:font-normal placeholder:text-lg"
                             value={lineSearch}
@@ -283,25 +270,26 @@ const NonExactLocationSelect = forwardRef( ({ updateAnswer, questionId, mapCente
                         />
                     </div>
                     <ChoiceType
-                        isMultiple={pageType !== "found"} 
-                        values={separateLines[typeShownID]} 
-                        getSelectedValue={handleSelectedLines} 
+                        isMultiple={pageType !== "found"}
+                        values={separateLines[typeShownID]}
+                        getSelectedValue={handleSelectedLines}
                         lineSearch={lineSearch}
                     />
                 </nav>
-            }
+            )}
             <div ref={scrollRef}></div>
         </>
     )
-})
+}
 
 const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
     const slider = useRef(null)
     const [isScrollable, setIsScrollable] = useState(false)
 
     useEffect(() => {
+        console.log(isScrollable)
         if (slider.current.scrollWidth > slider.current.offsetWidth) {
-            setIsScrollable(true);
+            setIsScrollable(true)
         }
     }, [])
 
@@ -315,21 +303,27 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 
     const renderTypeList = separateLines.map((linesByType, index) => {
         let numberOfSelected = 0
-        linesByType.forEach(elem => {
+        linesByType.forEach((elem) => {
             if (elem.select) numberOfSelected += 1
         })
         return (
-            <div key={index} className="inline-flex sm:min-w-[33.3333%] max-sm:min-w-full snap-start 
+            <div
+                key={index}
+                className="inline-flex sm:min-w-[33.3333%] max-sm:min-w-full snap-start 
                 rounded-xl px-4 py-1 bg-gray cursor-pointer justify-between items-center"
                 onClick={() => handletypeShownID(index)}>
                 <SmallText className="items-center">{linesByType[0].type}</SmallText>
                 <span className="flex flex-row w-fit h-auto">
-                    <span className={`transition-opacity duration-300 ${numberOfSelected === 0 ? "opacity-0" : "opacity-100"} 
+                    <span
+                        className={`transition-opacity duration-300 ${numberOfSelected === 0 ? "opacity-0" : "opacity-100"} 
                         border-2 border-white rounded-xl px-3 py-1 my-1 mr-1 text-xs font-bold`}>
                         {numberOfSelected === 0 ? 1 : numberOfSelected}
                     </span>
-                    <svg className={`fill-white transition-all duration-300 ${typeShownID === index && "rotate-180"}`} 
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="30">
+                    <svg
+                        className={`fill-white transition-all duration-300 ${typeShownID === index && "rotate-180"}`}
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        width="30">
                         <path d="M3.81 4.38 8 8.57l4.19-4.19 1.52 1.53L8 11.62 2.29 5.91l1.52-1.53z" />
                     </svg>
                 </span>
@@ -339,25 +333,26 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 
     return (
         <div className="flex gap-x-2 w-full mb-2">
-            <span className={`border-2 border-gray rounded-s-xl cursor-pointer min-h-full w-fit flex items-center
+            <span
+                className={`border-2 border-gray rounded-s-xl cursor-pointer min-h-full w-fit flex items-center
                 sm:hover:bg-primary/40 transition-all ease-in-out duration-150 ${!isScrollable && "hidden"}`}
                 onClick={() => slideLeft()}>
                 <svg className="rotate-180 fill-white w-6" viewBox="0 0 20 20">
-	                <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+                    <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
                 </svg>
             </span>
-            <div ref={slider} className={`flex w-full snap-x snap-mandatory scroll-smooth gap-x-4
-                ${isScrollable
-                    ? "overflow-x-auto scroll-smooth scrollbar-hide overscroll-x-contain" 
-                    : "justify-evenly"
-                }`}>
+            <div
+                ref={slider}
+                className={`flex w-full snap-x snap-mandatory scroll-smooth gap-x-4
+                ${isScrollable ? "overflow-x-auto scroll-smooth scrollbar-hide overscroll-x-contain" : "justify-evenly"}`}>
                 {renderTypeList}
             </div>
-            <span className={`border-2 border-gray rounded-e-xl cursor-pointer min-h-full w-fit flex items-center
+            <span
+                className={`border-2 border-gray rounded-e-xl cursor-pointer min-h-full w-fit flex items-center
                 hover:bg-primary/40 transition-all ease-in-out duration-150 ${!isScrollable && "hidden"}`}
                 onClick={() => slideRight()}>
                 <svg className="fill-white h-auto w-6" viewBox="0 0 20 20">
-	                <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+                    <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
                 </svg>
             </span>
         </div>
@@ -368,35 +363,36 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
     const listRadioItems = values.map((item, index) => {
         const fullName = `${item.name} ${item.number}`
         return (
-            <li key={index} className={`${
-                fullName.toLowerCase().includes(lineSearch.toLowerCase())
-                ? 'block'
-                : 'hidden'} xl:w-1/3 sm:w-1/2 w-full h-fit flex-[0 1 33.33%]`}
+            <li
+                key={index}
+                className={`${
+                    fullName.toLowerCase().includes(lineSearch.toLowerCase()) ? "block" : "hidden"
+                } xl:w-1/3 sm:w-1/2 w-full h-fit flex-[0 1 33.33%]`}
                 onClick={() => getSelectedValue(item.id)}>
-                <RadioComponent 
-                    isMultiple={isMultiple} 
-                    label={fullName} 
-                    checked={item.select} 
-                />
+                <RadioComponent isMultiple={isMultiple} label={fullName} checked={item.select} />
             </li>
         )
     })
     return (
         <div className="py-2">
-        <ul className="w-full max-h-[13.5rem] h-fit overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide list-none">
-            {listRadioItems}
-        </ul></div>
+            <ul className="w-full max-h-[13.5rem] h-fit overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide list-none">
+                {listRadioItems}
+            </ul>
+        </div>
     )
 }
 
 const RadioComponent = ({ isMultiple, label, checked }) => {
     return (
-        <div className={`border-2 mx-2 h-full box-border rounded-xl px-3 py-2 hover:border-2 flex items-center
+        <div
+            className={`border-2 mx-2 h-full box-border rounded-xl px-3 py-2 hover:border-2 flex items-center
             transition ease-in-out delay-50 hover:scale-[1.02] duration-100 cursor-pointer gap-x-3
-            ${checked ? 'border-primary bg-primary hover:bg-primary/50 hover:border-white' 
-            : 'border-white bg-gray hover:bg-[#020829]/[.20] hover:border-primary'}`
-            }>
-            {isMultiple &&
+            ${
+                checked
+                    ? "border-primary bg-primary hover:bg-primary/50 hover:border-white"
+                    : "border-white bg-gray hover:bg-[#020829]/[.20] hover:border-primary"
+            }`}>
+            {isMultiple && (
                 <div className={`w-6 h-6 rounded-md bg-white flex items-center justify-center ${checked && "bg-secondary"}`}>
                     {checked && (
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-primary">
@@ -404,7 +400,7 @@ const RadioComponent = ({ isMultiple, label, checked }) => {
                         </svg>
                     )}
                 </div>
-            }
+            )}
             <SmallText className="px-2 select-none">{label}</SmallText>
         </div>
     )
