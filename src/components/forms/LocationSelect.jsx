@@ -367,7 +367,7 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
                 key={index}
                 className={`${
                     fullName.toLowerCase().includes(lineSearch.toLowerCase()) ? "block" : "hidden"
-                } xl:w-1/3 sm:w-1/2 w-full h-fit flex-[0 1 33.33%]`}
+                } xl:w-1/3 sm:w-1/2 w-full flex-[0 1 33.33%]`}
                 onClick={() => getSelectedValue(item.id)}>
                 <RadioComponent isMultiple={isMultiple} label={fullName} checked={item.select} />
             </li>
@@ -375,7 +375,7 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
     })
     return (
         <div className="py-2">
-            <ul className="w-full max-h-[13.5rem] h-fit overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide list-none">
+            <ul className="w-full max-h-[13.5rem] overflow-y-auto flex-row flex gap-y-2 flex-wrap scrollbar-hide list-none">
                 {listRadioItems}
             </ul>
         </div>
@@ -385,7 +385,7 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
 const RadioComponent = ({ isMultiple, label, checked }) => {
     return (
         <div
-            className={`border-2 mx-2 h-full box-border rounded-xl px-3 py-2 hover:border-2 flex items-center
+            className={`border-2 mx-2 h-full box-border min-h-[4rem] rounded-xl px-3 py-2 hover:border-2 flex items-center
             transition ease-in-out delay-50 hover:scale-[1.02] duration-100 cursor-pointer gap-x-3
             ${
                 checked
