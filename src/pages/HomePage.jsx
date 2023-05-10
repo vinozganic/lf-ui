@@ -4,7 +4,7 @@ import { Button, MediumText, SmallText, Page, TrackingKeyInput } from "../compon
 const HomePage = () => {
     return (
         <Page
-            bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat bg-fixed"
+            bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat lg:bg-fixed"
             className="h-auto flex flex-col items-center px-6 lg:px-16">
             <img src="/images/logo.png" className="w-64 lg:w-1/4 mt-4 lg:mt-12" />
             <MediumText className="mx-8 mt-14 lg:mt-20 md:w-3/4 lg:w-1-2 text-left text-shadow-lg">
