@@ -123,7 +123,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
             )}
             {!foundLoading && matchesList.length > 0 && (
                 <div className="flex items-start justify-center">
-                    <div className="w-full my-0 lg:my-10 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
+                    <div className="w-full my-2 lg:my-10 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
                         {itemType === "lost" && (
                             <div className="flex items-center justify-start">
                                 <Button
@@ -158,8 +158,10 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                 <ArrowRightSvg />
                             </div>
                         </div>
-                        <div className="sm:pb-5 pb-2 px-14 mt-2 flex gap-2">
-                            <InfoSvg />
+                        <div className="sm:pb-5 pb-2 sm:px-14 mt-2 flex justify-center items-center gap-2">
+                            <div>
+                                <InfoSvg />
+                            </div>
                             <SmallText className="text-sm font-semibold text-white/60">
                                 Imena na karticama služe samo za razlikovanje spojeva. Ne predstavljaju stvarna imena korisnika.
                             </SmallText>
