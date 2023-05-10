@@ -47,7 +47,8 @@ const TrackingKeyInput = ({ length, className }) => {
             inputRefs.current[index + 1]?.focus()
         }
         if (value.length > 1 && index < length - 1) {
-            setIndividualTrackingKeyElement(index + 1, value.substring(1), newTrackingKey)
+            const newIndex = !newTrackingKey[index].match(regex) ? index : index + 1
+            setIndividualTrackingKeyElement(newIndex, value.substring(1), newTrackingKey)
         }
         setTrackingKey(newTrackingKey)
     }

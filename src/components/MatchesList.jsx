@@ -158,7 +158,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                 <ArrowRightSvg />
                             </div>
                         </div>
-                        <div className="sm:pb-5 pb-2 sm:px-14 mt-2 flex justify-center items-center gap-2">
+                        <div className="sm:pb-5 pb-2 sm:px-14 mt-2 flex justify-start items-center gap-2">
                             <div>
                                 <InfoSvg />
                             </div>
