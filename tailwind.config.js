@@ -45,5 +45,26 @@ module.exports = {
             noto: ["Noto Color Emoji", "sans-serif"],
         },
     },
-    plugins: [],
+    plugins: [
+        function ({ addUtilities }) {
+            addUtilities(
+                {
+                    ".bg-fixed:before": {
+                        content: '""',
+                        display: "block",
+                        position: "fixed",
+                        left: "0",
+                        top: "0",
+                        width: "100%",
+                        height: "100%",
+                        zIndex: "-10",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center center",
+                        backgroundRepeat: "no-repeat",
+                    },
+                },
+                ["responsive", "hover"]
+            )
+        },
+    ],
 }

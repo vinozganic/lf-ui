@@ -41,7 +41,9 @@ const MatchFoundPage = () => {
     }, [getMatches, getFoundItem])
 
     return (
-        <Page className="mx-4 h-auto min-h-screen bg-matchesVertical lg:bg-matchesHorizontal bg-fixed bg-cover bg-no-repeat justify-center">
+        <Page
+            bgClassName="lg:bg-matchesHorizontal lg:bg-fixed lg:bg-cover lg:bg-no-repeat"
+            className="mx-4 h-auto min-h-screen justify-center">
             {(matchesLoading || foundItemLoading) && <Spinner />}
             {item && (
                 <div>
