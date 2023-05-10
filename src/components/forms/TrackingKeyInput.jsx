@@ -21,12 +21,13 @@ const TrackingKeyInput = ({ length, className }) => {
     const submitTrackingKey = async () => {
         const trackingKeyResult = await trackingKeyRequest.get(`/track/${trackingKey.join("")}`)
         if (trackingKeyResponse.ok) {
+            setError(null)
             const itemType = trackingKeyResult.data.type
             const id = trackingKeyResult.data.id
             const redirectUrl = `/matches/${itemType}/${id}`
             navigate(redirectUrl)
         } else {
-            setError(trackingKeyResponse.data.message)
+            setError(trackingKeyResponse.status === 404 ? "Pogrešan ključ za praćenje" : "Greška")
         }
     }
 
@@ -113,7 +114,7 @@ const TrackingKeyInput = ({ length, className }) => {
                 )}
             </div>
             {loading && <Spinner />}
-            {error && <div className="text-red-500">{error}</div>}
+            {error && <div className="mt-3 p-2 bg-red/50 rounded-lg">{error}</div>}
         </div>
     )
 }
