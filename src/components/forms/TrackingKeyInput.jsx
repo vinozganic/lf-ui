@@ -96,7 +96,7 @@ const TrackingKeyInput = ({ length, className }) => {
                             key={index}
                             type="text"
                             placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
-                            value={trackingKey[index].replace(/\|/g, "")}
+                            value={trackingKey[index]}
                             onChange={(e) => {
                                 handleChange(e, index)
                             }}
