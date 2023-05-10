@@ -30,36 +30,57 @@ const TrackingKeyInput = ({ length, className }) => {
         }
     }
 
-    const handleChange = (e, index) => {
-        const { value } = e.target
-        const newTrackingKey = [...trackingKey]
+    const setIndividualTrackingKeyElement = (index, value, newTrackingKey) => {
         const oldValue = newTrackingKey[index]
-        newTrackingKey[index] = value.replace(oldValue, "").toUpperCase()
-        setTrackingKey(newTrackingKey)
-        if (value.length > 0) {
+        if (oldValue === "") {
+            newTrackingKey[index] = value.toUpperCase().charAt(0)
+        } else {
+            var regex = new RegExp(oldValue, "")
+            newTrackingKey[index] = value.toUpperCase().replace(regex, "").charAt(0)
+            value = value.toUpperCase().replace(regex, "")
+        }
+        var regex = /[A-Z\d]{1}/g
+        if (!newTrackingKey[index].match(regex)) {
+            newTrackingKey[index] = oldValue
+        } else if (value.length > 0) {
             inputRefs.current[index].blur()
             inputRefs.current[index + 1]?.focus()
         }
+        if (value.length > 1 && index < length - 1) {
+            const newIndex = !newTrackingKey[index].match(regex) ? index : index + 1
+            setIndividualTrackingKeyElement(newIndex, value.substring(1), newTrackingKey)
+        }
+        setTrackingKey(newTrackingKey)
     }
+
+    const handleChange = (e, index) => {
+        if (e.target.value.length > 0) {
+            const { value } = e.target
+            const newTrackingKey = [...trackingKey]
+            setIndividualTrackingKeyElement(index, value, newTrackingKey)
+        }
+    }
+
     const handleKeyDown = (e, index) => {
-        if (e.key === "Backspace" && index > 0) {
+        if (e.key === "Backspace") {
             const newTrackingKey = [...trackingKey]
             newTrackingKey[index] = ""
             setTrackingKey(newTrackingKey)
-            inputRefs.current[index - 1].focus()
+            if (index > 0) {
+                inputRefs.current[index - 1].focus()
+            }
         }
-
-        if (e.key === "Delete" && index < length - 1) {
+        if (e.key === "Delete") {
             const newTrackingKey = [...trackingKey]
             newTrackingKey[index] = ""
             setTrackingKey(newTrackingKey)
-            inputRefs.current[index + 1].focus()
+            if (index < length - 1) {
+                inputRefs.current[index + 1].focus()
+            }
         }
-
         if (e.key === "ArrowLeft" && index > 0) {
             inputRefs.current[index - 1].focus()
         }
-
         if (e.key === "ArrowRight" && index < length - 1) {
             inputRefs.current[index + 1].focus()
         }
@@ -76,8 +97,10 @@ const TrackingKeyInput = ({ length, className }) => {
                             key={index}
                             type="text"
                             placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
-                            value={value}
-                            onChange={(e) => handleChange(e, index)}
+                            value={trackingKey[index]}
+                            onChange={(e) => {
+                                handleChange(e, index)
+                            }}
                             onKeyDown={(e) => handleKeyDown(e, index)}
                             className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
                         />
