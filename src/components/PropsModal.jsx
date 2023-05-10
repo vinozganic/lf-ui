@@ -25,9 +25,9 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
         getTypes()
     }, [getTypes])
     const center =
-        typeof currentMatch?.itemData.location.coordinates[1] === "number"
-            ? [currentMatch?.itemData.location.coordinates[1], currentMatch?.itemData.location.coordinates[0]]
-            : [currentMatch?.itemData.location.coordinates[0][0][1], currentMatch?.itemData.location.coordinates[0][0][0]]
+        typeof currentMatch?.itemData.location.path.coordinates[1] === "number"
+            ? [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
+            : [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
 
     return (
         <>
@@ -70,9 +70,9 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 tap={false}
                                 dragging={false}>
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                                {currentMatch.itemData.location.type === "MultiLineString" && (
+                                {currentMatch.itemData.location.path.type === "MultiLineString" && (
                                     <>
-                                        {currentMatch.itemData.location.coordinates.map((coords) => (
+                                        {currentMatch.itemData.location.path.coordinates.map((coords) => (
                                             <Polyline
                                                 key={coords}
                                                 pathOptions={{ color: "blue", weight: 5 }}
@@ -81,7 +81,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.type == "Point" && <Marker position={center} />}
+                                {currentMatch.itemData.location.path.type == "Point" && <Marker position={center} />}
                                 {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
