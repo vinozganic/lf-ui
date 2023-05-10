@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import "./DatePickerStyles.css"
 import hrHR from "date-fns/locale/hr"
@@ -8,6 +8,7 @@ import ReactDatePicker, { registerLocale } from "react-datepicker"
 const DatePicker = ({ questionId, updateAnswer }) => {
     const [selectedDate, setSelectedDate] = useState(null)
     const [showCalendar, setShowCalendar] = useState(false)
+    const ref = useRef(null)
 
     const handleSelectedDate = (date) => {
         setSelectedDate(date)
@@ -19,15 +20,15 @@ const DatePicker = ({ questionId, updateAnswer }) => {
         return date.getDate().toString() + " / " + (parseInt(date.getMonth()) + 1) + " / " + date.getFullYear().toString()
     }
 
-    const handleShowCalendar = () => {
-        setShowCalendar(!showCalendar)
-        updateAnswer(selectedDate, questionId)
-    }
+    useEffect(() => {
+        if (showCalendar === true)
+            ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+    }, [showCalendar])
 
     return (
         <div className="grid gap-y-2">
             <div
-                onClick={handleShowCalendar}
+                onClick={() => setShowCalendar(!showCalendar)}
                 className={`grid-flow-row gap-4 items-center justify-start flex
                 bg-gray px-4 py-2 w-[310px]
                 border-gray border-2 hover:bg-opacity-80 hover:border-primary hover:border-opacity-40 duration-100 rounded-xl cursor-pointer ${
@@ -38,29 +39,32 @@ const DatePicker = ({ questionId, updateAnswer }) => {
                         className="w-5 h-5"
                         fill="white"
                         viewBox="0 0 20 20"
-                        onClick={handleShowCalendar}
+                        onClick={() => setShowCalendar(!showCalendar)}
                         xmlns="http://www.w3.org/2000/svg">
                         <path
                             fillRule="evenodd"
                             d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"></path>
                     </svg>
                 </div>
-                <div onClick={handleShowCalendar} className="w-full text-center">
+                <div onClick={() => setShowCalendar(!showCalendar)} className="w-full text-center">
                     <SmallText className="select-none">{selectedDate ? getNiceDate(selectedDate) : "Odaberi datum"}</SmallText>
                 </div>
             </div>
 
             {showCalendar && (
-                <ReactDatePicker
-                    selected={selectedDate}
-                    onChange={handleSelectedDate}
-                    maxDate={new Date()}
-                    dateFormat="dd/MM/yyyy"
-                    showPopperArrow={false}
-                    locale="hr-HR"
-                    inline={true}
-                    fixedHeight={true}
-                />
+                <>
+                    <ReactDatePicker
+                        selected={selectedDate}
+                        onChange={handleSelectedDate}
+                        maxDate={new Date()}
+                        dateFormat="dd/MM/yyyy"
+                        showPopperArrow={false}
+                        locale="hr-HR"
+                        inline={true}
+                        fixedHeight={true}
+                    />
+                    <nav ref={ref} className="mt-8"></nav>
+                </>
             )}
         </div>
     )

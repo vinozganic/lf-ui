@@ -24,7 +24,10 @@ const Form = ({ questions, text, type, className }) => {
     }
 
     useEffect(() => {
-        scrollToBottom()
+        if (progress !== 0)
+            scrollToBottom()
+        else
+            window.scrollTo({top: 0, behavior: "smooth"})
     }, [progress, formAnswers])
 
     const addQuestion = (questionObject, updateAnswer) => {

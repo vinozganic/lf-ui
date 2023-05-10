@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import countryData from "../../helpers/phoneNumberHelper"
 import { SmallText, Question } from "../../components"
 

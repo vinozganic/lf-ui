@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect, useCallback } from "react"
+import { React, useState, useRef, useEffect, useCallback, forwardRef } from "react"
 import { useLocation } from "react-router-dom"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
@@ -11,11 +11,21 @@ import { useFetch } from "use-http"
 const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
     const pageType = useLocation().pathname.split("/").pop()
+    const ref = useRef(null)
 
     const updateLocationType = (type) => {
-        setLocationType(type)
-        updateAnswer(null, questionId)
+        if (locationType !== type) {
+            if (pageType === "found" && type === "nonExact") 
+                updateAnswer(null, questionId)
+            setLocationType(type)
+        }
+        else
+            ref.current?.scrollIntoView({behavior: "smooth", block: "end"})
     }
+
+    useEffect(() => {
+        ref.current?.scrollIntoView({behavior: "smooth", block: "end"})
+    }, [locationType])
 
     const renderLocationTypeSelect = () => {
         return (
@@ -44,6 +54,7 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
                 <>
                     {renderLocationTypeSelect()}
                     <ExactLocationSelect
+                        ref={ref}
                         updateAnswer={updateAnswer}
                         questionId={questionId}
                         mapCenter={[45.815399, 15.966568]}
@@ -56,6 +67,7 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
                 <>
                     {renderLocationTypeSelect()}
                     <NonExactLocationSelect
+                        ref={ref}
                         updateAnswer={updateAnswer}
                         questionId={questionId}
                         mapCenter={[45.815399, 15.966568]}
@@ -72,7 +84,7 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
     return <div className={`${className}`}>{renderLocationSelect()}</div>
 }
 
-const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className }) => {
+const ExactLocationSelect = forwardRef(({ updateAnswer, questionId, mapCenter, className }, ref) => {
     const fgRef = useRef(null)
 
     const onCreated = (e) => {
@@ -91,43 +103,47 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
     }
 
     return (
-        <MapContainer
-            center={mapCenter}
-            zoom={13}
-            style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
-            className={`z-0 rounded-xl ${className}`}>
-            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-            <FeatureGroup ref={fgRef}>
-                <EditControl
-                    position="topright"
-                    onCreated={onCreated}
-                    on
-                    draw={{
-                        rectangle: false,
-                        circle: false,
-                        circlemarker: false,
-                        polyline: false,
-                        polygon: false,
-                        marker: {
-                            icon: new L.Icon({
-                                iconUrl: "/images/marker.png",
-                                iconSize: [40, 40],
-                            }),
-                        },
-                    }}
-                />
-            </FeatureGroup>
-        </MapContainer>
+        <>
+            <MapContainer
+                center={mapCenter}
+                zoom={13}
+                style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
+                className={`z-0 rounded-xl ${className}`}>
+                <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                <FeatureGroup ref={fgRef}>
+                    <EditControl
+                        position="topright"
+                        onCreated={onCreated}
+                        on
+                        draw={{
+                            rectangle: false,
+                            circle: false,
+                            circlemarker: false,
+                            polyline: false,
+                            polygon: false,
+                            marker: {
+                                icon: new L.Icon({
+                                    iconUrl: "/images/marker.png",
+                                    iconSize: [40, 40],
+                                }),
+                            },
+                        }}
+                    />
+                </FeatureGroup>
+            </MapContainer>
+            <nav className="mt-8" ref={ref}></nav>
+        </>
     )
-}
+})
 
-const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className, pageType }) => {
+const NonExactLocationSelect = forwardRef( ({ updateAnswer, questionId, mapCenter, className, pageType }, ref) => {
     const fgRef = useRef(null)
     const scrollRef = useRef(null)
     const [multiLineString, setMultiLineString] = useState([])
     const [typeShownID, setTypeShownID] = useState(null)
     const [linesSelected, setLinesSelected] = useState([])
     const [lineSearch, setLineSearch] = useState("")
+    const [firstRender, setFirstRender] = useState(true)
 
     const AreaCode = "Zagreb"   
     const { loading: loading, error: fetchError, request: linesReq, response: linesRes } = useFetch(`${API_URL}`)
@@ -145,10 +161,10 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             console.error("A useFetch error occurred: ", fetchError)
         getTransportLines()
     }, [])
-
+    
     useEffect(() => {
         if (linesSelected.length === 0 && multiLineString.length === 0) {
-            updateAnswer(null, questionId)
+            return
         } else {
             const selectedTransportLines = linesSelected
                 .filter(x => x.select === true)
@@ -161,9 +177,9 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             }
 
             if (selectedTransportLines.length === 0 && multiLineString.length === 0) {
-                updateAnswer(null, questionId)
+                firstRender ? setFirstRender(false) : updateAnswer(null, questionId)
             }
-            else { 
+            else {
                 updateAnswer(answer, questionId)
             }
         }
@@ -206,11 +222,11 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
 
     useEffect(() => {
         if (typeShownID !== null)
-            scrollRef.current.scrollIntoView({ behavior: "smooth" })
-    }, [typeShownID])
-
-    return (
-        loading ? <Spinner /> :
+            scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest"})
+        }, [typeShownID])
+        
+        return (
+            loading ? <Spinner /> :
         <>
             {pageType === "lost" &&
                 <MapContainer
@@ -244,14 +260,13 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     </FeatureGroup>
                 </MapContainer>
             }
-            {linesRes.ok && 
-                <MediumText className="w-full text-center my-4">Kojim linijama si se vozio?</MediumText>
-            }
+            <MediumText className="w-full text-center my-2">{linesRes.ok ? "Kojim linijama si se vozio?" : ""}</MediumText>
             <RenderTypeList
-                separateLines={separateLines} 
+                separateLines={separateLines}
                 typeShownID={typeShownID} 
-                handletypeShownID={handletypeShownID} 
+                handletypeShownID={handletypeShownID}
             />
+            <div ref={ref} ></div>
             {typeShownID !== null &&
                 <nav className="pt-2 rounded-xl bg-gray relative">
                     <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
@@ -278,14 +293,13 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             <div ref={scrollRef}></div>
         </>
     )
-}
+})
 
 const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
     const slider = useRef(null)
     const [isScrollable, setIsScrollable] = useState(false)
 
     useEffect(() => {
-        console.log(isScrollable)
         if (slider.current.scrollWidth > slider.current.offsetWidth) {
             setIsScrollable(true);
         }
