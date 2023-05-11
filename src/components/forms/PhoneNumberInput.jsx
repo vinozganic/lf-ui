@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import countryData from "../../helpers/phoneNumberHelper"
 import { SmallText, Question } from "../../components"
 
 const PhoneNumberInput = ({ questionId, updateAnswer }) => {
     const [countrySearch, setCountrySearch] = useState("")
     const [selectedCountry, setSelectedCountry] = useState({
-        name: "United States",
-        prefix: "+1",
-        flag: "🇺🇸",
+        name: "Croatia",
+        prefix: "+385",
+        flag: "🇭🇷",
     })
     const [open, setOpen] = useState(false)
     const [phoneNumberInput, setPhoneNumberInput] = useState("")

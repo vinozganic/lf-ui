@@ -44,8 +44,15 @@ const MatchLostPage = () => {
     }, [getMatches, getLostItem, resolved])
 
     return (
-        <Page className="mx-4 h-auto min-h-screen justify-center">
+        <Page
+            bgClassName="lg:bg-matchesHorizontal lg:bg-fixed lg:bg-cover lg:bg-no-repeat"
+            className="mx-4 h-auto min-h-screen justify-center">
             {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}
+            {item && (
+                <div>
+                    <SmallText>Ključ za praćenje: {item.trackingKey}</SmallText>
+                </div>
+            )}
             {!matchesLoading && !resolvedLoading && !lostItemLoading && resolved && (
                 <div>
                     <SmallText>Predmet je pronađen</SmallText>

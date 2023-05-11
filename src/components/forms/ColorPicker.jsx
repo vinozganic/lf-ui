@@ -14,7 +14,7 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
     }
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start sm:h-60">
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start sm:h-60 touch-none">
             <ChromePicker
                 color={color}
                 onChange={handleChangeComplete}
