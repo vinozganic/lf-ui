@@ -14,12 +14,12 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
     }
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start sm:h-60 touch-none">
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start sm:h-60">
             <ChromePicker
                 color={color}
                 onChange={handleChangeComplete}
                 disableAlpha={true}
-                className="pb-2 sm:ml-0 sm:mt-0 sm:mb-0"
+                className="pb-2 sm:ml-0 sm:mt-0 sm:mb-0 touch-none"
                 styles={{
                     default: {
                         picker: {
