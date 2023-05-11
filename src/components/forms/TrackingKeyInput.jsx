@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { Button, MediumText, Spinner } from "../../components"
@@ -31,7 +31,18 @@ const TrackingKeyInput = ({ length, className }) => {
         }
     }
 
-    const setIndividualTrackingKeyElement = (index, value, newTrackingKey) => {
+    const setOtherTrackingKeyElements = (index, value, newTrackingKey) => {
+        newTrackingKey[index] = value.toUpperCase().charAt(0)
+        if (value.length > 0) {
+            inputRefs.current[index].blur()
+            inputRefs.current[index + 1]?.focus()
+        }
+        if (value.length > 1 && index < length - 1) {
+            setOtherTrackingKeyElements(index + 1, value.substring(1), newTrackingKey)
+        }
+    }
+
+    const setFirstTrackingKeyElement = (index, value, newTrackingKey) => {
         const oldValue = newTrackingKey[index]
         if (oldValue === "") {
             newTrackingKey[index] = value.toUpperCase().charAt(0)
@@ -40,16 +51,12 @@ const TrackingKeyInput = ({ length, className }) => {
             newTrackingKey[index] = value.toUpperCase().replace(regex, "").charAt(0)
             value = value.toUpperCase().replace(regex, "")
         }
-        var regex = /[A-Z\d]{1}/g
-        if (!newTrackingKey[index].match(regex)) {
-            newTrackingKey[index] = oldValue
-        } else if (value.length > 0) {
+        if (value.length > 0) {
             inputRefs.current[index].blur()
             inputRefs.current[index + 1]?.focus()
         }
         if (value.length > 1 && index < length - 1) {
-            const newIndex = !newTrackingKey[index].match(regex) ? index : index + 1
-            setIndividualTrackingKeyElement(newIndex, value.substring(1), newTrackingKey)
+            setOtherTrackingKeyElements(index + 1, value.substring(1), newTrackingKey)
         }
         setTrackingKey(newTrackingKey)
     }
@@ -58,7 +65,10 @@ const TrackingKeyInput = ({ length, className }) => {
         if (e.target.value.length > 0) {
             const { value } = e.target
             const newTrackingKey = [...trackingKey]
-            setIndividualTrackingKeyElement(index, value, newTrackingKey)
+            const valueWihtoutSpecialChars = value.replace(/[^a-zA-Z\d]/g, "")
+            if (valueWihtoutSpecialChars.length > 1 || (newTrackingKey[index].length === 0 && valueWihtoutSpecialChars.length > 0)) {
+                setFirstTrackingKeyElement(index, valueWihtoutSpecialChars, newTrackingKey)
+            }
         }
     }
 
@@ -87,6 +97,14 @@ const TrackingKeyInput = ({ length, className }) => {
         }
     }
 
+    useEffect(() => {
+        for (let i = 0; i < length; i++) {
+            if (inputRefs.current[i].current) {
+                inputRefs.current[i].selectionStart = inputRefs.current[i].selectionEnd = inputRefs.current[i].value.length
+            }
+        }
+    }, [])
+
     return (
         <div className={`flex flex-col items-center gap-1 w-full ${className}`}>
             <div className="flex flex-col items-center gap-4 w-full justify-center text-shadow-lg">
@@ -101,6 +119,10 @@ const TrackingKeyInput = ({ length, className }) => {
                             value={trackingKey[index]}
                             onChange={(e) => {
                                 handleChange(e, index)
+                            }}
+                            onFocus={() => {
+                                inputRefs.current[index].selectionStart = inputRefs.current[index].selectionEnd =
+                                    inputRefs.current[index].value.length
                             }}
                             onKeyDown={(e) => handleKeyDown(e, index)}
                             className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
