@@ -19,7 +19,7 @@ const ColorPicker = ({ questionId, updateAnswer }) => {
                 color={color}
                 onChange={handleChangeComplete}
                 disableAlpha={true}
-                className="pb-2 sm:ml-0 sm:mt-0 sm:mb-0"
+                className="pb-2 sm:ml-0 sm:mt-0 sm:mb-0 touch-none"
                 styles={{
                     default: {
                         picker: {

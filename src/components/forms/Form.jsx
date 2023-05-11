@@ -32,7 +32,10 @@ const Form = ({ questions, text, type, className }) => {
     }, [formRequest, formResponse, navigate, type])
 
     useEffect(() => {
-        scrollToBottom()
+        if (progress !== 0)
+            scrollToBottom()
+        else
+            window.scrollTo({top: 0, behavior: "smooth"})
     }, [progress, formAnswers])
 
     const scrollToBottom = () => {
