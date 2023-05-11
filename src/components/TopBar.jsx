@@ -32,19 +32,19 @@ function TopBar() {
                             to="/about"
                             className={`mr-6 ${activeLink === "about" && "underline"} hover:underline`}
                             onClick={() => setActiveLink("about")}>
-                            <SmallText className={`text-white hover:scale-105 transition duration-300`}>O aplikaciji</SmallText>
+                            <SmallText className={`font-semibold text-white hover:scale-105 transition duration-300`}>O aplikaciji</SmallText>
                         </Link>
                         <Link
                             to="/privacy"
                             className={`mr-6 ${activeLink === "services" && "underline"} hover:underline`}
                             onClick={() => setActiveLink("services")}>
-                            <SmallText className={`text-white hover:scale-105 transition duration-300`}>Prikupljanje podataka</SmallText>
+                            <SmallText className={`font-semibold text-white hover:scale-105 transition duration-300`}>Prikupljanje podataka</SmallText>
                         </Link>
                         <Link
                             to="/contact"
                             className={` ${activeLink === "contact" && "underline"} hover:underline`}
                             onClick={() => setActiveLink("contact")}>
-                            <SmallText className={`text-white hover:scale-105 transition duration-300`}>Kontakt</SmallText>
+                            <SmallText className={`font-semibold text-white hover:scale-105 transition duration-300`}>Kontakt</SmallText>
                         </Link>
                     </div>
                 </div>

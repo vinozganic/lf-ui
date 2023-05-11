@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { API_URL } from "../../constants"
-import { Button, BigText, Spinner, ProgressBar } from "../../components"
+import { Button, MediumText, Spinner, ProgressBar } from "../../components"
 
 const Form = ({ questions, text, type, className }) => {
     const initialState = questions.map((question) => {
@@ -96,7 +96,7 @@ const Form = ({ questions, text, type, className }) => {
     return (
         <div className={`${className} relative mx-6`}>
             <ProgressBar progress={progress} />
-            <BigText className="mt-32 w-full max-w-7xl">{text}</BigText>
+            <MediumText className="mt-28 text-2xl md:text-3xl w-full max-w-7xl">{text}</MediumText>
             <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
                 <Button onClick={submitForm} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">

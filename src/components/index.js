@@ -24,7 +24,7 @@ import ProgressBar from "./forms/ProgressBar"
 import Question from "./forms/Question"
 import TrackingKeyInput from "./forms/TrackingKeyInput"
 import addTypePicker from "./forms/TypePicker"
-import SvgList from "./forms/SvgList"
+import SvgList from "./SvgList"
 
 export {
     BigText,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
-import { Page, Spinner, MatchesList, SmallText } from "../components"
+import { Page, Spinner, MatchesList, SmallText, MediumText, SvgList } from "../components"
 import { useFetch } from "use-http"
 import { API_URL } from "../constants"
 
@@ -49,8 +49,23 @@ const MatchLostPage = () => {
             className="mx-4 h-auto min-h-screen justify-center">
             {(matchesLoading || resolvedLoading || lostItemLoading) && <Spinner />}
             {item && (
-                <div>
-                    <SmallText>Ključ za praćenje: {item.trackingKey}</SmallText>
+                <div className="flex items-start justify-center">
+                    <div className="w-full flex mb-5 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
+                        <div className=" p-4 bg-gray/40 rounded-xl">
+                            <div>
+                                <SmallText className="flex items-end justify-start">
+                                    Ključ predmeta:
+                                    <MediumText className="ml-2 text-primary text-shadow-lg">{item.trackingKey}</MediumText>
+                                </SmallText>
+                            </div>
+                            <div className="mt-3 flex gap-2 ">
+                                {SvgList["info"]}
+                                <SmallText className="text-sm font-semibold text-white/60">
+                                    Zapišite si negdje ovaj ključ kako biste mogli pratiti status vašeg predmeta.
+                                </SmallText>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
             {!matchesLoading && !resolvedLoading && !lostItemLoading && resolved && (
