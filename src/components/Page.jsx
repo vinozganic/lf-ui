@@ -6,7 +6,7 @@ const Page = ({ children, className, bgClassName }) => {
         window.scrollTo(0, 0)
     }, [])
     return (
-        <div className={`min-h-screen pt-24 bg-background ${bgClassName} flex flex-col justify-between `}>
+        <div className={`min-h-screen pt-20 lg:pt-24 bg-background ${bgClassName} flex flex-col justify-between `}>
             <TopBar />
             <div className={`flex-grow ${className}`}>{children}</div>
             <Footer />

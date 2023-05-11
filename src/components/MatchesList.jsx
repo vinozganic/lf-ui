@@ -123,14 +123,14 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
             )}
             {!foundLoading && matchesList.length > 0 && (
                 <div className="flex items-start justify-center">
-                    <div className="w-full my-2 lg:my-10 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
+                    <div className="w-full my-2 lg:mt-6 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
                         {itemType === "lost" && (
                             <div className="flex items-center justify-start">
                                 <Button
                                     className="mb-2 sm:mb-5 w-full sm:w-2/3 md:w-1/2 xl:w-2/5 2xl:w-1/3"
                                     buttonClassName="drop-shadow-none"
                                     onClick={handleResolvedChange}>
-                                    <SmallText className="text-[1rem]">Predmet je pronađen bez tuđe pomoći</SmallText>
+                                    <SmallText className="text-[1rem]">Predmet je pronađen izvan aplikacije</SmallText>
                                 </Button>
                                 {resolvedModalVisible && (
                                     <ResolvedModal
@@ -167,7 +167,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                             </SmallText>
                         </div>
                         {currentMatch && (
-                            <div className="mt-4 bg-gray/60 px-4 py-6 rounded-xl">
+                            <div className="mt-4 bg-gray/40 px-2 pt-2 pb-4 rounded-3xl">
                                 <div className="p-1 h-[26rem] lg:h-[30rem] mb-6 ">
                                     <ChatBox
                                         channelId={currentMatch.data.id}
