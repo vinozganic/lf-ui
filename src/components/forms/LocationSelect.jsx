@@ -19,7 +19,7 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
 
     const renderLocationTypeSelect = () => {
         return (
-            <div className="flex flex-col items-start justify-start gap-x-12 gap-y-4 mx-2 md:flex-row md:items-end md:justify-between">
+            <div className="w-full flex flex-col items-start justify-start gap-x-12 gap-y-4 md:flex-row md:items-end md:justify-between">
                 <Button
                     style={{ backgroundColor: locationType != "exact" ? "#384866" : "#15bfe6", boxShadow: "none" }}
                     className="rounded-md w-full text-white"
@@ -251,7 +251,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     </FeatureGroup>
                 </MapContainer>
             )}
-            {linesRes.ok && <MediumText className="w-full text-center my-4">Kojim linijama si se vozio?</MediumText>}
+            {linesRes.ok && <MediumText className="w-full mt-10 text-xl md:text-3xl text-left my-4">Ako si koristio javni prijevoz, odaberi linije kojima si se vozio.</MediumText>}
             <RenderTypeList separateLines={separateLines} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
             {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
@@ -264,7 +264,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                         <input
                             type="text"
                             placeholder="Pretraži"
-                            className="w-full text-lg bg-gray focus:outline-none font-bold text-white placeholder:font-normal placeholder:text-lg"
+                            className="w-full text-lg bg-gray  focus:outline-none font-bold text-white placeholder:font-normal placeholder:text-lg"
                             value={lineSearch}
                             onChange={(ev) => setLineSearch(ev.target.value)}
                         />
@@ -309,8 +309,8 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
         return (
             <div
                 key={index}
-                className="inline-flex sm:min-w-[33.3333%] max-sm:min-w-full snap-start 
-                rounded-xl px-4 py-1 bg-gray cursor-pointer justify-between items-center"
+                className="inline-flex md:w-full sm:min-w-[33.3333%] max-sm:min-w-full snap-start 
+                md:rounded-xl px-4 py-1 bg-gray cursor-pointer justify-between items-center"
                 onClick={() => handletypeShownID(index)}>
                 <SmallText className="items-center">{linesByType[0].type}</SmallText>
                 <span className="flex flex-row w-fit h-auto">
@@ -332,7 +332,7 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
     })
 
     return (
-        <div className="flex gap-x-2 w-full mb-2">
+        <div className="flex w-full mb-2">
             <span
                 className={`border-2 border-gray rounded-s-xl cursor-pointer min-h-full w-fit flex items-center
                 sm:hover:bg-primary/40 transition-all ease-in-out duration-150 ${!isScrollable && "hidden"}`}

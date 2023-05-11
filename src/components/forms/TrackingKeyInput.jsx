@@ -67,8 +67,8 @@ const TrackingKeyInput = ({ length, className }) => {
 
     return (
         <div className={`flex flex-col items-center gap-1 w-full ${className}`}>
-            <div className="flex flex-col items-center gap-4 w-full justify-center">
-                <MediumText className="text-2xl">Prati svoj item:</MediumText>
+            <div className="flex flex-col items-center gap-4 w-full justify-center text-shadow-lg">
+                <MediumText className="text-2xl">Prati svoj predmet:</MediumText>
                 <div>
                     {trackingKey.map((value, index) => (
                         <input
