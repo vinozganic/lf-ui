@@ -116,81 +116,88 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
 
     return (
         <>
-            {matchesList.length === 0 && (
-                <div>
-                    <SmallText>Trenutno nema potencijalnih spojeva</SmallText>
-                </div>
-            )}
-            {!foundLoading && matchesList.length > 0 && (
+            {!foundLoading && (
                 <div className="flex items-start justify-center">
                     <div className="w-full my-2 lg:mt-6 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
-                        {itemType === "lost" && (
-                            <div className="flex items-center justify-start">
-                                <Button
-                                    className="mb-2 sm:mb-5 w-full sm:w-2/3 md:w-1/2 xl:w-2/5 2xl:w-1/3"
-                                    buttonClassName="drop-shadow-none"
-                                    onClick={handleResolvedChange}>
-                                    <SmallText className="text-[1rem]">Predmet je pronađen izvan aplikacije</SmallText>
-                                </Button>
-                                {resolvedModalVisible && (
-                                    <ResolvedModal
-                                        setVisible={setResolvedModalVisible}
-                                        resolveItem={resolveItem}
-                                        body={itemToResolveWith}
-                                    />
-                                )}
+                        {matchesList.length === 0 && (
+                            <div>
+                                <SmallText>Trenutno nema potencijalnih spojeva</SmallText>
                             </div>
                         )}
-                        <div className="mx-1 mt-6 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
-                            <div
-                                className="bg-primary hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] max-w-[3rem] grow rounded-l-xl flex justify-center items-center cursor-pointer"
-                                onClick={scrollLeft}>
-                                <ArrowLeftSvg />
-                            </div>
-                            <div
-                                className="px-4 grid grow grid-flow-col scrollbar-hide border-y-2 border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)] scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[60%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
-                                ref={scrollContainer}>
-                                {sortedListMatchCards}
-                            </div>
-                            <div
-                                className="bg-primary max-w-[3rem] hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] grow rounded-r-xl flex justify-center items-center cursor-pointer"
-                                onClick={scrollRight}>
-                                <ArrowRightSvg />
-                            </div>
-                        </div>
-                        <div className="sm:pb-5 pb-2 sm:px-14 mt-2 flex justify-start items-center gap-2">
-                            <div>
-                                <InfoSvg />
-                            </div>
-                            <SmallText className="text-sm font-semibold text-white/60">
-                                Imena na karticama služe samo za razlikovanje spojeva. Ne predstavljaju stvarna imena korisnika.
-                            </SmallText>
-                        </div>
-                        {currentMatch && (
-                            <div className="mt-4 bg-gray/40 px-2 pt-2 pb-4 rounded-3xl">
-                                <div className="p-1 h-[26rem] lg:h-[30rem] mb-6 ">
-                                    <ChatBox
-                                        channelId={currentMatch.data.id}
-                                        channelName={currentMatch.data.nickname}
-                                        chatClient={chatClient}
-                                    />
-                                </div>
-                                <div className="flex justify-start align-middle gap-4">
-                                    {itemType === "found" && (
-                                        <>
-                                            <Button onClick={handleShowProps} className="w-full sm:w-2/3 lg:w-1/3">
-                                                <SmallText className="text-[1rem]">Prikaži detalje</SmallText>
-                                            </Button>
-                                            <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
-                                        </>
-                                    )}
-                                    {itemType === "lost" && (
-                                        <Button className="w-full sm:w-2/3 md:w-1/2 xl:w-2/5 2xl:w-1/3" onClick={handleResolveWithCard}>
-                                            <SmallText className="text-[1rem]">Slučaj je riješen pomoću ovog spoja</SmallText>
+                        {matchesList.length > 0 && (
+                            <>
+                                {itemType === "lost" && (
+                                    <div className="flex items-center justify-start">
+                                        <Button
+                                            className="mb-2 sm:mb-5 w-full sm:w-2/3 md:w-1/2 xl:w-2/5 2xl:w-1/3"
+                                            buttonClassName="drop-shadow-none"
+                                            onClick={handleResolvedChange}>
+                                            <SmallText className="text-[1rem]">Predmet je pronađen izvan aplikacije</SmallText>
                                         </Button>
-                                    )}
+                                        {resolvedModalVisible && (
+                                            <ResolvedModal
+                                                setVisible={setResolvedModalVisible}
+                                                resolveItem={resolveItem}
+                                                body={itemToResolveWith}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="mx-1 mt-6 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
+                                    <div
+                                        className="bg-primary hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] max-w-[3rem] grow rounded-l-xl flex justify-center items-center cursor-pointer"
+                                        onClick={scrollLeft}>
+                                        <ArrowLeftSvg />
+                                    </div>
+                                    <div
+                                        className="px-4 grid grow grid-flow-col scrollbar-hide border-y-2 border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)] scroll-p-4 sm:scroll-p-6 snap-type-inline-mandatory overscroll-x-contain auto-cols-[60%] xl:auto-cols-[26%] lg:auto-cols-[30%] py-2 md:auto-cols-[31%] sm:auto-cols-[40%] overflow-x-auto gap-6 touch-pan-x scroll-smooth will-change-scroll"
+                                        ref={scrollContainer}>
+                                        {sortedListMatchCards}
+                                    </div>
+                                    <div
+                                        className="bg-primary max-w-[3rem] hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] grow rounded-r-xl flex justify-center items-center cursor-pointer"
+                                        onClick={scrollRight}>
+                                        <ArrowRightSvg />
+                                    </div>
                                 </div>
-                            </div>
+                                <div className="sm:pb-5 pb-2 sm:px-14 mt-2 flex justify-start items-center gap-2">
+                                    <div>
+                                        <InfoSvg />
+                                    </div>
+                                    <SmallText className="text-sm font-semibold text-white/60">
+                                        Imena na karticama služe samo za razlikovanje spojeva. Ne predstavljaju stvarna imena korisnika.
+                                    </SmallText>
+                                </div>
+                                {currentMatch && (
+                                    <div className="mt-4 bg-gray/40 px-2 pt-2 pb-4 rounded-3xl">
+                                        <div className="p-1 h-[26rem] lg:h-[30rem] mb-6 ">
+                                            <ChatBox
+                                                channelId={currentMatch.data.id}
+                                                channelName={currentMatch.data.nickname}
+                                                chatClient={chatClient}
+                                            />
+                                        </div>
+                                        <div className="flex justify-start align-middle gap-4">
+                                            {itemType === "found" && (
+                                                <>
+                                                    <Button onClick={handleShowProps} className="w-full sm:w-2/3 lg:w-1/3">
+                                                        <SmallText className="text-[1rem]">Prikaži detalje</SmallText>
+                                                    </Button>
+                                                    <PropsModal currentMatch={currentMatch} handleShowProps={handleShowProps} />
+                                                </>
+                                            )}
+                                            {itemType === "lost" && (
+                                                <Button
+                                                    className="w-full sm:w-2/3 md:w-1/2 xl:w-2/5 2xl:w-1/3"
+                                                    onClick={handleResolveWithCard}>
+                                                    <SmallText className="text-[1rem]">Slučaj je riješen pomoću ovog spoja</SmallText>
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
