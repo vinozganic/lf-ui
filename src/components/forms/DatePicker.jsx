@@ -21,7 +21,7 @@ const DatePicker = ({ questionId, updateAnswer }) => {
     }
 
     useEffect(() => {
-        if (showCalendar === true)
+        if (showCalendar)
             ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }, [showCalendar])
 
