@@ -4,7 +4,7 @@ import L from "leaflet"
 import "./PropsModalStyles.css"
 import { API_URL } from "../constants"
 import { useFetch } from "use-http"
-import { Button, SmallText, Spinner } from "../components"
+import { Button, SmallText, Spinner, SvgList } from "../components"
 
 const PropsModal = ({ currentMatch, handleShowProps }) => {
     const [types, setTypes] = useState("")
@@ -25,7 +25,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
     useEffect(() => {
         getTypes()
     }, [getTypes])
-    console.log(currentMatch?.itemData.location.path)
+
     const center =
         currentMatch?.itemData.location.path === null
             ? [
@@ -103,7 +103,8 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         })()}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
+                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
+                                currentMatch.itemData.location.publicTransportLines.length > 0 ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
                                             key={line.coordinates}
@@ -115,6 +116,45 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                     <></>
                                 )}
                             </MapContainer>
+                        </div>
+                        <div className="flex justify-start items-center gap-2 m-2">
+                            <div>{SvgList["info"]}</div>
+                            <SmallText className="text-sm font-semibold text-white/60">Legenda</SmallText>
+                        </div>
+                        <div className="flex justify-evenly">
+                            {currentMatch.itemData.location.path?.type === "Point" && (
+                                <div className="flex gap-2 m-4">
+                                    <div>
+                                        <SmallText className="text-white/70">Točna lokacija:</SmallText>
+                                    </div>
+                                    <div>
+                                        <img src="/images/marker.png" alt="marker" className="w-6 h-6" />
+                                    </div>
+                                </div>
+                            )}
+                            {currentMatch.itemData.location.path?.type === "MultiLineString" && (
+                                <div className="flex gap-2 m-4">
+                                    <div>
+                                        <SmallText className="text-white/70">Prijeđen put:</SmallText>
+                                    </div>
+                                    <div>
+                                        <div className="rounded-full w-6 h-6 border-white border bg-[rgb(0,0,255)]"></div>
+                                    </div>
+                                </div>
+                            )}
+                            {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
+                            currentMatch.itemData.location.publicTransportLines.length > 0 ? (
+                                <div className="flex gap-2 m-4">
+                                    <div>
+                                        <SmallText className="text-white/70">Javni prijevoz:</SmallText>
+                                    </div>
+                                    <div>
+                                        <div className="rounded-full w-6 h-6 border-white border bg-[rgb(255,0,0)]"></div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                         <Button onClick={() => handleShowProps()} className="pt-4">
                             U redu
