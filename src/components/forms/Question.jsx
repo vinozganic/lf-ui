@@ -3,7 +3,7 @@ import { MediumText } from "../../components"
 
 const Question = ({ questionText, children }) => {
     return (
-        <div className="mt-16 md:mt-20 lg:mt-24 xl:mt-32">
+        <div className="mt-14 md:mt-20 lg:mt-24 xl:mt-28">
             <MediumText className="mb-4">{questionText}</MediumText>
             {children}
         </div>

@@ -42,10 +42,10 @@ const FoundPage = () => {
             bgClassName="lg:bg-formHorizontal lg:bg-cover lg:bg-center lg:bg-fixed lg:bg-no-repeat"
             className="flex justify-center overflow-y-auto">
             <Form
-                text="Pred tobom se nalazi nekoliko pitanja. Pokušaj što preciznije odgovoriti na svako od njih. Što preciznije odgovoriš, veće su šanse da pronađeš vlasnika."
+                text="Pokušaj što preciznije odgovoriti na sljedeća pitanja. To će nam pomoći da pronađemo izgubljeni predmet."
                 questions={questions}
                 type="lost"
-                className="w-full md:w-3/4 xl:w-2/3 flex flex-col items-center gap-y-12 "
+                className="w-full md:w-3/4 xl:w-2/3 flex flex-col items-center"
             />
         </Page>
     )
