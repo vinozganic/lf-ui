@@ -43,11 +43,9 @@ const TrackingKeyInput = ({ length, className }) => {
     }
 
     const setFirstTrackingKeyElement = (index, value, newTrackingKey) => {
-        console.log(index, value, newTrackingKey)
         newTrackingKey[index] = value.toUpperCase().charAt(0)
         if (value.length > 0) {
             inputRefs.current[index].blur()
-            inputRefs.current[index].disabled = true
             inputRefs.current[index + 1]?.focus()
         }
         if (value.length > 1 && index < length - 1) {
@@ -73,19 +71,16 @@ const TrackingKeyInput = ({ length, className }) => {
         if (e.key === "Backspace") {
             if (index > 0 && index < length - 1) {
                 const newTrackingKey = [...trackingKey]
-                inputRefs.current[index - 1].disabled = false
                 newTrackingKey[index - 1] = ""
                 setTrackingKey(newTrackingKey)
                 inputRefs.current[index - 1].focus()
             } else if (index === length - 1 && trackingKey[index] !== "") {
                 const newTrackingKey = [...trackingKey]
-                inputRefs.current[index].disabled = false
                 newTrackingKey[index] = ""
                 setTrackingKey(newTrackingKey)
                 inputRefs.current[index].focus()
             } else if (index === length - 1 && trackingKey[index] === "") {
                 const newTrackingKey = [...trackingKey]
-                inputRefs.current[index - 1].disabled = false
                 newTrackingKey[index - 1] = ""
                 setTrackingKey(newTrackingKey)
                 inputRefs.current[index - 1].focus()
@@ -117,12 +112,6 @@ const TrackingKeyInput = ({ length, className }) => {
                     <div
                         className="absolute top-0 left-0 w-full h-full cursor-pointer"
                         onClick={() => {
-                            console.log(trackingKey.findIndex((item) => item === ""))
-                            inputRefs.current[
-                                trackingKey.findIndex((item) => item === "") === -1
-                                    ? length - 1
-                                    : trackingKey.findIndex((item) => item === "")
-                            ].disabled = false
                             inputRefs.current[
                                 trackingKey.findIndex((item) => item === "") === -1
                                     ? length - 1
@@ -132,7 +121,10 @@ const TrackingKeyInput = ({ length, className }) => {
                     />
                 </div>
                 {trackingKey.filter((item) => item == "").length == 0 && (
-                    <Button onClick={submitTrackingKey} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
+                    <Button
+                        onClick={submitTrackingKey}
+                        className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8 select-none"
+                        buttonClassName="rounded-lg select-none">
                         Prati
                     </Button>
                 )}
