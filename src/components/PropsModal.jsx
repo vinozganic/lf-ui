@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { MapContainer, TileLayer, Marker, Polyline } from "react-leaflet"
+import L from "leaflet"
 import "./PropsModalStyles.css"
 import { API_URL } from "../constants"
 import { useFetch } from "use-http"
@@ -24,8 +25,18 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
     useEffect(() => {
         getTypes()
     }, [getTypes])
+    console.log(currentMatch?.itemData.location.path)
     const center =
-        typeof currentMatch?.itemData.location.path.coordinates[1] === "number"
+        currentMatch?.itemData.location.path === null
+            ? [
+                  currentMatch?.itemData.location.publicTransportLines[0].coordinates[
+                      currentMatch?.itemData.location.publicTransportLines[0].coordinates.length / 2
+                  ][1],
+                  currentMatch?.itemData.location.publicTransportLines[0].coordinates[
+                      currentMatch?.itemData.location.publicTransportLines[0].coordinates.length / 2
+                  ][0],
+              ]
+            : currentMatch?.itemData.location.path.type === "Point"
             ? [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
             : [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
 
@@ -70,7 +81,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 tap={false}
                                 dragging={false}>
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                                {currentMatch.itemData.location.path.type === "MultiLineString" && (
+                                {currentMatch.itemData.location.path?.type === "MultiLineString" && (
                                     <>
                                         {currentMatch.itemData.location.path.coordinates.map((coords) => (
                                             <Polyline
@@ -81,7 +92,17 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.path.type == "Point" && <Marker position={center} />}
+                                {currentMatch.itemData.location.path?.type === "Point" && (
+                                    <>
+                                        {(() => {
+                                            const customIcon = L.icon({
+                                                iconUrl: "/images/marker.png",
+                                                iconSize: [40, 40],
+                                            })
+                                            return <Marker icon={customIcon} position={center} />
+                                        })()}
+                                    </>
+                                )}
                                 {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
