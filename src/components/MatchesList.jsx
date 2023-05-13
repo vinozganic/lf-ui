@@ -137,17 +137,12 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                         {SvgList["info"]}
                                     </div>
                                     <SmallText className="text-sm font-semibold text-white/60">
-                                        {itemType ==="lost" && (
-                                            <div>
-                                                Ove kartice predstavljaju potencijalne spojeve s izgubljenim predmetima.
-                                            </div>
-                                        )}
-                                        {itemType ==="found" && (
-                                            <div>
-                                                Ove kartice predstavljaju potencijalne spojeve s vlasnicima predmeta.
-                                            </div>
-                                        )}
+                                        <div>
+                                            Ove kartice predstavljaju potencijalne spojeve s {itemType ==="lost" ? "izgubljenim predmetima." : "vlasnicima predmeta."}
+                                        </div>
+                                        <div>
                                             Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
+                                        </div>
                                     </SmallText>
                                 </div>
                                 <div className="mx-1 mt-3 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
