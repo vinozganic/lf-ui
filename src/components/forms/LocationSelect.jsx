@@ -133,7 +133,9 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
                         />
                     </FeatureGroup>
                 </MapContainer>
-                <div className="absolute top-0 right-0 py-16 px-10 pointer-events-none rounded-3xl w-9 h-32 border-8 border-solid bg-red/10 animate-fadeOut border-red z-10 translate-x-5 -translate-y-2"></div>
+                <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                    <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                </div>
             </div>
         </>
     )
@@ -270,7 +272,9 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                                 />
                             </FeatureGroup>
                         </MapContainer>
-                        <div className="absolute top-0 right-0 py-16 px-10 pointer-events-none rounded-3xl w-9 h-32 border-8 border-solid bg-red/10 animate-fadeOut border-red z-10 translate-x-5 -translate-y-2"></div>
+                        <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                            <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                        </div>
                     </div>
                 </>
             )}
