@@ -4,9 +4,10 @@ import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
 import "leaflet/dist/leaflet.css"
 import "leaflet-draw/dist/leaflet.draw.css"
-import { Button, MediumText, Question, SmallText, Spinner } from "../"
+import { Button, MediumText, Question, SmallText, Spinner, SvgList } from "../"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
+import "./LocationAnimation.css"
 
 const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
@@ -97,33 +98,46 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
     }
 
     return (
-        <MapContainer
-            center={mapCenter}
-            zoom={13}
-            style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
-            className={`z-0 rounded-xl ${className}`}>
-            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-            <FeatureGroup ref={fgRef}>
-                <EditControl
-                    position="topright"
-                    onCreated={onCreated}
-                    on
-                    draw={{
-                        rectangle: false,
-                        circle: false,
-                        circlemarker: false,
-                        polyline: false,
-                        polygon: false,
-                        marker: {
-                            icon: new L.Icon({
-                                iconUrl: "/images/marker.png",
-                                iconSize: [40, 40],
-                            }),
-                        },
-                    }}
-                />
-            </FeatureGroup>
-        </MapContainer>
+        <>
+            <div className="flex mt-4 gap-2 justify-start items-center">
+                <div>{SvgList["info"]}</div>
+                <SmallText className="text-sm font-semibold text-white/60">
+                    U desnom gornjem kutu nalaze se gumbovi za interakciju sa kartom.
+                </SmallText>
+            </div>
+            <div className="relative">
+                <MapContainer
+                    center={mapCenter}
+                    zoom={13}
+                    style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
+                    className={`z-0 rounded-xl ${className}`}>
+                    <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                    <FeatureGroup ref={fgRef}>
+                        <EditControl
+                            position="topright"
+                            onCreated={onCreated}
+                            on
+                            draw={{
+                                rectangle: false,
+                                circle: false,
+                                circlemarker: false,
+                                polyline: false,
+                                polygon: false,
+                                marker: {
+                                    icon: new L.Icon({
+                                        iconUrl: "/images/marker.png",
+                                        iconSize: [40, 40],
+                                    }),
+                                },
+                            }}
+                        />
+                    </FeatureGroup>
+                </MapContainer>
+                <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                    <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                </div>
+            </div>
+        </>
     )
 }
 
@@ -221,36 +235,49 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     ) : (
         <>
             {pageType === "lost" && (
-                <MapContainer
-                    center={mapCenter}
-                    zoom={13}
-                    style={{ height: "60vh", borderRadius: "0.25rem" }}
-                    className={`z-0 rounded-xl ${className}`}>
-                    <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                    <FeatureGroup ref={fgRef}>
-                        <EditControl
-                            position="topright"
-                            onCreated={onCreated}
-                            draw={{
-                                rectangle: false,
-                                circle: false,
-                                circlemarker: false,
-                                polyline: {
-                                    shapeOptions: {
-                                        color: "red",
-                                        weight: 8,
-                                    },
-                                    icon: new L.DivIcon({
-                                        iconSize: new L.Point(8, 8),
-                                        className: "leaflet-div-icon leaflet-editing-icon rounded-full",
-                                    }),
-                                },
-                                polygon: false,
-                                marker: false,
-                            }}
-                        />
-                    </FeatureGroup>
-                </MapContainer>
+                <>
+                    <div className="flex mt-4 gap-2 justify-start items-center">
+                        <div>{SvgList["info"]}</div>
+                        <SmallText className="text-sm font-semibold text-white/60">
+                            U desnom gornjem kutu nalaze se gumbovi za interakciju sa kartom.
+                        </SmallText>
+                    </div>
+                    <div className="relative">
+                        <MapContainer
+                            center={mapCenter}
+                            zoom={13}
+                            style={{ height: "60vh", borderRadius: "0.25rem" }}
+                            className={`z-0 rounded-xl ${className}`}>
+                            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                            <FeatureGroup ref={fgRef}>
+                                <EditControl
+                                    position="topright"
+                                    onCreated={onCreated}
+                                    draw={{
+                                        rectangle: false,
+                                        circle: false,
+                                        circlemarker: false,
+                                        polyline: {
+                                            shapeOptions: {
+                                                color: "red",
+                                                weight: 8,
+                                            },
+                                            icon: new L.DivIcon({
+                                                iconSize: new L.Point(8, 8),
+                                                className: "leaflet-div-icon leaflet-editing-icon rounded-full",
+                                            }),
+                                        },
+                                        polygon: false,
+                                        marker: false,
+                                    }}
+                                />
+                            </FeatureGroup>
+                        </MapContainer>
+                        <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                            <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                        </div>
+                    </div>
+                </>
             )}
             {linesRes.ok && (
                 <MediumText className="w-full mt-10 text-xl md:text-3xl text-left my-4">
@@ -292,7 +319,6 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     useEffect(() => {
-        console.log(isScrollable)
         if (slider.current.scrollWidth > slider.current.offsetWidth) {
             setIsScrollable(true)
         }
