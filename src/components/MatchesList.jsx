@@ -148,7 +148,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                             </div>
                                         )}
                                             Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
-                                        </SmallText>
+                                    </SmallText>
                                 </div>
                                 <div className="mx-1 mt-3 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
                                     <div
