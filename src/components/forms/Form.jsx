@@ -100,7 +100,7 @@ const Form = ({ questions, text, type, className }) => {
             <div className="w-full max-w-7xl">{renderQuestions()}</div>
             {progress === 100 && !loading && (
                 <Button onClick={submitForm} className="w-3/4 lg:w-1/3 xl:w-1/4 mt-8">
-                    Submit
+                    Podnesi
                 </Button>
             )}
             {loading && <Spinner />}
