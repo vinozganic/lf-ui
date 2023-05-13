@@ -24,10 +24,23 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
     useEffect(() => {
         getTypes()
     }, [getTypes])
-    const center =
-        typeof currentMatch?.itemData.location.path.coordinates[1] === "number"
-            ? [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
-            : [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
+
+    let center = null
+
+    const hasPath = currentMatch?.itemData.location.path
+
+    if (hasPath) {
+        if (currentMatch.itemData.location.path.type === "MultiLineString") {
+            center = [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
+        } else {
+            center = [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
+        }
+    } else {
+        center = [
+            currentMatch?.itemData.location.publicTransportLines[0].coordinates[0][1],
+            currentMatch?.itemData.location.publicTransportLines[0].coordinates[0][0],
+        ]
+    }
 
     return (
         <>
