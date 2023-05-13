@@ -144,7 +144,6 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                         )}
                                     </div>
                                 )}
-
                                 <div className="mx-1 mt-6 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
                                     <div
                                         className="bg-primary hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] max-w-[3rem] grow rounded-l-xl flex justify-center items-center cursor-pointer"

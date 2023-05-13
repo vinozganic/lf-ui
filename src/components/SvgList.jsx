@@ -1,6 +1,16 @@
 import React from "react"
 
 const SvgList = {
+    checkmarkLocation: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-primary">
+            <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
+        </svg>
+    ),
+    checkmarkResolved: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-green">
+            <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
+        </svg>
+    ),
     info: (
         <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="#fff" opacity="60%" viewBox="0 0 1920 1920">
             <g fillRule="evenodd">
