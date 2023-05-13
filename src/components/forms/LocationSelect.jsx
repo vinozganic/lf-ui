@@ -143,7 +143,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             setLinesSelected(
                 dataGet.data.transportLines.map((item) => {
                     return { ...item, select: false }
-                })
+                }).sort((a, b) => a.number - b.number)
             )
         }
     }, [linesReq, linesRes])
@@ -187,7 +187,6 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         } else {
             acc[index].push(item)
         }
-        acc.sort((a, b) => a.number - b.number)
         return acc
     }, [])
 
