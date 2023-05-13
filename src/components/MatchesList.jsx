@@ -132,36 +132,24 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                         )}
                                     </div>
                                 )}
-                                {itemType ==="found" && (
-                                    <div className="sm:pb-5 pb-2  mt-2 flex justify-start items-center gap-2">
-                                        <div>
-                                            {SvgList["info"]}
-                                        </div>
-                                        <SmallText className="text-sm font-semibold text-white/60">
-                                            <div>
-                                                Ove kartice predstavljaju potencijalne spojeve s vlasnicima predmeta.
-                                            </div>
-                                            <div>
-                                                Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
-                                            </div>
-                                        </SmallText>
+                                <div className="sm:pb-5 pb-2 mt-2 flex justify-start items-center gap-2">
+                                    <div>
+                                        {SvgList["info"]}
                                     </div>
-                                )}
-                                {itemType ==="lost" && (
-                                    <div className="sm:pb-5 pb-2 mt-2 flex justify-start items-center gap-2">
-                                        <div>
-                                            {SvgList["info"]}
-                                        </div>
-                                        <SmallText className="text-sm font-semibold text-white/60">
+                                    <SmallText className="text-sm font-semibold text-white/60">
+                                        {itemType ==="lost" && (
                                             <div>
                                                 Ove kartice predstavljaju potencijalne spojeve s izgubljenim predmetima.
                                             </div>
+                                        )}
+                                        {itemType ==="found" && (
                                             <div>
-                                                Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
+                                                Ove kartice predstavljaju potencijalne spojeve s vlasnicima predmeta.
                                             </div>
+                                        )}
+                                            Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
                                         </SmallText>
-                                    </div>
-                                )}                                
+                                </div>
                                 <div className="mx-1 mt-3 flex flex-row w-full border-2 rounded-xl border-[rgb(255,255,255)] border-opacity-10 shadow-[rgb(255,255,255)]">
                                     <div
                                         className="bg-primary hover:bg-primary/60 min-w-[2rem] lg:min-w-[2.5rem] max-w-[3rem] grow rounded-l-xl flex justify-center items-center cursor-pointer"
