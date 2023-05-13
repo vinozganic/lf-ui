@@ -13,7 +13,8 @@ const DatePicker = ({ questionId, updateAnswer }) => {
     const handleSelectedDate = (date) => {
         setSelectedDate(date)
         setShowCalendar(false)
-        updateAnswer(date, questionId)
+        const answer = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+        updateAnswer(answer, questionId)
     }
 
     const getNiceDate = (date) => {
@@ -21,8 +22,7 @@ const DatePicker = ({ questionId, updateAnswer }) => {
     }
 
     useEffect(() => {
-        if (showCalendar)
-            ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+        if (showCalendar) ref.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }, [showCalendar])
 
     return (
