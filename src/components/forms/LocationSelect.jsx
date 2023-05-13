@@ -14,8 +14,10 @@ const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const pageType = useLocation().pathname.split("/").pop()
 
     const updateLocationType = (type) => {
-        setLocationType(type)
-        updateAnswer(null, questionId)
+        if (type !== locationType) {
+            setLocationType(type)
+            updateAnswer(null, questionId)
+        }
     }
 
     const renderLocationTypeSelect = () => {
@@ -133,7 +135,7 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
                         />
                     </FeatureGroup>
                 </MapContainer>
-                <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0 pointer-events-none">
                     <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
                 </div>
             </div>
@@ -273,7 +275,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                                 />
                             </FeatureGroup>
                         </MapContainer>
-                        <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                        <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0 pointer-events-none">
                             <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
                         </div>
                     </div>
