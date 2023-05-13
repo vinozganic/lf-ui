@@ -141,9 +141,11 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         const dataGet = await linesReq.get(`/config/transportLines/${AreaCode}`)
         if (linesRes.ok) {
             setLinesSelected(
-                dataGet.data.transportLines.map((item) => {
-                    return { ...item, select: false }
-                }).sort((a, b) => a.number - b.number)
+                dataGet.data.transportLines
+                    .map((item) => {
+                        return { ...item, select: false }
+                    })
+                    .sort((a, b) => a.number - b.number)
             )
         }
     }, [linesReq, linesRes])
@@ -363,7 +365,7 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 }
 
 const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
-    const refractorString = (string) => {
+    const normalizePublicTransportLineName = (string) => {
         return string
             .toLowerCase()
             .replace(/č/g, "c")
@@ -380,7 +382,7 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
             <li
                 key={index}
                 className={`${
-                    refractorString(fullName).includes(refractorString(lineSearch)) ? "block" : "hidden"
+                    normalizePublicTransportLineName(fullName).includes(normalizePublicTransportLineName(lineSearch)) ? "block" : "hidden"
                 } xl:w-1/3 sm:w-1/2 w-full flex-[0 1 33.33%]`}
                 onClick={() => getSelectedValue(item.id)}>
                 <RadioComponent isMultiple={isMultiple} label={fullName} checked={item.select} />
