@@ -1,0 +1,28 @@
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-fadeOut {
+    animation-name: fadeOut, pulse;
+    animation-duration: 3s, 1s;
+    animation-fill-mode: forwards, forwards;
+    animation-delay: 3s, 0s, 0s;
+    animation-iteration-count: 1, infinite;
+}

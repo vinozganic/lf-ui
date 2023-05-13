@@ -4,9 +4,10 @@ import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
 import "leaflet/dist/leaflet.css"
 import "leaflet-draw/dist/leaflet.draw.css"
-import { Button, MediumText, Question, SmallText, Spinner } from "../"
+import { Button, MediumText, Question, SmallText, Spinner, SvgList } from "../"
 import { API_URL } from "../../constants"
 import { useFetch } from "use-http"
+import "./LocationAnimation.css"
 
 const LocationSelect = ({ questionId, updateAnswer, className }) => {
     const [locationType, setLocationType] = useState(null)
@@ -97,33 +98,46 @@ const ExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className })
     }
 
     return (
-        <MapContainer
-            center={mapCenter}
-            zoom={13}
-            style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
-            className={`z-0 rounded-xl ${className}`}>
-            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-            <FeatureGroup ref={fgRef}>
-                <EditControl
-                    position="topright"
-                    onCreated={onCreated}
-                    on
-                    draw={{
-                        rectangle: false,
-                        circle: false,
-                        circlemarker: false,
-                        polyline: false,
-                        polygon: false,
-                        marker: {
-                            icon: new L.Icon({
-                                iconUrl: "/images/marker.png",
-                                iconSize: [40, 40],
-                            }),
-                        },
-                    }}
-                />
-            </FeatureGroup>
-        </MapContainer>
+        <>
+            <div className="flex mt-4 gap-2 justify-start items-center">
+                <div>{SvgList["info"]}</div>
+                <SmallText className="text-sm font-semibold text-white/60">
+                    U desnom gornjem kutu nalaze se gumbovi za interakciju sa kartom.
+                </SmallText>
+            </div>
+            <div className="relative">
+                <MapContainer
+                    center={mapCenter}
+                    zoom={13}
+                    style={{ height: "60vh", borderRadius: "0.25rem", zIndex: 0 }}
+                    className={`z-0 rounded-xl ${className}`}>
+                    <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                    <FeatureGroup ref={fgRef}>
+                        <EditControl
+                            position="topright"
+                            onCreated={onCreated}
+                            on
+                            draw={{
+                                rectangle: false,
+                                circle: false,
+                                circlemarker: false,
+                                polyline: false,
+                                polygon: false,
+                                marker: {
+                                    icon: new L.Icon({
+                                        iconUrl: "/images/marker.png",
+                                        iconSize: [40, 40],
+                                    }),
+                                },
+                            }}
+                        />
+                    </FeatureGroup>
+                </MapContainer>
+                <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                    <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                </div>
+            </div>
+        </>
     )
 }
 
@@ -141,9 +155,11 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         const dataGet = await linesReq.get(`/config/transportLines/${AreaCode}`)
         if (linesRes.ok) {
             setLinesSelected(
-                dataGet.data.transportLines.map((item) => {
-                    return { ...item, select: false }
-                })
+                dataGet.data.transportLines
+                    .map((item) => {
+                        return { ...item, select: false }
+                    })
+                    .sort((a, b) => a.number - b.number)
             )
         }
     }, [linesReq, linesRes])
@@ -187,7 +203,6 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         } else {
             acc[index].push(item)
         }
-        acc.sort((a, b) => a.number - b.number)
         return acc
     }, [])
 
@@ -220,38 +235,55 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     ) : (
         <>
             {pageType === "lost" && (
-                <MapContainer
-                    center={mapCenter}
-                    zoom={13}
-                    style={{ height: "60vh", borderRadius: "0.25rem" }}
-                    className={`z-0 rounded-xl ${className}`}>
-                    <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                    <FeatureGroup ref={fgRef}>
-                        <EditControl
-                            position="topright"
-                            onCreated={onCreated}
-                            draw={{
-                                rectangle: false,
-                                circle: false,
-                                circlemarker: false,
-                                polyline: {
-                                    shapeOptions: {
-                                        color: "red",
-                                        weight: 8,
-                                    },
-                                    icon: new L.DivIcon({
-                                        iconSize: new L.Point(8, 8),
-                                        className: "leaflet-div-icon leaflet-editing-icon rounded-full",
-                                    }),
-                                },
-                                polygon: false,
-                                marker: false,
-                            }}
-                        />
-                    </FeatureGroup>
-                </MapContainer>
+                <>
+                    <div className="flex mt-4 gap-2 justify-start items-center">
+                        <div>{SvgList["info"]}</div>
+                        <SmallText className="text-sm font-semibold text-white/60">
+                            U desnom gornjem kutu nalaze se gumbovi za interakciju sa kartom.
+                        </SmallText>
+                    </div>
+                    <div className="relative">
+                        <MapContainer
+                            center={mapCenter}
+                            zoom={13}
+                            style={{ height: "60vh", borderRadius: "0.25rem" }}
+                            className={`z-0 rounded-xl ${className}`}>
+                            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                            <FeatureGroup ref={fgRef}>
+                                <EditControl
+                                    position="topright"
+                                    onCreated={onCreated}
+                                    draw={{
+                                        rectangle: false,
+                                        circle: false,
+                                        circlemarker: false,
+                                        polyline: {
+                                            shapeOptions: {
+                                                color: "red",
+                                                weight: 8,
+                                            },
+                                            icon: new L.DivIcon({
+                                                iconSize: new L.Point(8, 8),
+                                                className: "leaflet-div-icon leaflet-editing-icon rounded-full",
+                                            }),
+                                        },
+                                        polygon: false,
+                                        marker: false,
+                                    }}
+                                />
+                            </FeatureGroup>
+                        </MapContainer>
+                        <div className="md:translate-x-5 translate-x-3 -translate-y-2 absolute top-0 right-0">
+                            <div className="py-16 md:px-10 px-8 pointer-events-none flex justify-center items-center animate-fadeOut rounded-3xl w-10 h-36 border-8 border-solid bg-[rgb(255,0,0,0.11)] border-red z-10"></div>
+                        </div>
+                    </div>
+                </>
             )}
-            {linesRes.ok && <MediumText className="w-full mt-10 text-xl md:text-3xl text-left my-4">Ako si koristio javni prijevoz, odaberi linije kojima si se vozio.</MediumText>}
+            {linesRes.ok && (
+                <MediumText className="w-full mt-10 text-xl md:text-3xl text-left my-4">
+                    Ako si koristio javni prijevoz, odaberi linije kojima si se vozio.
+                </MediumText>
+            )}
             <RenderTypeList separateLines={separateLines} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
             {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
@@ -287,7 +319,6 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
     const [isScrollable, setIsScrollable] = useState(false)
 
     useEffect(() => {
-        console.log(isScrollable)
         if (slider.current.scrollWidth > slider.current.offsetWidth) {
             setIsScrollable(true)
         }
@@ -360,13 +391,24 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 }
 
 const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
+    const normalizePublicTransportLineName = (string) => {
+        return string
+            .toLowerCase()
+            .replace(/č/g, "c")
+            .replace(/ć/g, "c")
+            .replace(/š/g, "s")
+            .replace(/đ/g, "d")
+            .replace(/ž/g, "z")
+            .replace(/[^a-zA-Z0-9]/g, "")
+    }
+
     const listRadioItems = values.map((item, index) => {
         const fullName = `${item.name} ${item.number}`
         return (
             <li
                 key={index}
                 className={`${
-                    fullName.toLowerCase().includes(lineSearch.toLowerCase()) ? "block" : "hidden"
+                    normalizePublicTransportLineName(fullName).includes(normalizePublicTransportLineName(lineSearch)) ? "block" : "hidden"
                 } xl:w-1/3 sm:w-1/2 w-full flex-[0 1 33.33%]`}
                 onClick={() => getSelectedValue(item.id)}>
                 <RadioComponent isMultiple={isMultiple} label={fullName} checked={item.select} />
@@ -393,7 +435,7 @@ const RadioComponent = ({ isMultiple, label, checked }) => {
                     : "border-white bg-gray hover:bg-[#020829]/[.20] hover:border-primary"
             }`}>
             {isMultiple && (
-                <div className={`w-6 h-6 rounded-md bg-white flex items-center justify-center ${checked && "bg-secondary"}`}>
+                <div className="w-6 h-6 rounded-md flex items-center justify-center bg-white">
                     {checked && (
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" className="fill-primary">
                             <path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z" />
