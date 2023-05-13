@@ -110,6 +110,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                 match={match}
                 itemData={itemType === "lost" ? null : foundItems?.data?.find((item) => item._id === match.data.lostId)}
                 setCurrentMatch={setCurrentMatch}
+                currentMatch={currentMatch}
             />
         </div>
     ))
