@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect, useCallback } from "react"
+import { React, useState, useRef, useEffect, useCallback, forwardRef } from "react"
 import { useLocation } from "react-router-dom"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
@@ -158,10 +158,20 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         if (linesRes.ok) {
             setLinesSelected(
                 dataGet.data.transportLines
-                    .map((item) => {
-                        return { ...item, select: false }
-                    })
+                    // .map((item) => {
+                    //     return { ...item, select: false }
+                    // })
                     .sort((a, b) => a.number - b.number)
+                    .reduce((acc, item) => {
+                        item = { ...item, select: false}
+                        const index = acc.findIndex((group) => group[0]?.type === item.type)
+                        if (index === -1) {
+                            acc.push([item])
+                        } else {
+                            acc[index].push(item)
+                        }
+                        return acc
+                    }, [])
             )
         }
     }, [linesReq, linesRes])
@@ -172,10 +182,10 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     }, [])
 
     useEffect(() => {
-        if (linesSelected.length === 0 && multiLineString.length === 0) {
+        if (linesSelected.flat().length === 0 && multiLineString.length === 0) {
             updateAnswer(null, questionId)
         } else {
-            const selectedTransportLines = linesSelected.filter((x) => x.select === true).map((x) => x.id)
+            const selectedTransportLines = linesSelected.flat().filter((x) => x.select === true).map((x) => x.id)
 
             let path = null
             if (multiLineString.length > 0) {
@@ -193,20 +203,11 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             if (selectedTransportLines.length === 0 && multiLineString.length === 0) {
                 updateAnswer(null, questionId)
             } else {
+                console.log(answer)
                 updateAnswer(answer, questionId)
             }
         }
     }, [multiLineString, linesSelected])
-
-    const separateLines = linesSelected.reduce((acc, item) => {
-        const index = acc.findIndex((group) => group[0]?.type === item.type)
-        if (index === -1) {
-            acc.push([item])
-        } else {
-            acc[index].push(item)
-        }
-        return acc
-    }, [])
 
     const handletypeShownID = (idx) => {
         if (typeShownID === idx) setTypeShownID(null)
@@ -214,8 +215,14 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     }
 
     const handleSelectedLines = (id) => {
-        const newlinesSelected = linesSelected.map((item) => {
-            return item.id === id ? { ...item, select: !item.select } : { ...item, select: pageType === "found" ? false : item.select }
+        const newlinesSelected = linesSelected.map((arr, index) => {
+            if (index === typeShownID) {
+                return arr.map((item) => {
+                    return item.id === id ? { ...item, select: !item.select } : { ...item, select: pageType === "found" ? false : item.select }
+                })
+            } else {
+                return arr
+            }
         })
         setLinesSelected(newlinesSelected)
     }
@@ -229,7 +236,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     }
 
     useEffect(() => {
-        if (typeShownID !== null) scrollRef.current.scrollIntoView({ behavior: "smooth" })
+        scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
     }, [typeShownID])
 
     return loading ? (
@@ -286,7 +293,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     Ako si koristio javni prijevoz, odaberi linije kojima si se vozio.
                 </MediumText>
             )}
-            <RenderTypeList separateLines={separateLines} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
+            <RenderTypeList separateLines={linesSelected} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
             {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
                     <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
@@ -305,7 +312,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     </div>
                     <ChoiceType
                         isMultiple={pageType !== "found"}
-                        values={separateLines[typeShownID]}
+                        values={linesSelected[typeShownID]}
                         getSelectedValue={handleSelectedLines}
                         lineSearch={lineSearch}
                     />
@@ -328,10 +335,12 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 
     const slideLeft = () => {
         slider.current.scrollLeft = slider.current.scrollLeft - 200
+        isScrollable && handletypeShownID(null)
     }
 
     const slideRight = () => {
         slider.current.scrollLeft = slider.current.scrollLeft + 200
+        isScrollable && handletypeShownID(null)
     }
 
     const renderTypeList = separateLines.map((linesByType, index) => {
@@ -340,35 +349,38 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
             if (elem.select) numberOfSelected += 1
         })
         return (
-            <div
+            <nav 
                 key={index}
-                className="inline-flex md:w-full sm:min-w-[33.3333%] max-sm:min-w-full snap-start 
-                md:rounded-xl px-4 py-1 bg-gray cursor-pointer justify-between items-center"
-                onClick={() => handletypeShownID(index)}>
-                <SmallText className="items-center">{linesByType[0].type}</SmallText>
-                <span className="flex flex-row w-fit h-auto">
-                    <span
-                        className={`transition-opacity duration-300 ${numberOfSelected === 0 ? "opacity-0" : "opacity-100"} 
-                        border-2 border-white rounded-xl px-3 py-1 my-1 mr-1 text-xs font-bold`}>
-                        {numberOfSelected === 0 ? 1 : numberOfSelected}
+                className="w-full md:flex-1 max-md:flex-none md:min-w-xs inline-block">
+                <div
+                    className="flex snap-start justify-between items-center
+                    md:rounded-xl px-4 py-1 bg-gray cursor-pointer"
+                    onClick={() => handletypeShownID(index)}>
+                    <SmallText>{linesByType[0].type}</SmallText>
+                    <span className="flex w-fit">
+                        <span
+                            className={`flex-none transition-opacity duration-300 ${numberOfSelected === 0 ? "opacity-0" : "opacity-100"} 
+                            border-2 border-white rounded-xl px-3 py-1 my-1 mr-1 text-xs font-bold`}>
+                            {numberOfSelected === 0 ? 1 : numberOfSelected}
+                        </span>
+                        <svg
+                            className={`flex-none fill-white transition-all duration-300 ${typeShownID === index && "rotate-180"}`}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            width="30">
+                            <path d="M3.81 4.38 8 8.57l4.19-4.19 1.52 1.53L8 11.62 2.29 5.91l1.52-1.53z" />
+                        </svg>
                     </span>
-                    <svg
-                        className={`fill-white transition-all duration-300 ${typeShownID === index && "rotate-180"}`}
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        width="30">
-                        <path d="M3.81 4.38 8 8.57l4.19-4.19 1.52 1.53L8 11.62 2.29 5.91l1.52-1.53z" />
-                    </svg>
-                </span>
-            </div>
+                </div>
+            </nav>
         )
     })
 
     return (
-        <div className="flex w-full mb-2">
+        <div className="grid grid-flow-col w-full mb-2">
             <span
-                className={`border-2 border-gray rounded-s-xl cursor-pointer min-h-full w-fit flex items-center
-                sm:hover:bg-primary/40 transition-all ease-in-out duration-150 ${!isScrollable && "hidden"}`}
+                className={`min-h-full w-fit flex items-center border-2 border-gray rounded-s-xl cursor-pointer 
+                sm:hover:bg-primary/40 transition-all ease-in-out duration-150 ${isScrollable ? "" : "hidden"}`}
                 onClick={() => slideLeft()}>
                 <svg className="rotate-180 fill-white w-6" viewBox="0 0 20 20">
                     <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
@@ -376,15 +388,14 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
             </span>
             <div
                 ref={slider}
-                className={`flex w-full snap-x snap-mandatory scroll-smooth gap-x-4
-                ${isScrollable ? "overflow-x-auto scroll-smooth scrollbar-hide overscroll-x-contain" : "justify-evenly"}`}>
+                className={`flex w-full gap-x-4 snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-hide`}>
                 {renderTypeList}
             </div>
             <span
-                className={`border-2 border-gray rounded-e-xl cursor-pointer min-h-full w-fit flex items-center
-                hover:bg-primary/40 transition-all ease-in-out duration-150 ${!isScrollable && "hidden"}`}
+                className={`min-h-full w-fit flex items-center border-2 border-gray rounded-e-xl cursor-pointer
+                hover:bg-primary/40 transition-all ease-in-out duration-150 ${isScrollable ? "" : "hidden"}`}
                 onClick={() => slideRight()}>
-                <svg className="fill-white h-auto w-6" viewBox="0 0 20 20">
+                <svg className="fill-white w-6" viewBox="0 0 20 20">
                     <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
                 </svg>
             </span>
@@ -429,7 +440,7 @@ const ChoiceType = ({ isMultiple, values, getSelectedValue, lineSearch }) => {
 const RadioComponent = ({ isMultiple, label, checked }) => {
     return (
         <div
-            className={`border-2 mx-2 h-full box-border min-h-[4rem] rounded-xl px-3 py-2 hover:border-2 flex items-center
+            className={`border-2 mx-2 box-border h-full rounded-xl px-3 py-2 flex items-center
             transition ease-in-out delay-50 hover:scale-[1.02] duration-100 cursor-pointer gap-x-3
             ${
                 checked
