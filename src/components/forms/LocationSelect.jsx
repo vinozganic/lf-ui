@@ -160,7 +160,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                 dataGet.data.transportLines
                     .sort((a, b) => a.number - b.number)
                     .reduce((acc, item) => {
-                        item = { ...item, select: false}
+                        item = { ...item, select: false }
                         const index = acc.findIndex((group) => group[0]?.type === item.type)
                         if (index === -1) {
                             acc.push([item])
@@ -182,7 +182,10 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         if (linesSelected.flat().length === 0 && multiLineString.length === 0) {
             updateAnswer(null, questionId)
         } else {
-            const selectedTransportLines = linesSelected.flat().filter((x) => x.select === true).map((x) => x.id)
+            const selectedTransportLines = linesSelected
+                .flat()
+                .filter((x) => x.select === true)
+                .map((x) => x.id)
 
             let path = null
             if (multiLineString.length > 0) {
@@ -205,7 +208,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         }
     }, [multiLineString, linesSelected])
 
-    const handletypeShownID = (idx) => {
+    const handleTypeShownID = (idx) => {
         if (typeShownID === idx) setTypeShownID(null)
         else setTypeShownID(idx)
     }
@@ -214,7 +217,9 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         const newlinesSelected = linesSelected.map((arr, index) => {
             if (index === typeShownID) {
                 return arr.map((item) => {
-                    return item.id === id ? { ...item, select: !item.select } : { ...item, select: pageType === "found" ? false : item.select }
+                    return item.id === id
+                        ? { ...item, select: !item.select }
+                        : { ...item, select: pageType === "found" ? false : item.select }
                 })
             } else {
                 return arr
@@ -289,7 +294,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                     Ako si koristio javni prijevoz, odaberi linije kojima si se vozio.
                 </MediumText>
             )}
-            <RenderTypeList separateLines={linesSelected} typeShownID={typeShownID} handletypeShownID={handletypeShownID} />
+            <RenderTypeList separateLines={linesSelected} typeShownID={typeShownID} handleTypeShownID={handleTypeShownID} />
             {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
                     <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
@@ -319,24 +324,24 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
     )
 }
 
-const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
+const RenderTypeList = ({ separateLines, typeShownID, handleTypeShownID }) => {
     const slider = useRef(null)
-    const [isScrollable, setIsScrollable] = useState(false)
+    const [isScrollable, setIsScrollable] = useState(true)
 
     useEffect(() => {
-        if (slider.current.scrollWidth > slider.current.offsetWidth) {
-            setIsScrollable(true)
+        if (slider.current.scrollWidth < slider.current.offsetWidth) {
+            setIsScrollable(false)
         }
-    }, [])
+    }, [slider])
 
     const slideLeft = () => {
         slider.current.scrollLeft = slider.current.scrollLeft - 200
-        isScrollable && handletypeShownID(null)
+        isScrollable && handleTypeShownID(null)
     }
 
     const slideRight = () => {
         slider.current.scrollLeft = slider.current.scrollLeft + 200
-        isScrollable && handletypeShownID(null)
+        isScrollable && handleTypeShownID(null)
     }
 
     const renderTypeList = separateLines.map((linesByType, index) => {
@@ -345,13 +350,11 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
             if (elem.select) numberOfSelected += 1
         })
         return (
-            <nav 
-                key={index}
-                className="w-full md:flex-1 max-md:flex-none md:min-w-xs inline-block">
+            <nav key={index} className="w-full md:flex-1 max-md:flex-none md:min-w-xs inline-block">
                 <div
                     className="flex snap-start justify-between items-center
                     md:rounded-xl px-4 py-1 bg-gray cursor-pointer"
-                    onClick={() => handletypeShownID(index)}>
+                    onClick={() => handleTypeShownID(index)}>
                     <SmallText>{linesByType[0].type}</SmallText>
                     <span className="flex w-fit">
                         <span
@@ -374,27 +377,29 @@ const RenderTypeList = ({ separateLines, typeShownID, handletypeShownID }) => {
 
     return (
         <div className="grid grid-flow-col w-full mb-2">
-            <span
-                className={`min-h-full w-fit flex items-center border-2 border-gray rounded-s-xl cursor-pointer 
-                sm:hover:bg-primary/40 transition-all ease-in-out duration-150 ${isScrollable ? "" : "hidden"}`}
-                onClick={() => slideLeft()}>
-                <svg className="rotate-180 fill-white w-6" viewBox="0 0 20 20">
-                    <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
-                </svg>
-            </span>
-            <div
-                ref={slider}
-                className={`flex w-full gap-x-4 snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-hide`}>
+            {isScrollable && (
+                <span
+                    className={`min-h-full w-fit flex items-center border-2 border-gray rounded-s-xl cursor-pointer 
+                sm:hover:bg-primary/40 transition-all ease-in-out duration-150`}
+                    onClick={() => slideLeft()}>
+                    <svg className="rotate-180 fill-white w-6" viewBox="0 0 20 20">
+                        <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+                    </svg>
+                </span>
+            )}
+            <div ref={slider} className={`flex w-full gap-x-4 snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-hide`}>
                 {renderTypeList}
             </div>
-            <span
-                className={`min-h-full w-fit flex items-center border-2 border-gray rounded-e-xl cursor-pointer
-                hover:bg-primary/40 transition-all ease-in-out duration-150 ${isScrollable ? "" : "hidden"}`}
-                onClick={() => slideRight()}>
-                <svg className="fill-white w-6" viewBox="0 0 20 20">
-                    <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
-                </svg>
-            </span>
+            {isScrollable && (
+                <span
+                    className={`min-h-full w-fit flex items-center border-2 border-gray rounded-e-xl cursor-pointer
+                hover:bg-primary/40 transition-all ease-in-out duration-150`}
+                    onClick={() => slideRight()}>
+                    <svg className="fill-white w-6" viewBox="0 0 20 20">
+                        <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+                    </svg>
+                </span>
+            )}
         </div>
     )
 }
