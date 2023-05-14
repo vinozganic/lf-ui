@@ -26,19 +26,22 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
         getTypes()
     }, [getTypes])
 
-    const center =
-        currentMatch?.itemData.location.path === null
-            ? [
-                  currentMatch?.itemData.location.publicTransportLines[0].coordinates[
-                      currentMatch?.itemData.location.publicTransportLines[0].coordinates.length / 2
-                  ][1],
-                  currentMatch?.itemData.location.publicTransportLines[0].coordinates[
-                      currentMatch?.itemData.location.publicTransportLines[0].coordinates.length / 2
-                  ][0],
-              ]
-            : currentMatch?.itemData.location.path.type === "Point"
-            ? [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
-            : [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
+    let center = null
+
+    const hasPath = currentMatch?.itemData.location.path
+
+    if (hasPath) {
+        if (currentMatch.itemData.location.path.type === "MultiLineString") {
+            center = [currentMatch?.itemData.location.path.coordinates[0][0][1], currentMatch?.itemData.location.path.coordinates[0][0][0]]
+        } else {
+            center = [currentMatch?.itemData.location.path.coordinates[1], currentMatch?.itemData.location.path.coordinates[0]]
+        }
+    } else {
+        center = [
+            currentMatch?.itemData.location.publicTransportLines[0].coordinates[0][1],
+            currentMatch?.itemData.location.publicTransportLines[0].coordinates[0][0],
+        ]
+    }
 
     return (
         <>
@@ -83,7 +86,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
                                 {currentMatch.itemData.location.path?.type === "MultiLineString" && (
                                     <>
-                                        {currentMatch.itemData.location.path.coordinates.map((coords) => (
+                                        {currentMatch.itemData.location.path?.coordinates.map((coords) => (
                                             <Polyline
                                                 key={coords}
                                                 pathOptions={{ color: "blue", weight: 5 }}
@@ -92,19 +95,8 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.path?.type === "Point" && (
-                                    <>
-                                        {(() => {
-                                            const customIcon = L.icon({
-                                                iconUrl: "/images/marker.png",
-                                                iconSize: [40, 40],
-                                            })
-                                            return <Marker icon={customIcon} position={center} />
-                                        })()}
-                                    </>
-                                )}
-                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
-                                currentMatch.itemData.location.publicTransportLines.length > 0 ? (
+                                {currentMatch.itemData.location.path?.type == "Point" && <Marker position={center} />}
+                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
                                             key={line.coordinates}
