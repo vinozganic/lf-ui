@@ -7,7 +7,7 @@ const HomePage = () => {
             bgClassName="bg-vertical lg:bg-horizontal bg-cover bg-no-repeat lg:bg-fixed"
             className="h-auto flex flex-col items-center px-6 lg:px-16">
             <img src="/images/logo.png" className="w-64 lg:w-1/4 mt-4 " />
-            <MediumText className=" mt-14 lg:mt-20 md:w-3/4 lg:w-1-2 text-xl md:text-3xl text-center text-shadow-lg">
+            <MediumText className="mt-14 lg:mt-20 md:w-3/4 lg:w-1-2 text-xl md:text-3xl text-center text-shadow-lg">
                 Ostala ti je torba u tramvaju? Pronašao/la si slušalice u teretani?
             </MediumText>
             <MediumText className="mx-4 mt-2 md:w-3/4 lg:w-1-2 text-xl md:text-3xl text-center text-shadow-lg">
