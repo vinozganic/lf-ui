@@ -16,7 +16,7 @@ const questions = [
     },
     {
         create: addColorPickerQuestion,
-        text: "Koje boje je izgubljeni predmet. Pokušaj što preciznije odrediti boju.",
+        text: "Koje boje je izgubljeni predmet? Pokušaj što preciznije odrediti boju.",
         fieldName: "color",
     },
     {

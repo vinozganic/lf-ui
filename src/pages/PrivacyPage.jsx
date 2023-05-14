@@ -3,7 +3,9 @@ import { Button, SmallText, MediumText, BigText, Page } from "../components"
 
 const PrivacyPage = () => {
     return (
-        <Page bgClassName="bg-privacyVertical lg:bg-privacyHorizontal bg-cover bg-center bg-no-repeat lg:bg-fixed" className="flex flex-col items-center px-6 lg:px-16">
+        <Page
+            bgClassName="bg-privacyVertical lg:bg-privacyHorizontal bg-cover bg-center bg-no-repeat lg:bg-fixed"
+            className="flex flex-col items-center px-6 lg:px-16">
             <BigText className="text-center mt-16 lg:mt-20">Prikupljanje podataka</BigText>
             <MediumText className="mx-2 mt-16 lg:w-3/4 text-left font-semibold text-primary">Uvod</MediumText>
             <SmallText className="mx-2 mt-5 lg:w-3/4 text-left font-medium">
