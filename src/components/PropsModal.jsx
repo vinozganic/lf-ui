@@ -83,7 +83,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 tap={false}
                                 dragging={false}>
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-                                {currentMatch.itemData.location.path.type === "MultiLineString" && (
+                                {currentMatch.itemData.location.path?.type === "MultiLineString" && (
                                     <>
                                         {currentMatch.itemData.location.path.coordinates.map((coords) => (
                                             <Polyline
@@ -94,7 +94,7 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.path.type == "Point" && <Marker position={center} />}
+                                {currentMatch.itemData.location.path?.type == "Point" && <Marker position={center} />}
                                 {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
