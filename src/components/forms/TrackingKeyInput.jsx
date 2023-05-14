@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useFetch } from "use-http"
 import { Button, MediumText, Spinner } from "../../components"
@@ -43,14 +43,7 @@ const TrackingKeyInput = ({ length, className }) => {
     }
 
     const setFirstTrackingKeyElement = (index, value, newTrackingKey) => {
-        const oldValue = newTrackingKey[index]
-        if (oldValue === "") {
-            newTrackingKey[index] = value.toUpperCase().charAt(0)
-        } else {
-            var regex = new RegExp(oldValue, "")
-            newTrackingKey[index] = value.toUpperCase().replace(regex, "").charAt(0)
-            value = value.toUpperCase().replace(regex, "")
-        }
+        newTrackingKey[index] = value.toUpperCase().charAt(0)
         if (value.length > 0) {
             inputRefs.current[index].blur()
             inputRefs.current[index + 1]?.focus()
@@ -61,12 +54,14 @@ const TrackingKeyInput = ({ length, className }) => {
         setTrackingKey(newTrackingKey)
     }
 
-    const handleChange = (e, index) => {
+    const handleChange = (e) => {
         if (e.target.value.length > 0) {
             const { value } = e.target
             const newTrackingKey = [...trackingKey]
             const valueWihtoutSpecialChars = value.replace(/[^a-zA-Z\d]/g, "")
-            if (valueWihtoutSpecialChars.length > 1 || (newTrackingKey[index].length === 0 && valueWihtoutSpecialChars.length > 0)) {
+            const index = newTrackingKey.findIndex((item) => item === "")
+            if (valueWihtoutSpecialChars.length > 0 && index !== -1) {
+                inputRefs.current[index].focus()
                 setFirstTrackingKeyElement(index, valueWihtoutSpecialChars, newTrackingKey)
             }
         }
@@ -74,63 +69,62 @@ const TrackingKeyInput = ({ length, className }) => {
 
     const handleKeyDown = (e, index) => {
         if (e.key === "Backspace") {
-            const newTrackingKey = [...trackingKey]
-            newTrackingKey[index] = ""
-            setTrackingKey(newTrackingKey)
-            if (index > 0) {
+            if (index > 0 && index < length - 1) {
+                const newTrackingKey = [...trackingKey]
+                newTrackingKey[index - 1] = ""
+                setTrackingKey(newTrackingKey)
+                inputRefs.current[index - 1].focus()
+            } else if (index === length - 1 && trackingKey[index] !== "") {
+                const newTrackingKey = [...trackingKey]
+                newTrackingKey[index] = ""
+                setTrackingKey(newTrackingKey)
+                inputRefs.current[index].focus()
+            } else if (index === length - 1 && trackingKey[index] === "") {
+                const newTrackingKey = [...trackingKey]
+                newTrackingKey[index - 1] = ""
+                setTrackingKey(newTrackingKey)
                 inputRefs.current[index - 1].focus()
             }
         }
-        if (e.key === "Delete") {
-            const newTrackingKey = [...trackingKey]
-            newTrackingKey[index] = ""
-            setTrackingKey(newTrackingKey)
-            if (index < length - 1) {
-                inputRefs.current[index + 1].focus()
-            }
-        }
-        if (e.key === "ArrowLeft" && index > 0) {
-            inputRefs.current[index - 1].focus()
-        }
-        if (e.key === "ArrowRight" && index < length - 1) {
-            inputRefs.current[index + 1].focus()
-        }
     }
-
-    useEffect(() => {
-        for (let i = 0; i < length; i++) {
-            if (inputRefs.current[i].current) {
-                inputRefs.current[i].selectionStart = inputRefs.current[i].selectionEnd = inputRefs.current[i].value.length
-            }
-        }
-    }, [])
 
     return (
         <div className={`flex flex-col items-center gap-1 w-full ${className}`}>
             <div className="flex flex-col items-center gap-4 w-full justify-center text-shadow-lg">
                 <MediumText className="text-2xl">Prati svoj predmet:</MediumText>
-                <div>
-                    {trackingKey.map((value, index) => (
-                        <input
-                            ref={(el) => (inputRefs.current[index] = el)}
-                            key={index}
-                            type="text"
-                            placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
-                            value={trackingKey[index]}
-                            onChange={(e) => {
-                                handleChange(e, index)
-                            }}
-                            onFocus={() => {
-                                inputRefs.current[index].selectionStart = inputRefs.current[index].selectionEnd =
-                                    inputRefs.current[index].value.length
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                            className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
-                        />
-                    ))}
+                <div className="relative">
+                    <div>
+                        {trackingKey.map((value, index) => (
+                            <input
+                                ref={(el) => (inputRefs.current[index] = el)}
+                                key={index}
+                                type="text"
+                                placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
+                                value={trackingKey[index]}
+                                onChange={(e) => {
+                                    handleChange(e)
+                                }}
+                                onKeyDown={(e) => handleKeyDown(e, index)}
+                                className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
+                            />
+                        ))}
+                    </div>
+                    <div
+                        className="absolute top-0 left-0 w-full h-full cursor-pointer"
+                        onClick={() => {
+                            inputRefs.current[
+                                trackingKey.findIndex((item) => item === "") === -1
+                                    ? length - 1
+                                    : trackingKey.findIndex((item) => item === "")
+                            ].focus()
+                        }}
+                    />
                 </div>
                 {trackingKey.filter((item) => item == "").length == 0 && (
-                    <Button onClick={submitTrackingKey} className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8" buttonClassName="rounded-lg">
+                    <Button
+                        onClick={submitTrackingKey}
+                        className="w-3/4 md:w-1/4 lg:w-1/6 xl:w-1/8 select-none"
+                        buttonClassName="rounded-lg select-none">
                         Prati
                     </Button>
                 )}

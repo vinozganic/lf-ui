@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react"
 import { SmallText } from "../components"
 
-const MatchCard = ({ match, className, setCurrentMatch, itemData }) => {
+const MatchCard = ({ match, className, setCurrentMatch, itemData, currentMatch }) => {
     const [progressColor, setProgressColor] = useState("")
 
     useEffect(() => {
@@ -30,11 +30,15 @@ const MatchCard = ({ match, className, setCurrentMatch, itemData }) => {
             lg:hover:scale-105 lg:hover:bg-gray bg-gray/60
             ${className}`}
             onClick={() => {
-                setCurrentMatch({
-                    data: match.data,
-                    itemData: itemData,
-                    showProps: false,
-                })
+                if (currentMatch !== null && currentMatch.data === match.data) {
+                    setCurrentMatch(null)
+                } else {
+                    setCurrentMatch({
+                        data: match.data,
+                        itemData: itemData,
+                        showProps: false,
+                    })
+                }
             }}>
             <div className="h-full flex flex-col w-full lg:gap-y-10 gap-y-7 justify-between items-center">
                 <SmallText className="text-center">{match.data.nickname}</SmallText>
