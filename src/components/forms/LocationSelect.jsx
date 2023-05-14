@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect, useCallback, forwardRef } from "react"
+import { React, useState, useRef, useEffect, useCallback } from "react"
 import { useLocation } from "react-router-dom"
 import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet"
 import { EditControl } from "react-leaflet-draw"
@@ -158,9 +158,6 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
         if (linesRes.ok) {
             setLinesSelected(
                 dataGet.data.transportLines
-                    // .map((item) => {
-                    //     return { ...item, select: false }
-                    // })
                     .sort((a, b) => a.number - b.number)
                     .reduce((acc, item) => {
                         item = { ...item, select: false}
@@ -203,7 +200,6 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             if (selectedTransportLines.length === 0 && multiLineString.length === 0) {
                 updateAnswer(null, questionId)
             } else {
-                console.log(answer)
                 updateAnswer(answer, questionId)
             }
         }
