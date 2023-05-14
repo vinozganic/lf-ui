@@ -99,23 +99,21 @@ const TrackingKeyInput = ({ length, className }) => {
             <div className="flex flex-col items-center gap-4 w-full justify-center text-shadow-lg">
                 <MediumText className="text-2xl">Prati svoj predmet:</MediumText>
                 <div className="relative">
-                    <div>
-                        {trackingKey.map((value, index) => (
-                            <input
-                                ref={(el) => (inputRefs.current[index] = el)}
-                                key={index}
-                                type="text"
-                                placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
-                                value={trackingKey[index]}
-                                onChange={(e) => {
-                                    handleChange(e)
-                                }}
-                                onClick={handleClick}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
-                            />
-                        ))}
-                    </div>
+                    {trackingKey.map((value, index) => (
+                        <input
+                            ref={(el) => (inputRefs.current[index] = el)}
+                            key={index}
+                            type="text"
+                            placeholder={trackingKey.filter((item) => item != "").length > 0 ? "" : index + 1}
+                            value={trackingKey[index]}
+                            onChange={(e) => {
+                                handleChange(e)
+                            }}
+                            onClick={handleClick}
+                            onKeyDown={(e) => handleKeyDown(e, index)}
+                            className="h-9 w-9 md:h-11 md:w-11 p-1 m-[1px] bg-gray/95 text-white/90 font-semibold border-white/20 border-2 rounded-md text-center placeholder:opacity-50 caret-transparent cursor-pointer focus:border-white/50 focus:outline-none"
+                        />
+                    ))}
                 </div>
                 {trackingKey.filter((item) => item == "").length == 0 && (
                     <Button
