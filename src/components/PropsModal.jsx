@@ -85,9 +85,8 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                 dragging={false}>
                                 <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
                                 {currentMatch.itemData.location.path?.type === "MultiLineString" && (
-                                {currentMatch.itemData.location.path?.type === "MultiLineString" && (
                                     <>
-                                        {currentMatch.itemData.location.path.coordinates.map((coords) => (
+                                        {currentMatch.itemData.location.path?.coordinates.map((coords) => (
                                             <Polyline
                                                 key={coords}
                                                 pathOptions={{ color: "blue", weight: 5 }}
