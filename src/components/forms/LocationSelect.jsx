@@ -329,8 +329,10 @@ const RenderTypeList = ({ separateLines, typeShownID, handleTypeShownID }) => {
     const [isScrollable, setIsScrollable] = useState(true)
 
     useEffect(() => {
-        if (slider.current.scrollWidth < slider.current.offsetWidth) {
+        if (slider.current.scrollWidth <= slider.current.offsetWidth) {
             setIsScrollable(false)
+        } else {
+            setIsScrollable(true)
         }
     }, [slider])
 
