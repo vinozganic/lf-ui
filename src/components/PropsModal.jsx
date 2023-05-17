@@ -95,8 +95,19 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.path?.type == "Point" && <Marker position={center} />}
-                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
+                                {currentMatch.itemData.location.path?.type === "Point" && (
+                                    <>
+                                        {(() => {
+                                            const customIcon = L.icon({
+                                                iconUrl: "/images/marker.png",
+                                                iconSize: [40, 40],
+                                            })
+                                            return <Marker icon={customIcon} position={center} />
+                                        })()}
+                                    </>
+                                )}
+                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
+                                currentMatch.itemData.location.publicTransportLines.length > 0 ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
                                             key={line.coordinates}
