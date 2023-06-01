@@ -297,7 +297,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
             <RenderTypeList separateLines={linesSelected} typeShownID={typeShownID} handleTypeShownID={handleTypeShownID} />
             {typeShownID !== null && (
                 <nav className="pt-2 rounded-xl bg-gray relative">
-                    <div className="sticky flex items-center top-0 w-full p-4 bg-gray px-8 pb-6 border-b-2 border-white">
+                    <div className="sticky flex items-center top-0 w-full pb-3 pt-1 bg-gray px-8 border-b-2 border-white/40">
                         <span className="mr-6">
                             <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="26">
                                 <path d="M21.15 19.74a12 12 0 1 0-1.41 1.41l10.55 10.56 1.41-1.41zM12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10z" />
@@ -305,7 +305,7 @@ const NonExactLocationSelect = ({ updateAnswer, questionId, mapCenter, className
                         </span>
                         <input
                             type="text"
-                            placeholder="Pretraži"
+                            placeholder="Pretraga"
                             className="w-full text-lg bg-gray  focus:outline-none font-bold text-white placeholder:font-normal placeholder:text-lg"
                             value={lineSearch}
                             onChange={(ev) => setLineSearch(ev.target.value)}

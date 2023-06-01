@@ -110,7 +110,7 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                     <div className="w-full my-2 lg:mt-6 lg:mx-10 lg:w-4/5 2xl:w-[80rem]">
                         {matchesList.length === 0 && (
                             <div>
-                                <SmallText>Trenutno nema potencijalnih spojeva</SmallText>
+                                <SmallText>Spajanje u tijeku. Osvježite stranicu ili pokušajte kasnije.</SmallText>
                             </div>
                         )}
                         {matchesList.length > 0 && (
@@ -133,12 +133,11 @@ const MatchesList = ({ matches, item, itemType, resolveItem }) => {
                                     </div>
                                 )}
                                 <div className="sm:pb-5 pb-2 mt-2 flex justify-start items-center gap-2">
-                                    <div>
-                                        {SvgList["info"]}
-                                    </div>
+                                    <div>{SvgList["info"]}</div>
                                     <SmallText className="text-sm font-semibold text-white/60">
                                         <div>
-                                            Ove kartice predstavljaju potencijalne spojeve s {itemType ==="lost" ? "izgubljenim predmetima." : "vlasnicima predmeta."}
+                                            Ove kartice predstavljaju potencijalne spojeve s{" "}
+                                            {itemType === "lost" ? "izgubljenim predmetima." : "vlasnicima predmeta."}
                                         </div>
                                         <div>
                                             Imena na karticama ne predstavljaju stvarna imena korisnika, već služe za razlikovanje kartica.
