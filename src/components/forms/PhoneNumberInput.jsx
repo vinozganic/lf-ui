@@ -70,7 +70,7 @@ const PhoneNumberInput = ({ questionId, updateAnswer }) => {
                 <div>
                     <input
                         type="text"
-                        placeholder="Enter phone number"
+                        placeholder="Unesi broj..."
                         className="font-bold h-12 placeholder:font-normal placeholder:text-center placeholder:text-base focus:outline-none text-white text-lg p-2 pl-1 border-2 border-gray rounded-xl hover:bg-opacity-80 duration-100 hover:border-primary hover:border-opacity-40 bg-gray w-[calc(16*1ch)]"
                         value={phoneNumberInput}
                         maxLength="14"
