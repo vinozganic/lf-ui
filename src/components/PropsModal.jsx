@@ -47,34 +47,32 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
         <>
             {currentMatch?.showProps && typeLoading && <Spinner />}
             {currentMatch?.showProps && !typeLoading && (
-                <div className="fixed inset-0 z-40 flex items-center justify-center overflow-y-auto bg-black bg-opacity-25 select-none backdrop-blur-sm">
-                    <div className="relative sm:p-10 p-4 border-2 border-gray bg-gray/80 rounded-xl">
+                <div className="fixed inset-0 z-60 flex items-center justify-center overflow-y-auto bg-black bg-opacity-25 select-none backdrop-blur-sm">
+                    <div className="sm:mt-32 relative w-full sm:w-2/3 md:w-1/2 lg:w-1/3 sm:p-10 p-4 border-2 border-gray bg-gray/80 rounded-xl m-1">
                         <SmallText className="text-center">Podaci o izgubljenoj stvari</SmallText>
-                        <div className="p-4 pt-5 grid grid-cols-2 gap-x-14">
-                            <div className="text-left p-2">
-                                <SmallText>Vrsta:</SmallText>
+                        <div className="p-4 pt-5">
+                            <div className="py-1 flex gap-x-8">
+                                <SmallText className="w-1/4">Vrsta:</SmallText>
+                                <SmallText className="text-center flex-grow">
+                                    {types.find((type) => type.name === currentMatch.itemData.type).niceName}
+                                </SmallText>
                             </div>
-                            <div className="text-center p-2">
-                                <SmallText>{types.find((type) => type.name === currentMatch.itemData.type).niceName}</SmallText>
+                            <div className="py-1 flex gap-x-8">
+                                <SmallText className="w-1/4">Boja:</SmallText>
+                                <div className="flex-grow flex justify-center">
+                                    <div
+                                        className={`rounded-full w-6 h-6 mx-4 border-white border`}
+                                        style={{
+                                            backgroundColor: `rgb(${currentMatch.itemData.color[0]},${currentMatch.itemData.color[1]},${currentMatch.itemData.color[2]})`,
+                                        }}></div>
+                                </div>
                             </div>
-                            <div className="text-left p-2">
-                                <SmallText>Boja:</SmallText>
-                            </div>
-                            <div className="text-center relative p-2">
-                                <div
-                                    className={`rounded-full w-6 h-6 absolute right-1/2 translate-x-1/2 border-white border`}
-                                    style={{
-                                        backgroundColor: `rgb(${currentMatch.itemData.color[0]},${currentMatch.itemData.color[1]},${currentMatch.itemData.color[2]})`,
-                                    }}></div>
-                            </div>
-                            <div className="text-left p-2">
-                                <SmallText>Datum:</SmallText>
-                            </div>
-                            <div className="text-center p-2">
-                                <SmallText>{day + "." + month + "." + year}</SmallText>
+                            <div className="py-1 flex gap-x-8">
+                                <SmallText className="w-1/4">Datum:</SmallText>
+                                <SmallText className="flex-grow text-center">{day + "." + month + "." + year}</SmallText>
                             </div>
                         </div>
-                        <div className="text-center col-start-1 col-end-2 pb-2">
+                        <div className="text-center col-start-1 col-end-2 py-1">
                             <MapContainer
                                 style={{ height: "200px", width: "100%", border: "1px solid rgb(56,72,102)", borderRadius: "0.5rem" }}
                                 center={center}
@@ -95,8 +93,19 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                                         ))}
                                     </>
                                 )}
-                                {currentMatch.itemData.location.path?.type == "Point" && <Marker position={center} />}
-                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") ? (
+                                {currentMatch.itemData.location.path?.type === "Point" && (
+                                    <>
+                                        {(() => {
+                                            const customIcon = L.icon({
+                                                iconUrl: "/images/marker.png",
+                                                iconSize: [40, 40],
+                                            })
+                                            return <Marker icon={customIcon} position={center} />
+                                        })()}
+                                    </>
+                                )}
+                                {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
+                                currentMatch.itemData.location.publicTransportLines.length > 0 ? (
                                     currentMatch.itemData.location.publicTransportLines.map((line) => (
                                         <Polyline
                                             key={line.coordinates}
@@ -113,34 +122,34 @@ const PropsModal = ({ currentMatch, handleShowProps }) => {
                             <div>{SvgList["info"]}</div>
                             <SmallText className="text-sm font-semibold text-white/60">Legenda</SmallText>
                         </div>
-                        <div className="flex justify-evenly">
+                        <div className="flex flex-col justify-evenly">
                             {currentMatch.itemData.location.path?.type === "Point" && (
-                                <div className="flex gap-2 m-4">
+                                <div className="flex gap-x-8 py-1 px-4">
                                     <div>
                                         <SmallText className="text-white/70">Točna lokacija:</SmallText>
                                     </div>
-                                    <div>
+                                    <div className="w-full flex justify-center">
                                         <img src="/images/marker.png" alt="marker" className="w-6 h-6" />
                                     </div>
                                 </div>
                             )}
                             {currentMatch.itemData.location.path?.type === "MultiLineString" && (
-                                <div className="flex gap-2 m-4">
-                                    <div>
+                                <div className="flex gap-x-8 py-1 px-4">
+                                    <div className="w-2/5">
                                         <SmallText className="text-white/70">Prijeđen put:</SmallText>
                                     </div>
-                                    <div>
+                                    <div className="flex-grow flex justify-center">
                                         <div className="rounded-full w-6 h-6 border-white border bg-[rgb(0,0,255)]"></div>
                                     </div>
                                 </div>
                             )}
                             {currentMatch.itemData.location.hasOwnProperty("publicTransportLines") &&
                             currentMatch.itemData.location.publicTransportLines.length > 0 ? (
-                                <div className="flex gap-2 m-4">
-                                    <div>
+                                <div className="flex gap-x-8 py-1 px-4">
+                                    <div className="w-2/5">
                                         <SmallText className="text-white/70">Javni prijevoz:</SmallText>
                                     </div>
-                                    <div>
+                                    <div className="flex-grow flex justify-center">
                                         <div className="rounded-full w-6 h-6 border-white border bg-[rgb(255,0,0)]"></div>
                                     </div>
                                 </div>
