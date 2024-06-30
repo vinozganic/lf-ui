@@ -20,9 +20,9 @@ Welcome to the `lf-ui`, the frontend interface of Lost & Found, a centralized an
 - **No Barrier Entry**: Access the platform's full capabilities without the need to register or download anything, directly from your browser.
 
 ## 📸 Screenshots
-<img src="https://i.ibb.co/fMrQ7Gf/lfz-screenshot.png" alt="Lost & Found - Home screen" width="600"/>
-<img src="https://i.ibb.co/WWFDdHd/Screenshot-2024-02-11-at-14-14-49.jpg" alt="Lost & Found - Submitting Process 1" width="600"/>
-<img src="https://i.ibb.co/Fz0NyXN/Screenshot-2024-02-11-at-14-16-16.jpg" alt="Lost & Found - Submitting Process 2" width="600"/>
+![Lost & Found - Home screen](https://github.com/vinozganic/lf-ui/assets/95239040/e1a1ce61-6aa1-4122-b0ac-5107d1aa4e51)
+![Lost & Found - Submitting Process 1](https://github.com/vinozganic/lf-ui/assets/95239040/6499d677-aa44-4c6e-a56e-92c0bc1dc1c1)
+![Lost & Found - Submitting Process 2](https://github.com/vinozganic/lf-ui/assets/95239040/381abdef-ea29-487f-8684-bc275c869911)
 
 ## 🤝 Contributing
 
